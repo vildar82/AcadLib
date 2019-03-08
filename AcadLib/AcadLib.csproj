@@ -32,6 +32,7 @@
     <DocumentationFile>..\..\..\Autodesk\AutoCAD\Pik\Settings\Dll\AcadLib.xml</DocumentationFile>
     <NoWarn>CS1591</NoWarn>
     <ShouldCreateLogs>False</ShouldCreateLogs>
+    <LangVersion>7.3</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>x64</PlatformTarget>
@@ -49,6 +50,7 @@
     <ShouldCreateLogs>True</ShouldCreateLogs>
     <AdvancedSettingsExpanded>False</AdvancedSettingsExpanded>
     <AssemblyInfoVersionType>SettingsVersion</AssemblyInfoVersionType>
+    <LangVersion>7.3</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'ReleaseLocal|AnyCPU'">
     <OutputPath>bin\Release\</OutputPath>
@@ -60,7 +62,7 @@
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>..\stylecop.ruleset</CodeAnalysisRuleSet>
     <WarningLevel>0</WarningLevel>
-    <LangVersion>latest</LangVersion>
+    <LangVersion>7.3</LangVersion>
   </PropertyGroup>
   <PropertyGroup>
     <ReferencePath>lib</ReferencePath>
