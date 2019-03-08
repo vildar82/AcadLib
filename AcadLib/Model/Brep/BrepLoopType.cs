@@ -1,6 +1,4 @@
-﻿// ReSharper disable once CheckNamespace
-
-namespace AcadLib
+﻿namespace AcadLib
 {
     public enum BrepLoopType
     {
