@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <ReferencePath>C:\dev\ObjectARX\ObjectARX2017\;C:\Autodesk\AutoCAD\Pik\Settings\Dll\</ReferencePath>
+    <PublishUrlHistory>\\picompany.ru\pikp\Dep\IT\IRA\09_ПРОГРАММЫ\AcadUtilsEditUsers\Publish\|\\picompany.ru\pikp\Dep\IT\IRA\09_ПРОГРАММЫ\AcadUtilsEditUsers\</PublishUrlHistory>
+    <InstallUrlHistory />
+    <SupportUrlHistory />
+    <UpdateUrlHistory />
+    <BootstrapperUrlHistory />
+    <ErrorReportUrlHistory />
+    <FallbackCulture>en-US</FallbackCulture>
+    <VerifyUploadedFiles>false</VerifyUploadedFiles>
+    <ProjectView>ProjectFiles</ProjectView>
+  </PropertyGroup>
+  <PropertyGroup>
+    <EnableSecurityDebugging>false</EnableSecurityDebugging>
+  </PropertyGroup>
+</Project>

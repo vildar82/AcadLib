@@ -1,0 +1,204 @@
+﻿<wpf:BaseWindow
+    x:Class="AcadLib.Utils.Tabs.UI.TabsView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:local="clr-namespace:AcadLib.Utils.Tabs.UI"
+    xmlns:wpf="clr-namespace:NetLib.WPF;assembly=NetLib"
+    xmlns:converters="clr-namespace:NetLib.WPF.Converters;assembly=NetLib"
+    xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
+    xmlns:properties="clr-namespace:AcadLib.Properties"
+    d:DataContext="{d:DesignInstance local:TabsVM}"
+    ShowMaxRestoreButton="False"
+    ShowMinButton="False"
+    mc:Ignorable="d"
+    x:Name="Win"
+    Title="Открытие чертежей">
+    <Window.Resources>
+        <DataTemplate x:Key="Restore" DataType="{x:Type local:TabVM}">
+            <CheckBox IsChecked="{Binding Restore, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Center" />
+        </DataTemplate>
+        <DataTemplate x:Key="Name" DataType="{x:Type local:TabVM}">
+            <TextBlock Text="{Binding Name}" FontWeight="Bold" />
+        </DataTemplate>
+        <DataTemplate x:Key="Date" DataType="{x:Type local:TabVM}">
+            <TextBlock Text="{Binding DateLastWrite, StringFormat=dd.MM.yy HH:mm}" />
+        </DataTemplate>
+        <DataTemplate x:Key="Size" DataType="{x:Type local:TabVM}">
+            <TextBlock Text="{Binding Size, Converter={converters:Bytes}}" />
+        </DataTemplate>
+        <Style x:Key="DgHeader" TargetType="{x:Type DataGridColumnHeader}"
+               BasedOn="{StaticResource MetroDataGridColumnHeader}">
+            <Setter Property="FontWeight" Value="Light" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="HorizontalContentAlignment" Value="Center" />
+            <Setter Property="Margin" Value="-1,0,-1,0" />
+        </Style>
+        <Style x:Key="DgRow" TargetType="{x:Type DataGridRow}" BasedOn="{StaticResource MetroDataGridRow}">
+            <Setter Property="Background" Value="{Binding Err, Converter={local:ErrConverter}}" />
+            <Setter Property="ToolTipService.ShowDuration" Value="10000" />
+            <Setter Property="ToolTipService.InitialShowDelay" Value="800" />
+            <Setter Property="ToolTipService.BetweenShowDelay" Value="800" />
+            <Setter Property="ToolTip">
+                <Setter.Value>
+                    <StackPanel>
+                        <TextBlock Text="{Binding File}" FontWeight="Bold" />
+                        <TextBlock Text="{Binding Err}"
+                                   Visibility="{Binding Err, Converter={converters:NullCollapseVisibilityConverter}}"
+                                   Background="{Binding Err, Converter={local:ErrConverter}}" />
+                        <TextBlock Text="{Binding DateLastWrite, StringFormat=dd.MM.yyy HH:mm}"
+                                   Visibility="{Binding Image, Converter={converters:NullCollapseVisibilityConverter}}" />
+                        <TextBlock Text="{Binding Size, Converter={converters:Bytes}}"
+                                   Visibility="{Binding Image, Converter={converters:NullCollapseVisibilityConverter}}" />
+                        <Image Source="{Binding Image}" Height="300"
+                               Visibility="{Binding Image, Converter={converters:NullCollapseVisibilityConverter}}" />
+                    </StackPanel>
+                </Setter.Value>
+            </Setter>
+            <EventSetter Event="MouseDown" Handler="Row_Click" />
+            <EventSetter Event="Selected" Handler="Row_Select" />
+            <EventSetter Event="MouseDoubleClick" Handler="Row_DoubleClick" />
+            <EventSetter Event="ToolTipOpening" Handler="EventSetter_OnHandler" />
+        </Style>
+        <!--</ResourceDictionary>-->
+    </Window.Resources>
+    <Grid Margin="1">
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <ScrollViewer Grid.Row="0" VerticalScrollBarVisibility="Auto">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <Grid Grid.Row="0" mah:VisibilityHelper.IsVisible="{Binding HasRestoreTabs}">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+                    <StackPanel Grid.Row="0" Margin="3" Orientation="Horizontal" HorizontalAlignment="Center">
+                        <TextBlock Text="Сессии:" />
+                        <StackPanel Orientation="Horizontal" Margin="10,0,0,0">
+                            <TextBox Text="{Binding SessionCount}" VerticalAlignment="Center"
+                                     ToolTip="Максимальное количество хранимых сессий автокада."
+                                     BorderThickness="0" />
+                        </StackPanel>
+                    </StackPanel>
+                    <ItemsControl Grid.Row="1" ItemsSource="{Binding Sessions}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate DataType="local:SessionVM">
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition />
+                                    </Grid.RowDefinitions>
+                                    <Grid Grid.Row="0">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto" />
+                                            <ColumnDefinition />
+                                        </Grid.ColumnDefinitions>
+                                        <CheckBox Grid.Column="0" IsChecked="{Binding RestoreAll}" Margin="18,0,0,0" />
+                                        <StackPanel Grid.Column="0" Grid.ColumnSpan="2" Orientation="Horizontal"
+                                                    HorizontalAlignment="Center"
+                                                    Margin="0">
+                                            <TextBlock Text="{Binding Date, StringFormat=dd.MM.yy HH:mm}" Margin="0" />
+                                        </StackPanel>
+                                    </Grid>
+                                    <DataGrid Grid.Row="1" Margin="0,0,0,10" ItemsSource="{Binding Tabs}"
+                                              HeadersVisibility="None"
+                                              AutoGenerateColumns="False"
+                                              CanUserAddRows="False"
+                                              CanUserDeleteRows="False" CanUserReorderColumns="False"
+                                              CanUserResizeRows="False"
+                                              GridLinesVisibility="None" ToolTipService.ShowDuration="10000"
+                                              ColumnHeaderStyle="{StaticResource DgHeader}"
+                                              RowStyle="{StaticResource DgRow}">
+                                        <DataGrid.Columns>
+                                            <DataGridTemplateColumn IsReadOnly="False"
+                                                                    CellTemplate="{StaticResource Restore}"
+                                                                    SortMemberPath="Restore"
+                                                                    Width="60">
+                                                <DataGridTemplateColumn.Header>
+                                                    <CheckBox x:Name="cbSelectAll" Checked="SelectAll_Checked"
+                                                              Unchecked="SelectAll_Unchecked"
+                                                              FlowDirection="RightToLeft" HorizontalAlignment="Left">
+                                                        <TextBlock Text="" FlowDirection="LeftToRight" />
+                                                    </CheckBox>
+                                                </DataGridTemplateColumn.Header>
+                                            </DataGridTemplateColumn>
+                                            <DataGridTemplateColumn Header="Чертеж" IsReadOnly="True"
+                                                                    CellTemplate="{StaticResource Name}"
+                                                                    SortMemberPath="Name"
+                                                                    Width="350" />
+                                            <DataGridTemplateColumn Header="Дата файла" IsReadOnly="True"
+                                                                    CellTemplate="{StaticResource Date}"
+                                                                    SortMemberPath="DateLastWrite"
+                                                                    Width="80" />
+                                            <DataGridTemplateColumn Header="Размер" IsReadOnly="True"
+                                                                    CellTemplate="{StaticResource Size}"
+                                                                    SortMemberPath="Size"
+                                                                    Width="50" />
+                                        </DataGrid.Columns>
+                                    </DataGrid>
+                                </Grid>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </Grid>
+                <Grid Grid.Row="1">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+                    <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Center" Margin="2">
+                        <ToggleButton Content="История" IsChecked="{Binding HasHistory}"
+                                      HorizontalAlignment="Center" />
+                        <TextBox Style="{DynamicResource SearchMetroTextBox}" MinWidth="120"
+                                 Text="{Binding HistorySearch, Delay=350, UpdateSourceTrigger=PropertyChanged}"
+                                 mah:VisibilityHelper.IsVisible="{Binding HasHistory}" VerticalAlignment="Center"
+                                 Margin="5,0,0,0" />
+                    </StackPanel>
+                    <DataGrid Grid.Row="1" Margin="5" ItemsSource="{Binding History}" AutoGenerateColumns="False"
+                              CanUserAddRows="False"
+                              CanUserDeleteRows="False" CanUserReorderColumns="False" CanUserResizeRows="False"
+                              GridLinesVisibility="None" ToolTipService.ShowDuration="10000"
+                              ColumnHeaderStyle="{StaticResource DgHeader}"
+                              RowStyle="{StaticResource DgRow}"
+                              mah:VisibilityHelper.IsVisible="{Binding HasHistory}">
+                        <DataGrid.Columns>
+                            <DataGridTemplateColumn Header="Открыть" IsReadOnly="False"
+                                                    CellTemplate="{StaticResource Restore}"
+                                                    SortMemberPath="Restore"
+                                                    Width="{Binding RestoreTabsColRestoreWidth, Source={x:Static properties:Settings.Default}, 
+                    Converter={converters:DataGridLengthConverter}, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+                            <DataGridTemplateColumn Header="Чертеж" IsReadOnly="True"
+                                                    CellTemplate="{StaticResource Name}"
+                                                    SortMemberPath="Name"
+                                                    Width="{Binding RestoreTabsColNameWidth, Source={x:Static properties:Settings.Default}, 
+                    Converter={converters:DataGridLengthConverter}, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+                            <DataGridTemplateColumn Header="Дата файла" IsReadOnly="True"
+                                                    CellTemplate="{StaticResource Date}"
+                                                    SortMemberPath="DateLastWrite"
+                                                    Width="{Binding RestoreTabsColDateWidth, Source={x:Static properties:Settings.Default}, 
+                    Converter={converters:DataGridLengthConverter}, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+                            <DataGridTemplateColumn Header="Размер" IsReadOnly="True"
+                                                    CellTemplate="{StaticResource Size}"
+                                                    SortMemberPath="Size"
+                                                    Width="{Binding RestoreTabsColSizeWidth, Source={x:Static properties:Settings.Default}, 
+                    Converter={converters:DataGridLengthConverter}, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Grid>
+            </Grid>
+        </ScrollViewer>
+        <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="5" HorizontalAlignment="Center">
+            <Button Content="Открыть" Margin="5" IsDefault="True" Command="{Binding Ok}" MinWidth="70" />
+        </StackPanel>
+        <CheckBox Grid.Row="1" IsChecked="{Binding IsOn}" Content="Показывать при запуске"
+                  ToolTip="Включение/отключение восстановления вкладок. Можно изменить в пользовательских настройках."
+                  Margin="2" />
+    </Grid>
+</wpf:BaseWindow>

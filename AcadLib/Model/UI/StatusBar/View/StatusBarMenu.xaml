@@ -1,0 +1,33 @@
+﻿<Window
+    x:Class="AcadLib.UI.StatusBar.View.StatusBarMenu"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:theme="clr-namespace:Autodesk.Windows.Themes;assembly=AdUiPalettes"
+    xmlns:view="clr-namespace:AcadLib.UI.StatusBar.View"
+    xmlns:fa="http://schemas.fontawesome.io/icons/"
+    mc:Ignorable="d"
+    d:DataContext="{d:DesignInstance view:StatusBarMenu}"
+    SizeToContent="WidthAndHeight"
+    BorderThickness="0"
+    WindowStyle="None"
+    Background="{Binding CurrentTheme.TabBorderBrush, Source={x:Static theme:ThemeManager.PaletteSettings}}"
+    ResizeMode="NoResize"
+    WindowStartupLocation="Manual">
+    <StackPanel>
+        <ListBox ItemsSource="{Binding MenuItems}" Margin="2" BorderThickness="0" Padding="2"
+             Background="{Binding CurrentTheme.TabBackgroundBrush, Source={x:Static theme:ThemeManager.PaletteSettings}}"
+             Foreground="{Binding CurrentTheme.ActiveTextBrush, Source={x:Static theme:ThemeManager.PaletteSettings}}">
+        <ListBox.ItemTemplate>
+            <DataTemplate>
+                <StackPanel Margin="1" MouseDown="OnMouseDown" Orientation="Horizontal">
+                    <fa:FontAwesome Icon="Check" Visibility="{Binding Visible}" Height="12"/>
+                    <TextBlock Text="{Binding Text}" VerticalAlignment="Center" HorizontalAlignment="Left"
+                               Margin="3" FontWeight="Bold" FontSize="12" MinWidth="60"/>
+                </StackPanel>
+            </DataTemplate>
+        </ListBox.ItemTemplate>
+    </ListBox>
+    </StackPanel>
+</Window>

@@ -1,0 +1,29 @@
+﻿<wpf1:BaseWindow 
+    x:Class="AcadLib.UI.Properties.PropertiesView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:local="clr-namespace:AcadLib.UI.Properties"
+    d:DataContext="{d:DesignInstance Type=local:DesignPropertiesViewModel}"
+	xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+    xmlns:wpf1="clr-namespace:NetLib.WPF;assembly=NetLib"
+    mc:Ignorable="d"
+    Topmost="True"
+    Title="Настройки" Height="300" Width="300">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <xctk:PropertyGrid Grid.Row="0" SelectedObject="{Binding Value}" ShowAdvancedOptions="True"/>
+        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center" Margin="5">
+            <Button Content="Сброс" Command="{Binding Reset}" Margin="5,5,50,5"/>
+            <Button Command="{Binding OK}" Content="OK" Margin="5" MinWidth="60"/>
+            <Button Content="Отмена" IsCancel="True" Margin="5" MinWidth="60"/>
+        </StackPanel>
+    </Grid>
+</wpf1:BaseWindow>
+
+
+

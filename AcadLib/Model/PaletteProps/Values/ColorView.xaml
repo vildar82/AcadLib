@@ -1,0 +1,12 @@
+﻿<UserControl x:Class="AcadLib.PaletteProps.ColorView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+    xmlns:controls="clr-namespace:AcadLib.WPF.Controls"
+    xmlns:paletteProps="clr-namespace:AcadLib.PaletteProps"
+    xmlns:wpf="clr-namespace:NetLib.WPF;assembly=NetLib"
+    d:DataContext="{d:DesignInstance paletteProps:ColorVM}"
+    mc:Ignorable="d" >
+    <controls:AcadColorPick Color="{Binding Value}"/>
+</UserControl>

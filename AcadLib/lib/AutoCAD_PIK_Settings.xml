@@ -1,0 +1,313 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>AutoCAD_PIK_Settings</name>
+    </assembly>
+    <members>
+        <member name="F:AutoCAD_PIK_Manager.Commands.Group">
+            <summary>
+            Префикс команд (группа)
+            </summary>
+        </member>
+        <member name="T:AutoCAD_PIK_Manager.Log">
+            <summary>
+            Debug: сообщения отладки, профилирования. В production системе обычно сообщения этого уровня включаются при первоначальном запуске системы или для поиска узких мест (bottleneck-ов).
+            Info: обычные сообщения, информирующие о действиях системы.Реагировать на такие сообщения вообще не надо, но они могут помочь, например, при поиске багов, расследовании интересных ситуаций итд.
+            Warn: записывая такое сообщение, система пытается привлечь внимание обслуживающего персонала.Произошло что-то странное. Возможно, это новый тип ситуации, ещё не известный системе. Следует разобраться в том, что произошло, что это означает, и отнести ситуацию либо к инфо-сообщению, либо к ошибке.Соответственно, придётся доработать код обработки таких ситуаций.
+            Error: ошибка в работе системы, требующая вмешательства. Что-то не сохранилось, что-то отвалилось. Необходимо принимать меры довольно быстро! Ошибки этого уровня и выше требуют немедленной записи в лог, чтобы ускорить реакцию на них.Нужно понимать, что ошибка пользователя – это не ошибка системы. Если пользователь ввёл в поле -1, где это не предполагалось – не надо писать об этом в лог ошибок.
+            Fatal: это особый класс ошибок. Такие ошибки приводят к неработоспособности системы в целом, или неработоспособности одной из подсистем.Чаще всего случаются фатальные ошибки из-за неверной конфигурации или отказов оборудования. Требуют срочной, немедленной реакции. Возможно, следует предусмотреть уведомление о таких ошибках по SMS.
+            </summary>
+        </member>
+        <member name="M:AutoCAD_PIK_Manager.Log.Debug(System.String)">
+            <summary>
+            Debug: сообщения отладки, профилирования. В production системе обычно сообщения этого уровня включаются при первоначальном запуске системы или для поиска узких мест (bottleneck-ов).
+            </summary>
+            <param name="message"></param>
+        </member>
+        <member name="M:AutoCAD_PIK_Manager.Log.Error(System.String)">
+            <summary>
+            Error: ошибка в работе системы, требующая вмешательства. Что-то не сохранилось, что-то отвалилось. Необходимо принимать меры довольно быстро! Ошибки этого уровня и выше требуют немедленной записи в лог, чтобы ускорить реакцию на них.Нужно понимать, что ошибка пользователя – это не ошибка системы. Если пользователь ввёл в поле -1, где это не предполагалось – не надо писать об этом в лог ошибок.
+            </summary>
+            <param name="message"></param>
+        </member>
+        <member name="M:AutoCAD_PIK_Manager.Log.Fatal(System.String)">
+            <summary>
+            Fatal: это особый класс ошибок. Такие ошибки приводят к неработоспособности системы в целом, или неработоспособности одной из подсистем.Чаще всего случаются фатальные ошибки из-за неверной конфигурации или отказов оборудования. Требуют срочной, немедленной реакции. Возможно, следует предусмотреть уведомление о таких ошибках по SMS.
+            </summary>
+            <param name="message"></param>
+        </member>
+        <member name="M:AutoCAD_PIK_Manager.Log.Info(System.String)">
+            <summary>
+            Info: обычные сообщения, информирующие о действиях системы.Реагировать на такие сообщения вообще не надо, но они могут помочь, например, при поиске багов, расследовании интересных ситуаций итд.
+            </summary>
+            <param name="message"></param>
+        </member>
+        <member name="M:AutoCAD_PIK_Manager.Log.Mail(System.String)">
+            <summary>
+            Отправка сообщения на почту и в лог
+            </summary>
+        </member>
+        <member name="M:AutoCAD_PIK_Manager.Log.Mail(System.Exception,System.String)">
+            <summary>
+            Отправка сообщения на почту и в лог
+            </summary>
+        </member>
+        <member name="M:AutoCAD_PIK_Manager.Log.SendMail(System.String,System.String,System.String)">
+            <summary>
+            Отправка электронной почты
+            </summary>
+            <param name="to">Кому, адреса через запятую</param>
+            <param name="subject">Тема</param>
+            <param name="body">Сообщение</param>
+        </member>
+        <member name="M:AutoCAD_PIK_Manager.Log.Warn(System.String)">
+            <summary>
+            Warn: записывая такое сообщение, система пытается привлечь внимание обслуживающего персонала.Произошло что-то странное. Возможно, это новый тип ситуации, ещё не известный системе. Следует разобраться в том, что произошло, что это означает, и отнести ситуацию либо к инфо-сообщению, либо к ошибке.Соответственно, придётся доработать код обработки таких ситуаций.
+            </summary>
+            <param name="message"></param>
+        </member>
+        <member name="M:AutoCAD_PIK_Manager.LogAddin.#ctor">
+            <summary>
+            Лог плагина - по группе
+            </summary>
+        </member>
+        <member name="M:AutoCAD_PIK_Manager.LogAddin.Debug(System.String)">
+            <summary>
+            Debug: сообщения отладки, профилирования. В production системе обычно сообщения этого уровня включаются при первоначальном запуске системы или для поиска узких мест (bottleneck-ов).
+            </summary>
+            <param name="message"></param>
+        </member>
+        <member name="M:AutoCAD_PIK_Manager.LogAddin.Error(System.String)">
+            <summary>
+            Error: ошибка в работе системы, требующая вмешательства. Что-то не сохранилось, что-то отвалилось. Необходимо принимать меры довольно быстро! Ошибки этого уровня и выше требуют немедленной записи в лог, чтобы ускорить реакцию на них.Нужно понимать, что ошибка пользователя – это не ошибка системы. Если пользователь ввёл в поле -1, где это не предполагалось – не надо писать об этом в лог ошибок.
+            </summary>
+            <param name="message"></param>
+        </member>
+        <member name="M:AutoCAD_PIK_Manager.LogAddin.Fatal(System.String)">
+            <summary>
+            Fatal: это особый класс ошибок. Такие ошибки приводят к неработоспособности системы в целом, или неработоспособности одной из подсистем.Чаще всего случаются фатальные ошибки из-за неверной конфигурации или отказов оборудования. Требуют срочной, немедленной реакции. Возможно, следует предусмотреть уведомление о таких ошибках по SMS.
+            </summary>
+            <param name="message"></param>
+        </member>
+        <member name="M:AutoCAD_PIK_Manager.LogAddin.Info(System.String)">
+            <summary>
+            Info: обычные сообщения, информирующие о действиях системы.Реагировать на такие сообщения вообще не надо, но они могут помочь, например, при поиске багов, расследовании интересных ситуаций итд.
+            </summary>
+            <param name="message"></param>
+        </member>
+        <member name="M:AutoCAD_PIK_Manager.LogAddin.Warn(System.String)">
+            <summary>
+            Warn: записывая такое сообщение, система пытается привлечь внимание обслуживающего персонала.Произошло что-то странное. Возможно, это новый тип ситуации, ещё не известный системе. Следует разобраться в том, что произошло, что это означает, и отнести ситуацию либо к инфо-сообщению, либо к ошибке.Соответственно, придётся доработать код обработки таких ситуаций.
+            </summary>
+            <param name="message"></param>
+        </member>
+        <member name="T:AutoCAD_PIK_Manager.Profile">
+            <summary>
+                Настройка профиля ПИК в автокаде.
+            </summary>
+        </member>
+        <member name="M:AutoCAD_PIK_Manager.Profile.SetProfile">
+            <summary>
+                Настройка профиля ПИК в автокаде
+            </summary>
+        </member>
+        <member name="M:AutoCAD_PIK_Manager.Profile.SetupSupportPath">
+            <summary>
+                Добавление путей доступа определенных в файле settingsPik и settingsGroup
+            </summary>
+        </member>
+        <member name="T:AutoCAD_PIK_Manager.Settings.Exceptions.NoGroupException">
+            <summary>
+            Исключение - пользователь группы "Нет"
+            </summary>
+        </member>
+        <member name="M:AutoCAD_PIK_Manager.Settings.PathVariable.Merge(AutoCAD_PIK_Manager.Settings.PathVariable,AutoCAD_PIK_Manager.Settings.PathVariable)">
+            <summary>
+            Объединение настроек
+            </summary>
+        </member>
+        <member name="T:AutoCAD_PIK_Manager.Settings.PikSettings">
+            <summary>
+            Настройки Autocad_Pik_Manager
+            </summary>
+        </member>
+        <member name="P:AutoCAD_PIK_Manager.Settings.PikSettings.LocalSettingsFolder">
+            <summary>
+            Путь до папки настроек на локальном компьютере: c:\Autodesk\AutoCAD\Pik\Settings
+            </summary>
+        </member>
+        <member name="P:AutoCAD_PIK_Manager.Settings.PikSettings.ServerSettingsFolder">
+            <summary>
+            Путь к папкее настроек на сервере. z:\AutoCAD_server\Адаптация
+            </summary>
+        </member>
+        <member name="P:AutoCAD_PIK_Manager.Settings.PikSettings.ServerShareSettingsFolder">
+            <summary>
+            Путь к папке с настройками программ общими для всех пользователей (share).
+            </summary>
+        </member>
+        <member name="P:AutoCAD_PIK_Manager.Settings.PikSettings.UserGroup">
+            <summary>
+            Группа пользователя.
+            </summary>
+        </member>
+        <member name="P:AutoCAD_PIK_Manager.Settings.PikSettings.AdditionalUserGroup">
+            <summary>
+            Дополнительная группа пользователя.
+            </summary>
+        </member>
+        <member name="P:AutoCAD_PIK_Manager.Settings.PikSettings.IsUserGroupDefault">
+            <summary>
+            Если группа пользователя не определена и взята дефолтная
+            </summary>
+        </member>
+        <member name="P:AutoCAD_PIK_Manager.Settings.PikSettings.UserGroups">
+            <summary>
+            Группы пользователей определенные по папкам в папке Standart на сервере
+            </summary>
+        </member>
+        <member name="P:AutoCAD_PIK_Manager.Settings.PikSettings.UserGroupsCombined">
+            <summary>
+            Комбинация групп пользователя - например КР-МН и КР-СБ
+            </summary>
+        </member>
+        <member name="P:AutoCAD_PIK_Manager.Settings.PikSettings.IsUpdatedSettings">
+            <summary>
+            Последние ли настройки у пользователя
+            </summary>
+        </member>
+        <member name="M:AutoCAD_PIK_Manager.Settings.PikSettings.GetUserCombinedGroups">
+            <summary>
+            Определение комбинации групп пользователя. группы могут быть перечислены через запятую - КР-МН, КР-СБ
+            </summary>
+        </member>
+        <member name="M:AutoCAD_PIK_Manager.Settings.PikSettings.GetUserGroupFromServer(System.Boolean@,System.String@)">
+            <summary>
+            Определение группы пользователя
+            </summary>
+            <param name="isDisabledSettings"></param>
+            <returns></returns>
+        </member>
+        <member name="T:AutoCAD_PIK_Manager.Settings.SettingsGroupFile">
+            <summary>
+            Настройки отдела. Индивидуальные особенности отдела.
+            </summary>
+        </member>
+        <member name="P:AutoCAD_PIK_Manager.Settings.SettingsGroupFile.AutoLoadLispPathBySettings">
+            <summary>
+            Автоматически загружаемые лисп файлы - относительные пути от c:\Autodesk\AutoCAD\Pik\Settings\
+            </summary>
+        </member>
+        <member name="M:AutoCAD_PIK_Manager.Settings.SettingsGroupFile.Merge(System.Collections.Generic.List{AutoCAD_PIK_Manager.Settings.SettingsGroupFile})">
+            <summary>
+            Объединение настроек групп в одну общую
+            </summary>
+            <param name="sgfs">Группы настроек разных разделов</param>
+        </member>
+        <member name="T:AutoCAD_PIK_Manager.Settings.SettingsPikFile">
+            <summary>
+            Настройки ПИК из файла SettingsPIK.xml
+            </summary>
+        </member>
+        <member name="P:AutoCAD_PIK_Manager.Settings.SettingsPikFile.AutoLoadLispPathBySettings">
+            <summary>
+            Автоматически загружаемые лисп файлы - относительные пути от c:\Autodesk\AutoCAD\Pik\Settings\
+            </summary>
+        </member>
+        <member name="P:AutoCAD_PIK_Manager.Settings.SettingsPikFile.DbDictionaryCleans">
+            <summary>
+            Очистка словаря чертежа - можно указывать название через путь '/'
+            </summary>
+        </member>
+        <member name="M:AutoCAD_PIK_Manager.Update.GetCopyedFiles(System.IO.DirectoryInfo,System.IO.DirectoryInfo,System.Threading.CancellationToken,System.Boolean)">
+            <summary>
+            Копирование файлов настроек с сервера
+            </summary>
+        </member>
+        <member name="M:AutoCAD_PIK_Manager.Update.VersionsEqal(System.String,System.String,System.String@,System.String@,System.String@)">
+            <summary>
+            Равны ли версии общих настроек локально и на сервере
+            </summary>
+        </member>
+        <member name="M:AutoCAD_PIK_Manager.Update.AvaibleDiskSpaceMb">
+            <summary>
+            Доступное место на диске, MB
+            </summary>
+        </member>
+        <member name="M:AutoCAD_PIK_Manager.Update.GetCopiedCommonFiles(System.Threading.CancellationToken)">
+            <summary>
+            Копирование общих настроек
+            </summary>
+        </member>
+        <member name="T:AutoCAD_PIK_Manager.User.AutocadUser">
+            <summary>
+            Пользователь настроек ПИК в AutoCAD
+            </summary>
+        </member>
+        <member name="T:AutoCAD_PIK_Manager.User.DbAutocadUsers">
+             <summary>
+            Represents a strongly typed in-memory cache of data.
+            </summary>
+        </member>
+        <member name="T:AutoCAD_PIK_Manager.User.DbAutocadUsers.AutocadUsersDataTable">
+             <summary>
+            Represents the strongly named DataTable class.
+            </summary>
+        </member>
+        <member name="T:AutoCAD_PIK_Manager.User.DbAutocadUsers.AutocadUsersRow">
+             <summary>
+            Represents strongly named DataRow class.
+            </summary>
+        </member>
+        <member name="T:AutoCAD_PIK_Manager.User.DbAutocadUsers.AutocadUsersRowChangeEvent">
+             <summary>
+            Row event argument class
+            </summary>
+        </member>
+        <member name="T:AutoCAD_PIK_Manager.User.DbAutocadUsersTableAdapters.AutocadUsersTableAdapter">
+             <summary>
+            Represents the connection and commands used to retrieve and save data.
+            </summary>
+        </member>
+        <member name="T:AutoCAD_PIK_Manager.User.DbAutocadUsersTableAdapters.TableAdapterManager">
+             <summary>
+            TableAdapterManager is used to coordinate TableAdapters in the dataset to enable Hierarchical Update scenarios
+            </summary>
+        </member>
+        <member name="M:AutoCAD_PIK_Manager.User.DbAutocadUsersTableAdapters.TableAdapterManager.UpdateUpdatedRows(AutoCAD_PIK_Manager.User.DbAutocadUsers,System.Collections.Generic.List{System.Data.DataRow},System.Collections.Generic.List{System.Data.DataRow})">
+             <summary>
+            Update rows in top-down order.
+            </summary>
+        </member>
+        <member name="M:AutoCAD_PIK_Manager.User.DbAutocadUsersTableAdapters.TableAdapterManager.UpdateInsertedRows(AutoCAD_PIK_Manager.User.DbAutocadUsers,System.Collections.Generic.List{System.Data.DataRow})">
+             <summary>
+            Insert rows in top-down order.
+            </summary>
+        </member>
+        <member name="M:AutoCAD_PIK_Manager.User.DbAutocadUsersTableAdapters.TableAdapterManager.UpdateDeletedRows(AutoCAD_PIK_Manager.User.DbAutocadUsers,System.Collections.Generic.List{System.Data.DataRow})">
+             <summary>
+            Delete rows in bottom-up order.
+            </summary>
+        </member>
+        <member name="M:AutoCAD_PIK_Manager.User.DbAutocadUsersTableAdapters.TableAdapterManager.GetRealUpdatedRows(System.Data.DataRow[],System.Collections.Generic.List{System.Data.DataRow})">
+             <summary>
+            Remove inserted rows that become updated rows after calling TableAdapter.Update(inserted rows) first
+            </summary>
+        </member>
+        <member name="M:AutoCAD_PIK_Manager.User.DbAutocadUsersTableAdapters.TableAdapterManager.UpdateAll(AutoCAD_PIK_Manager.User.DbAutocadUsers)">
+             <summary>
+            Update all changes to the dataset.
+            </summary>
+        </member>
+        <member name="T:AutoCAD_PIK_Manager.User.DbAutocadUsersTableAdapters.TableAdapterManager.UpdateOrderOption">
+             <summary>
+            Update Order Option
+            </summary>
+        </member>
+        <member name="T:AutoCAD_PIK_Manager.User.DbAutocadUsersTableAdapters.TableAdapterManager.SelfReferenceComparer">
+             <summary>
+            Used to sort self-referenced table's rows
+            </summary>
+        </member>
+    </members>
+</doc>

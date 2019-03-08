@@ -1,0 +1,30 @@
+﻿<wpf:BaseWindow
+    x:Class="AcadLib.Layers.LayersSelected.LayersSelectedView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:layersSelected="clr-namespace:AcadLib.Layers.LayersSelected"
+    xmlns:wpf="clr-namespace:NetLib.WPF;assembly=NetLib"
+    xmlns:converterA="clr-namespace:AcadLib.WPF.Converters"
+    xmlns:layers="clr-namespace:AcadLib.Layers"
+    d:DataContext="{d:DesignInstance layersSelected:LayersSelectedVM, d:IsDesignTimeCreatable=True}"
+    UncloseDialogByEsc="True"
+    mc:Ignorable="d"
+    Title="Слои выделенных объектов">
+    <Grid>
+        <DataGrid ItemsSource="{Binding Layers}" IsReadOnly="True" AutoGenerateColumns="False" Margin="5">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Имя" Binding="{Binding Name}" MinWidth="100" />
+                <DataGridTemplateColumn Header="Цвет">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate DataType="layers:LayerInfo">
+                            <Button Content="{Binding ColorStr}"
+                                    Background="{Binding Color, Converter={converterA:ColorToBrushConverter}}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+    </Grid>
+</wpf:BaseWindow>

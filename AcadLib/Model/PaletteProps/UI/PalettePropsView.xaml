@@ -1,0 +1,144 @@
+﻿<UserControl
+    x:Class="AcadLib.PaletteProps.UI.PalettePropsView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:AcadLib.PaletteProps.UI"
+    xmlns:wpf="clr-namespace:NetLib.WPF;assembly=NetLib"
+    xmlns:conv="clr-namespace:NetLib.WPF.Converters;assembly=NetLib"
+    xmlns:properties="clr-namespace:AcadLib.Properties"
+    xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
+    xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+    d:DataContext="{d:DesignInstance local:PalettePropsVM}"
+    Background="{DynamicResource BackBrush}"
+    Name="Palette"
+    Foreground="{DynamicResource TextBrush}"
+    mc:Ignorable="d">
+    <UserControl.Resources>
+        <ResourceDictionary Source="PalettePropsStyle.xaml" />
+    </UserControl.Resources>
+    <Grid HorizontalAlignment="Stretch"
+          mah:VisibilityHelper.IsHidden="{Binding Types, Converter={conv:IsNullConverter}}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <ComboBox Grid.Column="0" ItemsSource="{Binding Types}" SelectedItem="{Binding SelectedType}"
+                      Margin="1" MinWidth="100">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal" Margin="1">
+                            <TextBlock Text="{Binding Name}" Margin="1" ToolTip="Название объекта" />
+                            <TextBlock Text="{Binding Count}" Margin="5,1,1,1" ToolTip="Кол-во объектов" />
+                        </StackPanel>
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+                <ComboBox.ToolTip>
+                    <StackPanel Orientation="Horizontal" Margin="1">
+                        <TextBlock Text="{Binding SelectedType.Name}" Margin="1" />
+                        <TextBlock Text="{Binding SelectedType.Count}" Margin="5,1,1,1" />
+                    </StackPanel>
+                </ComboBox.ToolTip>
+            </ComboBox>
+            <Button Grid.Column="1" Content="{iconPacks:Material Select}" Command="{Binding SelectedType.SelectType}"
+                    Margin="1"
+                    ToolTip="Выделить объекты на чертеже" />
+        </Grid>
+        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+            <ItemsControl ItemsSource="{Binding SelectedType.Groups}" Margin="0">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition />
+                            </Grid.RowDefinitions>
+                            <Grid Name="groupGrid" Grid.Row="0" Background="{DynamicResource BackMoreBrush}">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition />
+                                </Grid.ColumnDefinitions>
+                                <!--Имя группы свойств-->
+                                <TextBlock Grid.Column="0" HorizontalAlignment="Left"
+                                           Style="{StaticResource TbGroupNameStyle}">
+                                    <Run Text="{Binding Name}" />
+                                    <Run Text=" " />
+                                    <Run Text="{Binding Count, Mode=OneWay}" />
+                                </TextBlock>
+                                <StackPanel Grid.Column="1" HorizontalAlignment="Right" Orientation="Horizontal">
+                                    <Button Content="{iconPacks:Material Select}"
+                                            Command="{Binding SelectGroup}" Margin="1"
+                                            ToolTip="Выделить объекты на чертеже" />
+                                    <Button Content="{Binding ButtonExpandContent}"
+                                            Foreground="{DynamicResource TextBrush}"
+                                            Command="{Binding ButtonExpandCommand}"
+                                            Style="{StaticResource BExpandStyle}" Margin="0,0,0,2"
+                                            ToolTip="{Binding ButtonExpandTooltip}" />
+                                </StackPanel>
+                            </Grid>
+                            <!--Список свойств группы-->
+                            <ItemsControl Grid.Row="1" ItemsSource="{Binding Properties}" VerticalAlignment="Top"
+                                          mah:VisibilityHelper.IsVisible="{Binding IsExpanded}"
+                                          PreviewMouseWheel="OnPreviewMouseWheel" Margin="5,0,0,0">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border BorderThickness="0">
+                                            <Grid>
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition Height="Auto" />
+                                                    <RowDefinition Height="Auto" />
+                                                </Grid.RowDefinitions>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition
+                                                        Width="{Binding PalettePropsNameWidth,
+														Source={x:Static properties:Settings.Default},
+														Converter={conv:GridLengthConverter}, Mode=TwoWay}" />
+                                                    <ColumnDefinition Width="2" />
+                                                    <ColumnDefinition />
+                                                </Grid.ColumnDefinitions>
+                                                <!-- Имя свойства -->
+                                                <TextBlock Grid.Row="0" Grid.Column="0" Text="{Binding Name}"
+                                                           Style="{StaticResource TbPropNameStyle}" />
+                                                <GridSplitter Grid.Row="0" Grid.Column="1" Width="1"
+                                                              VerticalAlignment="Stretch" HorizontalAlignment="Center"
+                                                              Background="{DynamicResource BackMoreBrush}" />
+                                                <!-- Значение -->
+                                                <ContentControl Grid.Row="0" Grid.Column="2"
+                                                                Content="{Binding ValueControl}"
+                                                                VerticalAlignment="Center"
+                                                                Background="Transparent" />
+                                                <StackPanel Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3"
+                                                            Orientation="Vertical">
+                                                    <Separator
+                                                        Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}"
+                                                        Background="{DynamicResource BackMoreBrush}" />
+                                                </StackPanel>
+                                                <Grid.ToolTip>
+                                                    <StackPanel>
+                                                        <StackPanel Orientation="Horizontal">
+                                                            <TextBlock Text="{Binding Name}" />
+                                                            <TextBlock Text=" = " />
+                                                            <TextBlock Text="{Binding ValueControl.DataContext.Value}" />
+                                                        </StackPanel>
+                                                        <TextBlock Text="{Binding Tooltip}"
+                                                                   Visibility="{Binding Tooltip, Converter={conv:NullCollapseVisibilityConverter}}" />
+                                                    </StackPanel>
+                                                </Grid.ToolTip>
+                                            </Grid>
+                                        </Border>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </Grid>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </ScrollViewer>
+    </Grid>
+</UserControl>

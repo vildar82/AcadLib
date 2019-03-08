@@ -1,0 +1,164 @@
+﻿<wpf:BaseWindow x:Class="UtilsEditUsers.Model.User.UsersEditor.UsersEditorView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                xmlns:wpf="clr-namespace:NetLib.WPF;assembly=NetLib"
+        xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
+        xmlns:usersEditor="clr-namespace:UtilsEditUsers.Model.User.UsersEditor"
+        xmlns:converters="clr-namespace:NetLib.WPF.Converters;assembly=NetLib"
+        xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+        d:DataContext="{d:DesignInstance usersEditor:UsersEditorVM}"
+        mc:Ignorable="d"
+        WindowState="Maximized"
+        ShowMaxRestoreButton="True"
+        Title="Пользователи">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <StackPanel Grid.Row="0"  Orientation="Horizontal" Margin="10,5,0,0">
+            <TextBlock Text="{Binding UsersCount}"/>
+            <TextBox Text="{Binding Filter, Delay=400, UpdateSourceTrigger=PropertyChanged}" Margin="10,0,10,0"
+                 mah:TextBoxHelper.Watermark="Фильтр" MinWidth="100"  HorizontalAlignment="Left" mah:TextBoxHelper.ClearTextButton="True"/>
+            <Button Content="Я" Command="{Binding FindMe}"  VerticalAlignment="Center" MinWidth="30"/>
+            <StackPanel Orientation="Horizontal" Margin="10,0,10,0">
+                <TextBlock Text="Группа: "/>
+                <ComboBox ItemsSource="{Binding FilterGroups}" SelectedItem="{Binding FilterGroup}" VerticalAlignment="Center"
+                          MinWidth="70"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Margin="10,0,0,0">
+                <TextBlock Text="Версии на сервере: "/>
+                <ComboBox ItemsSource="{Binding GroupServerVersions}" MinWidth="120"
+                          SelectedItem="{Binding GroupServerVersion}">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="80"/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Column="0" Text="{Binding Name}" ToolTip="{Binding Description}"/>
+                                <TextBlock Grid.Column="1" Text="{Binding Version}" Margin="10,0,0,0"/>
+                            </Grid>
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+            </StackPanel>
+        </StackPanel>
+        <DataGrid Name="DgUsers" Grid.Row="1" ItemsSource="{Binding Users}" AutoGenerateColumns="False" IsReadOnly="True"
+                  CanUserDeleteRows="False" CanUserAddRows="False" CanUserResizeRows="False" CanUserReorderColumns="False"
+                  SelectionMode="Extended" SelectionChanged="Selector_OnSelectionChanged" Margin="10" BorderThickness="1">
+            <DataGrid.Columns>
+                <DataGridTemplateColumn Header="Фото" >
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate DataType="usersEditor:EditAutocadUsers">
+                            <Image Source="{Binding Image}" Height="30">
+                                <Image.ToolTip>
+                                    <Image Source="{Binding Image}"/>
+                                </Image.ToolTip>
+                            </Image>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTextColumn Header="ФИО" Binding="{Binding FIO}" />
+                <DataGridTextColumn Header="Логин" Binding="{Binding Login}" />
+                <DataGridTextColumn Header="Группа" Binding="{Binding Group}" />
+                <DataGridTextColumn Header="Доп группа" Binding="{Binding AdditionalGroup}" />
+                <DataGridTemplateColumn Header="Версия" SortMemberPath="Version" >
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate DataType="usersEditor:EditAutocadUsers">
+                            <TextBlock Text="{Binding Version}" VerticalAlignment="Center"
+                                       Background="{Binding VersionColor}"
+                                       ToolTip="{Binding VersionTooltip}"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTextColumn Header="Дата запуска" Binding="{Binding DateRun, StringFormat=dd.MM.yyyy HH:mm}" 
+                                    IsReadOnly="True" />
+                <DataGridCheckBoxColumn Header="Отключен" Binding="{Binding Disabled}" 
+                                        ElementStyle="{DynamicResource MetroDataGridCheckBox}"
+                                        EditingElementStyle="{DynamicResource MetroDataGridCheckBox}"/>
+                <DataGridCheckBoxColumn Header="PreviewUpdate" Binding="{Binding PreviewUpdate}"
+                                        ElementStyle="{DynamicResource MetroDataGridCheckBox}"
+                                        EditingElementStyle="{DynamicResource MetroDataGridCheckBox}"/>
+                <DataGridTextColumn Header="Примечание" Binding="{Binding Description}" Width="150" />
+                <DataGridTextColumn Header="Отдел" Binding="{Binding AdDepartment}" Width="250" />
+                <DataGridTextColumn Header="Должность" Binding="{Binding AdPosition}" Width="250" />
+                <DataGridTemplateColumn Header="Удалить" >
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate DataType="usersEditor:EditAutocadUsers">
+                            <Button Content="x" VerticalContentAlignment="Center" 
+                                    Command="{Binding DataContext.DeleteUser, ElementName=DgUsers}" HorizontalAlignment="Center"
+                                    CommandParameter="{Binding}"
+                                    VerticalAlignment="Center"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+        <Grid Grid.Row="2" Margin="10" IsEnabled="{Binding EditMode}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="100"/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <!--ФИО-->
+            <TextBlock Grid.Column="0" Grid.Row="0" Text="ФИО"/>
+            <TextBox Grid.Column="1" Grid.Row="0" Text="{Binding SelectedUser.FIO}"
+                     IsEnabled="{Binding IsOneUserSelected}" Margin="2"/>
+            <!--Логин-->
+            <TextBlock Grid.Column="0" Grid.Row="1" Text="Логин"/>
+            <TextBox Grid.Column="1" Grid.Row="1" Text="{Binding SelectedUser.Login}" Margin="2"
+                     IsEnabled="{Binding IsOneUserSelected}"/>
+            <!--Группа-->
+            <TextBlock Grid.Column="0" Grid.Row="2" Text="Группа"/>
+            <StackPanel Grid.Column="1" Grid.Row="2" Orientation="Horizontal">
+            <ComboBox ItemsSource="{Binding Groups}" VerticalAlignment="Center" MinWidth="100"
+                      Text="{Binding SelectedUser.Group}" Margin="2" IsEditable="True"/>
+                <!--Доп Группа-->
+                <TextBlock Text="Доп. группа" Margin="1"/>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <ComboBox Grid.Column="0" ItemsSource="{Binding Groups}" VerticalAlignment="Center" MinWidth="100"
+                              Text="{Binding SelectedUser.AdditionalGroup}" Margin="2" IsEditable="True"/>
+                    <Button Grid.Column="1" Command="{Binding DeleteAdditionalGroup}" Content="{iconPacks:Material Delete}"
+                            CommandParameter="{Binding SelectedUser}" Margin="1"/>
+                </Grid>
+            </StackPanel>
+            <!--Preview Update-->
+            <TextBlock Grid.Column="0" Grid.Row="3" Text="Preview Update"/>
+            <CheckBox Grid.Column="1" Grid.Row="3" IsChecked="{Binding SelectedUser.PreviewUpdate}" Margin="2"/>
+            <!--Отключен-->
+            <TextBlock Grid.Column="0" Grid.Row="4" Text="Отключен"/>
+            <CheckBox Grid.Column="1" Grid.Row="4" IsChecked="{Binding SelectedUser.Disabled}" Margin="2"/>
+            <!--Примечание-->
+            <TextBlock Grid.Column="0" Grid.Row="5" Text="Примечание"/>
+            <TextBox Grid.Column="1" Grid.Row="5" Text="{Binding SelectedUser.Description}" Margin="2"/>
+            <StackPanel Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Center">
+                <Button Content="Применить" Command="{Binding Apply}" Margin="0,5,0,0"
+                        mah:VisibilityHelper.IsVisible="{Binding EditMode}"/>
+            </StackPanel>
+        </Grid>
+        <StackPanel Grid.Row="3" Orientation="Horizontal" Margin="5" HorizontalAlignment="Center">
+            <mah:ToggleSwitch IsChecked="{Binding EditMode}" Margin="5" Content="Редатирование" mah:VisibilityHelper.IsVisible="{Binding IsBimUser}"/>
+            <Button Content="Сохранить" Command="{Binding Save}" Margin="5" VerticalAlignment="Center"/>
+        </StackPanel>
+    </Grid>
+</wpf:BaseWindow>
+
