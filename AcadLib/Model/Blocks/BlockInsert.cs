@@ -189,6 +189,22 @@
         /// Вставка вхождения блока
         /// </summary>
         public static BlockReference InsertBlockRef(
+            string blName,
+            Point3d pt,
+            ObjectId ownerId,
+            double scale = 1)
+        {
+            var bt = ownerId.Database.BlockTableId.GetObject<BlockTable>();
+            var btrId = bt[blName];
+            var owner = ownerId.GetObjectT<BlockTableRecord>(OpenMode.ForWrite);
+            var t = bt.Database.TransactionManager.TopTransaction;
+            return InsertBlockRef(btrId, pt, owner, t, scale);
+        }
+
+        /// <summary>
+        /// Вставка вхождения блока
+        /// </summary>
+        public static BlockReference InsertBlockRef(
             BlockTableRecord btr,
             Point3d pt,
             [NotNull] BlockTableRecord owner,
