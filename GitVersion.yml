@@ -1,9 +1,8 @@
 assembly-versioning-scheme: MajorMinorPatch
-assembly-file-versioning-scheme: MajorMinorPatchTag
+assembly-file-versioning-scheme: MajorMinorPatch
 mode: ContinuousDeployment
 tag-prefix: '[vV]'
 next-version: 1.2.123
-increment: Patch
 major-version-bump-message: '\s?(breaking|major)'
 minor-version-bump-message: '\s?(feature|minor)'
 patch-version-bump-message: '\s?(fix|patch|add)'
@@ -11,3 +10,4 @@ commit-message-incrementing: Enabled
 branches: {}
 ignore:
   sha: []
+increment: Patch
