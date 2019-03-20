@@ -1,14 +1,13 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using AcadLib.Layers.Filter;
-using AcadLib.Layers.LayerState;
-using Autodesk.AutoCAD.DatabaseServices;
-using iTextSharp.text;
-using JetBrains.Annotations;
-
 namespace AcadLib.Template
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using Autodesk.AutoCAD.DatabaseServices;
+    using JetBrains.Annotations;
+    using Layers.Filter;
+    using Layers.LayerState;
+
     [Flags]
     public enum TemplateItemEnum
     {
@@ -20,7 +19,7 @@ namespace AcadLib.Template
         MLeaderStyles = 32,
         TableStyles = 64
     }
-    
+
     [PublicAPI]
     public class CopyFromTemplate
     {
@@ -47,7 +46,7 @@ namespace AcadLib.Template
                         Logger.Log.Error(ex, "CopyFromTemplate слои");
                         $"Ошибка копирования слоев - {ex.Message}".WriteToCommandLine();
                     }
-                    
+
                     if (copyItems.HasFlag(TemplateItemEnum.TextStyles))
                         CopySymbolTableItems(dbSrc.TextStyleTableId, dbDest.TextStyleTableId, "Текстовые стили");
                     if (copyItems.HasFlag(TemplateItemEnum.DimStyles))
