@@ -22,8 +22,7 @@
         [NotNull]
         public static Cell SetValue([NotNull] this Cell cell, [CanBeNull] object value)
         {
-            if (value == null)
-                return cell;
+            if (value == null) return cell;
             cell.SetValue(value, ParseOption.ParseOptionNone);
             return cell;
         }
@@ -165,10 +164,9 @@
             }
         }
 
-        private static void Merge(Table table, int colStart, int rowStart, int colEnd, int rowEnd)
+        public static void Merge(Table table, int colStart, int rowStart, int colEnd, int rowEnd)
         {
-            if (colEnd - colStart <= 0 && rowEnd - rowStart <= 0)
-                return;
+            if (colEnd - colStart <= 0 && rowEnd - rowStart <= 0) return;
             var rangew = CellRange.Create(table, rowStart, colStart, rowEnd, colEnd);
             table.MergeCells(rangew);
         }
