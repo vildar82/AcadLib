@@ -1,7 +1,4 @@
-﻿using System.Threading.Tasks;
-using System.Windows.Threading;
-
-namespace AcadLib.Errors
+﻿namespace AcadLib.Errors
 {
     using System;
     using System.Collections.Generic;
@@ -311,7 +308,7 @@ namespace AcadLib.Errors
                     Name = title,
                     Tooltip = tooltip,
                     Click = new RelayCommand(click)
-                });                
+                });
             });
         }
 
@@ -324,7 +321,7 @@ namespace AcadLib.Errors
                     Name = title,
                     Tooltip = tooltip,
                     Click = new RelayCommand(() => entId.ShowEnt())
-                });                
+                });
             });
         }
 
