@@ -18,6 +18,8 @@
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 //  Ported to C# By Dror Gluska, April 9th, 2009
 
+using System.Linq;
+
 namespace AcadLib.RTree.SpatialIndex
 {
     using System;
@@ -1002,6 +1004,11 @@ namespace AcadLib.RTree.SpatialIndex
 
             n.reorganize(this);
             return newNode;
+        }
+
+        public List<T> GetItems()
+        {
+            return ItemsToIds.Keys.ToList();
         }
     }
 }

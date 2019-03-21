@@ -94,13 +94,11 @@
         {
             return new Extents3d(
                 new Point3d(ext.MinPoint.X - cell.Borders.Horizontal.Margin ?? 0, ext.MinPoint.Y - cell.Borders.Top.Margin ?? 0, 0),
-                new Point3d(ext.MaxPoint.X + cell.Borders.Horizontal.Margin ?? 0, ext.MaxPoint.Y + cell.Borders.Top.Margin ?? 0, 0)
-                );
+                new Point3d(ext.MaxPoint.X + cell.Borders.Horizontal.Margin ?? 0, ext.MaxPoint.Y + cell.Borders.Top.Margin ?? 0, 0));
         }
 
         private static void SetCell([NotNull] CellBorder cell, LineWeight lw, bool visible)
         {
-            // cell.Overrides = GridProperties.Visibility | GridProperties.LineWeight;
             cell.LineWeight = lw;
             cell.IsVisible = visible;
         }
@@ -164,7 +162,7 @@
             }
         }
 
-        public static void Merge(Table table, int colStart, int rowStart, int colEnd, int rowEnd)
+        public static void Merge(this Table table, int colStart, int rowStart, int colEnd, int rowEnd)
         {
             if (colEnd - colStart <= 0 && rowEnd - rowStart <= 0) return;
             var rangew = CellRange.Create(table, rowStart, colStart, rowEnd, colEnd);

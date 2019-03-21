@@ -2,7 +2,7 @@ assembly-versioning-scheme: MajorMinorPatch
 assembly-file-versioning-scheme: MajorMinorPatch
 mode: ContinuousDeployment
 tag-prefix: '[vV]'
-next-version: 1.2.123
+next-version: 1.2.124
 major-version-bump-message: '\s?(breaking|major)'
 minor-version-bump-message: '\s?(feature|minor)'
 patch-version-bump-message: '\s?(fix|patch|add)'
