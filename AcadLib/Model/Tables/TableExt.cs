@@ -27,6 +27,19 @@
             return cell;
         }
 
+        [NotNull]
+        public static Cell SetValue(this Cell cell, ObjectId btrId, bool isAutoScale = true, double scale = 1, double rotation = 0)
+        {
+            if (btrId.IsNull) return cell;
+            cell.BlockTableRecordId = btrId;
+            var blockContent = cell.Contents[0];
+            blockContent.IsAutoScale = isAutoScale;
+            if (isAutoScale) return cell;
+            blockContent.Scale = scale;
+            blockContent.Rotation = rotation;
+            return cell;
+        }
+
         public static Cell MoveDown([NotNull] this Cell cell)
         {
             return cell.ParentTable.Cells[cell.Row + 1, cell.Column];

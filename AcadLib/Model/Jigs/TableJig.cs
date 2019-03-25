@@ -11,12 +11,13 @@
         private readonly string _msg;
         private Point3d _position;
 
-        public TableJig([NotNull] Table table, double scale, string msg) : base(table)
+        public TableJig([NotNull] Table table, double scale, string msg)
+            : base(table)
         {
             _msg = msg;
-            var table1 = table;
-            _position = table1.Position;
-            table1.TransformBy(Matrix3d.Scaling(scale, table.Position));
+            _position = table.Position;
+            table.TransformBy(Matrix3d.Scaling(scale, table.Position));
+            table.TransformBy(AcadHelper.Doc.Editor.CurrentUserCoordinateSystem);
         }
 
         public Entity GetEntity()

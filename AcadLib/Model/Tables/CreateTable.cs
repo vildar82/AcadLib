@@ -122,7 +122,7 @@
                 var jigTable = new TableJig(table, scale, "Вставка таблицы");
                 if (doc.Editor.Drag(jigTable).Status == PromptStatus.OK)
                 {
-                    var cs = (BlockTableRecord)db.CurrentSpaceId.GetObject(OpenMode.ForWrite);
+                    var cs = db.CurrentSpaceId.GetObjectT<BlockTableRecord>(OpenMode.ForWrite);
                     cs.AppendEntity(table);
                     t.AddNewlyCreatedDBObject(table, true);
                 }

@@ -190,7 +190,7 @@
     <PackageReference Include="NetLib">
       <Version>1.1.123</Version>
     </PackageReference>
-    <PackageReference Update="Fody" Version="3.3.5" />
+    <PackageReference Update="Fody" Version="4.2.1" />
     <PackageReference Update="Nerdbank.GitVersioning" Version="2.3.38" />
     <PackageReference Include="PropertyChanged.Fody">
       <Version>2.6.0</Version>

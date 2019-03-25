@@ -14,6 +14,7 @@ namespace AcadLib.UI.Ribbon.Editor.Converters
             try
             {
                 var item = (RibbonItemDataVM) value;
+                if (item == null) return null;
                 return
                     $"{item.GetType().Name} \n{item.Name} \n{item.Description} \n{(item.IsTest ? "Тест" : "")} \n{item.Access?.JoinToString()}";
             }
