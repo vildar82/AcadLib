@@ -28,9 +28,11 @@
         }
 
         [NotNull]
-        public static Cell SetValue(this Cell cell, ObjectId btrId, bool isAutoScale = true, double scale = 1, double rotation = 0)
+        public static Cell SetValue(this Cell cell, ObjectId btrId, bool isAutoScale, double scale = 1, double rotation = 0)
         {
             if (btrId.IsNull) return cell;
+            cell.Borders.Horizontal.Margin = 0;
+            cell.Borders.Vertical.Margin = 0;
             cell.BlockTableRecordId = btrId;
             var blockContent = cell.Contents[0];
             blockContent.IsAutoScale = isAutoScale;
