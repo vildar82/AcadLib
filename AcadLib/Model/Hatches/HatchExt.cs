@@ -15,6 +15,16 @@
     [PublicAPI]
     public static class HatchExt
     {
+        public static bool IsPointOnHatchByRay(this Hatch hatch, Point3d pt, Tolerance tolerance)
+        {
+            using (var ray = new Ray { BasePoint = pt, UnitDir = Vector3d.YAxis })
+            {
+                var pts = new Point3dCollection();
+                ray.IntersectWith(hatch, Intersect.OnBothOperands, new Plane(), pts, IntPtr.Zero, IntPtr.Zero);
+                return pts.Count > 0 && (pts.Count.IsOdd() || pts.Cast<Point3d>().Any(p => p.IsEqualTo(pt)));
+            }
+        }
+
         /// <summary>
         /// Создание ассоциативной штриховки по полилинии
         /// Полилиния должна быть в базе чертежа
