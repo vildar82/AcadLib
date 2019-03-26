@@ -237,11 +237,7 @@
         /// <param name="over">Контур который должен быть "над" объединенными полилиниями. Т.е. контур этой полилинии вырезается из полученного контура, если попадает на него.</param>
         public static Region Union([CanBeNull] this IEnumerable<Polyline> pls, Region over)
         {
-            // ReSharper disable once PossibleMultipleEnumeration
-            if (pls?.Any() != true)
-                return null;
-
-            // ReSharper disable once PossibleMultipleEnumeration
+            if (pls?.Any() != true) return null;
             var regions = CreateRegion(pls);
             Region union = null;
             try
