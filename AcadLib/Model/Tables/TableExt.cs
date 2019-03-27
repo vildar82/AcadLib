@@ -33,6 +33,10 @@
             if (btrId.IsNull) return cell;
             cell.Borders.Horizontal.Margin = 0;
             cell.Borders.Vertical.Margin = 0;
+            cell.Borders.Top.Margin = 0;
+            cell.Borders.Bottom.Margin = 0;
+            cell.Borders.Left.Margin = 0;
+            cell.Borders.Right.Margin = 0;
             cell.BlockTableRecordId = btrId;
             var blockContent = cell.Contents[0];
             blockContent.IsAutoScale = isAutoScale;
