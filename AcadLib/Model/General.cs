@@ -71,6 +71,8 @@
             }
         }
 
+        public static string UserGroup => PikSettings.UserGroup;
+
         public static bool IsRemoteUser()
         {
             return Environment.MachineName.StartsWith("V-70");

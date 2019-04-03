@@ -58,8 +58,7 @@
 
         public static void SetBorders([NotNull] this Table table, LineWeight lw)
         {
-            if (table.Rows.Count < 2)
-                return;
+            if (table.Rows.Count < 2) return;
 
             var rowTitle = table.Rows[0];
             SetRowTitle(rowTitle);

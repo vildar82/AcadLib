@@ -21,5 +21,9 @@ namespace AcadLib.Reactive
         public IObservable<EventPattern<ObjectEventArgs>> ObjectModified =>
             Observable.FromEventPattern<ObjectEventHandler, ObjectEventArgs>
                 (x => db.ObjectModified += x, x => db.ObjectModified -= x);
+
+        public IObservable<EventPattern<ObjectEventArgs>> ObjectAppended =>
+            Observable.FromEventPattern<ObjectEventHandler, ObjectEventArgs>
+                (x => db.ObjectAppended += x, x => db.ObjectAppended -= x);
     }
 }
