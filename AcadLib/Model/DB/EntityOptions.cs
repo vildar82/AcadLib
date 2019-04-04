@@ -1,6 +1,7 @@
 ﻿namespace AcadLib
 {
     using Autodesk.AutoCAD.DatabaseServices;
+    using Autodesk.AutoCAD.Geometry;
     using JetBrains.Annotations;
     using NetLib.Monad;
 
@@ -31,6 +32,7 @@
             LineWeight = ent.LineWeight;
             if (ent is Polyline pl && pl.HasWidth)
                 PoliylineWidth = pl.Try(p => (double?)p.ConstantWidth, e => null);
+            BlockScale = (ent as BlockReference)?.ScaleFactors.X;
         }
 
         public ObjectId LayerId { get; set; }
@@ -44,6 +46,7 @@
         public double? LinetypeScale { get; set; }
 
         public double? PoliylineWidth { get; set; }
+        public double? BlockScale { get; set; }
 
         public LineWeight LineWeight
         {
@@ -83,6 +86,7 @@
             SetLineType(ent);
             SetLinetypeScale(ent);
             if (PoliylineWidth != null && ent is Polyline pl) pl.ConstantWidth = PoliylineWidth.Value;
+            if (BlockScale != null && ent is BlockReference blRef) blRef.ScaleFactors = new Scale3d(BlockScale.Value);
         }
 
         public void SetLineType(Entity ent)
