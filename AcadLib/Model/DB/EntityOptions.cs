@@ -1,4 +1,6 @@
-﻿namespace AcadLib
+﻿using System;
+
+namespace AcadLib
 {
     using Autodesk.AutoCAD.DatabaseServices;
     using Autodesk.AutoCAD.Geometry;
@@ -86,7 +88,11 @@
             SetLineType(ent);
             SetLinetypeScale(ent);
             if (PoliylineWidth != null && ent is Polyline pl) pl.ConstantWidth = PoliylineWidth.Value;
-            if (BlockScale != null && ent is BlockReference blRef) blRef.ScaleFactors = new Scale3d(BlockScale.Value);
+            if (BlockScale != null && ent is BlockReference blRef &&
+                Math.Abs(blRef.ScaleFactors.X - BlockScale.Value) > 0.0001)
+            {
+                blRef.ScaleFactors = new Scale3d(BlockScale.Value);
+            }
         }
 
         public void SetLineType(Entity ent)

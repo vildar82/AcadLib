@@ -23,7 +23,7 @@
         private readonly ApiClient _client;
         [NotNull]
         private readonly PathChecker _pathChecker;
-        private UserData _userData;
+        private readonly UserData _userData;
 
         /// <summary>
         /// Конструктор
