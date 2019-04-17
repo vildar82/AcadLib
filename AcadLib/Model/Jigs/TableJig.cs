@@ -1,4 +1,6 @@
-﻿namespace AcadLib.Jigs
+﻿using System.Linq;
+
+namespace AcadLib.Jigs
 {
     using Autodesk.AutoCAD.DatabaseServices;
     using Autodesk.AutoCAD.EditorInput;
@@ -9,12 +11,19 @@
     public class TableJig : EntityJig
     {
         private readonly string _msg;
+        private readonly string[] _keywords;
         private Point3d _position;
 
         public TableJig([NotNull] Table table, double scale, string msg)
+            : this(table, scale, msg, null)
+        {
+        }
+
+        public TableJig([NotNull] Table table, double scale, string msg, params string[] keywords)
             : base(table)
         {
-            _msg = msg;
+            _msg      = msg;
+            _keywords = keywords;
             _position = table.Position;
             table.TransformBy(Matrix3d.Scaling(scale, table.Position));
             table.TransformBy(AcadHelper.Doc.Editor.CurrentUserCoordinateSystem);
@@ -31,14 +40,21 @@
             {
                 Message = "\n" + _msg
             };
+            if (_keywords?.Any() == true) foreach (var keyword in _keywords) jigOpts.Keywords.Add(keyword);
             var res = prompts.AcquirePoint(jigOpts);
-            if (res.Status == PromptStatus.OK)
+            switch (res.Status)
             {
-                var curPoint = res.Value;
-                if (_position.DistanceTo(curPoint) > 1.0e-2)
-                    _position = curPoint;
-                else
-                    return SamplerStatus.NoChange;
+                case PromptStatus.OK:
+                {
+                    var curPoint = res.Value;
+                    if (_position.DistanceTo(curPoint) > 1.0e-2)
+                        _position = curPoint;
+                    else
+                        return SamplerStatus.NoChange;
+                    break;
+                }
+
+                case PromptStatus.Keyword: return SamplerStatus.Cancel;
             }
 
             return res.Status == PromptStatus.Cancel ? SamplerStatus.Cancel : SamplerStatus.OK;

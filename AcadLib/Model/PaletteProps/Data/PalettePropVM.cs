@@ -7,10 +7,9 @@
     /// </summary>
     public class PalettePropVM
     {
+        public int OrderIndex { get; set; }
         public string Name { get; set; }
-
         public string Tooltip { get; set; }
-
         public Control ValueControl { get; set; }
     }
 }

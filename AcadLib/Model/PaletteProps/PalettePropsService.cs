@@ -98,7 +98,7 @@
             idsHash = new HashSet<ObjectId>(ids);
 
             // группы по типу объектов
-            var groups = new List<PalettePropsType>();
+            var types = new List<PalettePropsType>();
             using (doc.LockDocument())
             using (var t = doc.TransactionManager.StartTransaction())
             {
@@ -106,9 +106,17 @@
                 {
                     try
                     {
-                        var types = provider.GetTypes(ids, doc)
-                            .Where(w => w?.Groups?.Any(g => g?.Properties?.Any() == true) == true);
-                        groups.AddRange(types);
+                        var curTypes = provider.GetTypes(ids, doc)
+                            .Where(w => w?.Groups?.Any(g => g?.Properties?.Any() == true) == true).ToList();
+                        foreach (var type in curTypes)
+                        {
+                            foreach (var @group in type.Groups)
+                            {
+                                group.Properties = group.Properties.OrderByDescending(o => o.OrderIndex).ThenBy(o => o.Name).ToList();
+                            }
+                        }
+
+                        types.AddRange(curTypes);
                     }
                     catch (Exception ex)
                     {
@@ -119,13 +127,13 @@
                 t.Commit();
             }
 
-            if (groups.Count == 0)
+            if (types.Count == 0)
             {
                 propsVM.Clear();
             }
             else
             {
-                propsVM.Types = groups.OrderByDescending(o => o.Count).ToList();
+                propsVM.Types = types.OrderByDescending(o => o.Count).ToList();
                 propsVM.SelectedType = propsVM.Types[0];
             }
 

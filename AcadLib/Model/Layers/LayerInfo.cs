@@ -1,4 +1,6 @@
-﻿namespace AcadLib.Layers
+﻿using AcadLib.Strings;
+
+namespace AcadLib.Layers
 {
     using System;
     using System.Xml.Serialization;
@@ -24,7 +26,7 @@
 
         public LayerInfo(string name)
         {
-            Name = name;
+            Name = name.GetValidDbSymbolName();
             Color = Color.FromColorIndex(ColorMethod.ByAci, 7);
             LineWeight = LineWeight.ByLineWeightDefault;
         }

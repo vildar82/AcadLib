@@ -40,8 +40,7 @@
             cell.BlockTableRecordId = btrId;
             var blockContent = cell.Contents[0];
             blockContent.IsAutoScale = isAutoScale;
-            if (isAutoScale) return cell;
-            blockContent.Scale = scale;
+            if (!isAutoScale) blockContent.Scale = scale;
             blockContent.Rotation = rotation;
             return cell;
         }
