@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 
 namespace AcadLib.Jigs
 {
@@ -11,6 +12,7 @@ namespace AcadLib.Jigs
     public class TableJig : EntityJig
     {
         private readonly string _msg;
+        private readonly Action<string> _keywordInput;
         private readonly string[] _keywords;
         private Point3d _position;
 
@@ -19,10 +21,11 @@ namespace AcadLib.Jigs
         {
         }
 
-        public TableJig([NotNull] Table table, double scale, string msg, params string[] keywords)
+        public TableJig([NotNull] Table table, double scale, string msg, Action<string> keywordInput, params string[] keywords)
             : base(table)
         {
             _msg      = msg;
+            _keywordInput = keywordInput;
             _keywords = keywords;
             _position = table.Position;
             table.TransformBy(Matrix3d.Scaling(scale, table.Position));
@@ -54,7 +57,11 @@ namespace AcadLib.Jigs
                     break;
                 }
 
-                case PromptStatus.Keyword: return SamplerStatus.Cancel;
+                case PromptStatus.Keyword:
+                {
+                    _keywordInput(res.StringResult);
+                    return SamplerStatus.OK;
+                }
             }
 
             return res.Status == PromptStatus.Cancel ? SamplerStatus.Cancel : SamplerStatus.OK;
