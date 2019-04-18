@@ -46,8 +46,7 @@
         {
             try
             {
-                if (IsExcludeUser())
-                    return;
+                if (IsExcludeUser()) return;
                 Application.DocumentManager.DocumentLockModeChanged += DocumentManager_DocumentLockModeChanged;
                 Task.Run(() => { eventer = new Eventer(GetApp(), HostApplicationServices.Current.releaseMarketVersion); });
                 Application.DocumentManager.DocumentCreateStarted += DocumentManager_DocumentCreateStarted;
@@ -111,8 +110,7 @@
         {
             try
             {
-                if (CivilTest.IsCivil())
-                    return "Civil";
+                if (CivilTest.IsCivil()) return "Civil";
             }
             catch
             {
@@ -352,8 +350,7 @@
         private static void Db_SaveComplete(object sender, DatabaseIOEventArgs e)
         {
             Debug.WriteLine($"Db_SaveComplete {e.FileName}");
-            if (!IsDwg(e?.FileName))
-                return;
+            if (!IsDwg(e?.FileName)) return;
             eventer?.Finish(EventType.Save, e.FileName, sn);
         }
 
@@ -364,15 +361,12 @@
             {
                 switch (checkRes.NexAction)
                 {
-                    case NexAction.Proceed:
-                        return false;
+                    case NexAction.Proceed: return false;
                     case NexAction.SaveOverride:
                         SaveOverride(checkRes.FilePathOverride);
                         return true;
-                    case NexAction.Cancel:
-                        throw new OperationCanceledException();
-                    default:
-                        throw new ArgumentOutOfRangeException();
+                    case NexAction.Cancel: throw new OperationCanceledException();
+                    default: throw new ArgumentOutOfRangeException();
                 }
             }
 
@@ -432,8 +426,7 @@
 
         private static void BackupOldFile(string oldFile)
         {
-            if (!File.Exists(oldFile))
-                return;
+            if (!File.Exists(oldFile)) return;
             var newName = $"{oldFile}.renamed";
             try
             {
