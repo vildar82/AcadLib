@@ -3,7 +3,7 @@
 <package>
   <metadata>
     <id>AcadLib</id>
-    <version>1.2.134</version>
+    <version>1.2.135</version>
     <authors>Vildar</authors>
     <projectUrl>https://github.com/vildar82/AcadLib</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
@@ -14,7 +14,10 @@
       <dependency id="NetLib" version="1.1.*" />
       <dependency id="AutoMapper" version="8.0.0" />
       <dependency id="CsvHelper" version="12.1.2" />
-    <dependency id="UnitsNet" version="4.13.0" />
+      <dependency id="UnitsNet" version="4.13.0" />
+      <dependency id="Google.Apis.Drive.v3" version="1.38.2.1554" />
+      <dependency id="Google.Apis.Sheets.v4" version="1.38.2.1555" />
+      <dependency id="Google.GData.Client" version="2.2.0" />
     </dependencies>
   </metadata>
   <files>

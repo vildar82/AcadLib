@@ -1,6 +1,7 @@
 ﻿using System.Text.RegularExpressions;
 using Autodesk.AutoCAD.DatabaseServices;
 using JetBrains.Annotations;
+using NetLib;
 
 namespace AcadLib.Strings
 {
@@ -11,6 +12,7 @@ namespace AcadLib.Strings
         public static string GetValidDbSymbolName([NotNull] this string name)
         {
             // string testString = "<>/?\";:*|,='";
+            if (name.IsNullOrEmpty()) return name;
             var pattern = new Regex("[<>/?\";:*|,=']");
             var res = pattern.Replace(name, ".");
             res = res.Replace('\\', '.');
