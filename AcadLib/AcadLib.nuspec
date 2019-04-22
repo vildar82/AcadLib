@@ -14,9 +14,9 @@
       <dependency id="NetLib" version="1.1.*" />
       <dependency id="AutoMapper" version="8.0.0" />
       <dependency id="CsvHelper" version="12.1.2" />
-      <dependency id="UnitsNet" version="4.13.0" />
-      <dependency id="Google.Apis.Drive.v3" version="1.38.2.1554" />
-      <dependency id="Google.Apis.Sheets.v4" version="1.38.2.1555" />
+      <dependency id="UnitsNet" version="4.20.0" />
+      <dependency id="Google.Apis.Drive.v3" version="1.38.2.1566" />
+      <dependency id="Google.Apis.Sheets.v4" version="1.38.2.1565" />
       <dependency id="Google.GData.Client" version="2.2.0" />
     </dependencies>
   </metadata>
