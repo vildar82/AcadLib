@@ -1,49 +1,50 @@
 <?xml version="1.0"?>
 
 <package>
-  <metadata>
-    <id>AcadLib</id>
-    <version>1.2.164</version>
-    <authors>Vildar</authors>
-    <projectUrl>https://github.com/vildar82/AcadLib</projectUrl>
-    <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <description>Net4.7.1 c# AutoCAD Library, WPF + ReactiveUI</description>
-    <copyright>Copyright 2018</copyright>
-    <tags>C# AutoCAD</tags>
-    <dependencies>
-      <dependency id="NetLib" version="1.1.*" />
-      <dependency id="AutoMapper" version="8.0.0" />
-      <dependency id="CsvHelper" version="12.1.2" />
-      <dependency id="UnitsNet" version="4.20.0" />
-      <dependency id="Google.Apis.Drive.v3" version="1.38.2.1566" />
-      <dependency id="Google.Apis.Sheets.v4" version="1.38.2.1565" />
-      <dependency id="Google.GData.Client" version="2.2.0" />
-    </dependencies>
-  </metadata>
-  <files>
-  <file src="lib\AutoCAD_PIK_Settings.dll" target="lib\net471" />
-  <file src="lib\AutoCAD_PIK_Settings.xml" target="lib\net471" />
+    <metadata>
+        <id>AcadLib</id>
+        <version>1.2.165</version>
+        <authors>Vildar</authors>
+        <projectUrl>https://github.com/vildar82/AcadLib</projectUrl>
+        <requireLicenseAcceptance>false</requireLicenseAcceptance>
+        <description>Net4.7.1 c# AutoCAD Library, WPF + ReactiveUI</description>
+        <copyright>Copyright 2018</copyright>
+        <tags>C# AutoCAD</tags>
+        <dependencies>
+            <dependency id="NetLib" version="1.1.*"/>
+            <dependency id="AutoMapper" version="8.0.0"/>
+            <dependency id="CsvHelper" version="12.1.2"/>
+            <dependency id="UnitsNet" version="4.20.0"/>
+            <dependency id="Google.Apis.Drive.v3" version="1.38.2.1566"/>
+            <dependency id="Google.Apis.Sheets.v4" version="1.38.2.1565"/>
+            <dependency id="Google.GData.Client" version="2.2.0"/>
+        </dependencies>
+    </metadata>
+    <files>
+        <file src="lib\AutoCAD_PIK_Settings.dll" target="lib\net471"/>
+        <file src="lib\AutoCAD_PIK_Settings.xml" target="lib\net471"/>
 
-  <file src="lib\AcCoreMgd.dll" target="lib\net471" />
-  <file src="lib\AcCoreMgd.xml" target="lib\net471" />
+        <file src="lib\AcCoreMgd.dll" target="lib\net471"/>
+        <file src="lib\AcCoreMgd.xml" target="lib\net471"/>
 
-  <file src="lib\AcDbMgd.dll" target="lib\net471" />
-  <file src="lib\AcDbMgd.xml" target="lib\net471" />
+        <file src="lib\AcDbMgd.dll" target="lib\net471"/>
+        <file src="lib\AcDbMgd.xml" target="lib\net471"/>
 
-  <file src="lib\AcDbMgdBrep.dll" target="lib\net471" />
-  <file src="lib\AcDbMgdBrep.xml" target="lib\net471" />
+        <file src="lib\AcDbMgdBrep.dll" target="lib\net471"/>
+        <file src="lib\AcDbMgdBrep.xml" target="lib\net471"/>
 
-  <file src="lib\AcMgd.dll" target="lib\net471" />
-  <file src="lib\AcMgd.xml" target="lib\net471" />
+        <file src="lib\AcMgd.dll" target="lib\net471"/>
+        <file src="lib\AcMgd.xml" target="lib\net471"/>
 
-  <file src="lib\AcWindows.dll" target="lib\net471" />
-  <file src="lib\AcWindows.xml" target="lib\net471" />
+        <file src="lib\AcWindows.dll" target="lib\net471"/>
+        <file src="lib\AcWindows.xml" target="lib\net471"/>
 
-    <file src="lib\AcMPolygonMGD.dll" target="lib\net471" />
-  <file src="lib\AecBaseMgd.dll" target="lib\net471" />
-  <file src="lib\AeccDbMgd.dll" target="lib\net471" />
-  <file src="lib\AdUiPalettes.dll" target="lib\net471" />
-  <file src="lib\MongoDblib.dll" target="lib\net471" />
-  <file src="lib\UIAutomationClient.dll" target="lib\net471" />
-  </files>
+        <file src="lib\AcMPolygonMGD.dll" target="lib\net471"/>
+        <file src="lib\AecBaseMgd.dll" target="lib\net471"/>
+        <file src="lib\AeccDbMgd.dll" target="lib\net471"/>
+        <file src="lib\AdUiPalettes.dll" target="lib\net471"/>
+        <file src="lib\MongoDblib.dll" target="lib\net471"/>
+        <file src="lib\UIAutomationClient.dll" target="lib\net471"/>
+        <file src="lib\GoogleDoc.dll" target="lib\net471"/>
+    </files>
 </package>

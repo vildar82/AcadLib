@@ -106,6 +106,9 @@
     <Reference Include="GlobalHooks">
       <HintPath>lib\GlobalHooks.dll</HintPath>
     </Reference>
+    <Reference Include="GoogleDoc, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>lib\GoogleDoc.dll</HintPath>
+    </Reference>
     <Reference Include="MongoDblib">
       <HintPath>lib\MongoDblib.dll</HintPath>
     </Reference>
@@ -312,6 +315,7 @@
     </Compile>
     <Compile Include="Model\Styles\StyleManager\UI\StyleManagerVM.cs" />
     <Compile Include="Model\Styles\StyleManager\UI\StyleTableVM.cs" />
+    <Compile Include="Model\Tables\Google\GoogleTable.cs" />
     <Compile Include="Model\Template\CopyFromTemplate.cs" />
     <Compile Include="Model\Template\TemplateManager.cs" />
     <Compile Include="Model\Layers\LayerVisibleState.cs" />
