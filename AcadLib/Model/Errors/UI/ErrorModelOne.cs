@@ -14,13 +14,14 @@
 
     public class ErrorModelOne : ErrorModelBase
     {
-        public ErrorModelOne([NotNull] IError err, [CanBeNull] ErrorModelList parent) : base(err)
+        public ErrorModelOne([NotNull] IError err, [CanBeNull] ErrorModelList parent)
+            : base(err)
         {
             VisibilityCount = Visibility.Collapsed;
             Parent = parent;
             if (parent == null)
             {
-                if (err.Group.IsNullOrEmpty() || err.Message.StartsWith(err.Group))
+                if (err.Group.IsNullOrEmpty() || err.Message.StartsWith(err.Group ?? string.Empty))
                 {
                     Message = err.Message;
                 }
@@ -33,7 +34,7 @@
             }
             else
             {
-                Message = err.Message.StartsWith(err.Group)
+                Message = err.Message.StartsWith(err.Group ?? string.Empty)
                     ? err.Message.Substring(err.Group.Length)
                     : err.Message;
             }

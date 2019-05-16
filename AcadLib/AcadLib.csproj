@@ -108,6 +108,7 @@
     </Reference>
     <Reference Include="GoogleDoc, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
       <HintPath>lib\GoogleDoc.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="MongoDblib">
       <HintPath>lib\MongoDblib.dll</HintPath>
