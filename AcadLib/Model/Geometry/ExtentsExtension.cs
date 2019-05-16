@@ -1,4 +1,7 @@
 ﻿// ReSharper disable once CheckNamespace
+
+using System;
+
 namespace Autodesk.AutoCAD.DatabaseServices
 {
     using System.Collections.Generic;
@@ -134,6 +137,15 @@ namespace Autodesk.AutoCAD.DatabaseServices
         /// </summary>
         /// <returns></returns>
         public static bool IsPointInBounds(this Extents3d ext, Point3d pt, double tolerance)
+        {
+            return pt.X > ext.MinPoint.X - tolerance && pt.Y > ext.MinPoint.Y - tolerance &&
+                   pt.X < ext.MaxPoint.X + tolerance && pt.Y < ext.MaxPoint.Y + tolerance;
+        }
+
+        /// <summary>
+        /// Попадает ли точка внутрь границы
+        /// </summary>
+        public static bool IsPointInBounds(this Extents2d ext, Point2d pt, double tolerance = double.Epsilon)
         {
             return pt.X > ext.MinPoint.X - tolerance && pt.Y > ext.MinPoint.Y - tolerance &&
                    pt.X < ext.MaxPoint.X + tolerance && pt.Y < ext.MaxPoint.Y + tolerance;

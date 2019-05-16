@@ -34,7 +34,7 @@
             }
             else
             {
-                Message = err.Message.StartsWith(err.Group ?? string.Empty)
+                Message = !err.Group.IsNullOrEmpty() && err.Message.StartsWith(err.Group)
                     ? err.Message.Substring(err.Group.Length)
                     : err.Message;
             }
