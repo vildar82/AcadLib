@@ -22,30 +22,26 @@
             {
                 if (hatch.Id.IsNull)
                 {
-                    using (var t = db.TransactionManager.StartTransaction())
-                    {
-                        var cs = db.CurrentSpaceId.GetObject<BlockTableRecord>(OpenMode.ForWrite);
-                        var hClone = (Hatch) hatch.Clone();
-                        hId = cs.AppendEntity(hClone);
-                        t.AddNewlyCreatedDBObject(hClone, true);
-                        t.Commit();
-                    }
+                    using var t = db.TransactionManager.StartTransaction();
+                    var cs     = db.CurrentSpaceId.GetObject<BlockTableRecord>(OpenMode.ForWrite);
+                    var hClone = (Hatch) hatch.Clone();
+                    hId = cs.AppendEntity(hClone);
+                    t.AddNewlyCreatedDBObject(hClone, true);
+                    t.Commit();
                 }
 
-                using (var r = hId.CreateRegionFromHatch())
-                using (var ray = new Ray {BasePoint = pt, UnitDir = new Vector3d(0.235, 0.7458, 0)})
-                {
-                    var pts = new Point3dCollection();
-                    ray.IntersectWith(r, Intersect.OnBothOperands, new Plane(), pts, IntPtr.Zero, IntPtr.Zero);
-                    return pts.Count > 0 && (pts.Count.IsOdd() || pts.Cast<Point3d>().Any(p => p.IsEqualTo(pt)));
-                }
+                using var r = hId.CreateRegionFromHatch();
+                using var ray = new Ray {BasePoint = pt, UnitDir = new Vector3d(0.235, 0.7458, 0)};
+                var pts = new Point3dCollection();
+                ray.IntersectWith(r, Intersect.OnBothOperands, new Plane(), pts, IntPtr.Zero, IntPtr.Zero);
+                return pts.Count > 0 && (pts.Count.IsOdd() || pts.Cast<Point3d>().Any(p => p.IsEqualTo(pt)));
             }
             finally
             {
                 if (!hId.IsNull)
                 {
-                    using (var h = hId.Open(OpenMode.ForWrite, false, true) as Hatch)
-                        h?.Erase();
+                    using var h = hId.Open(OpenMode.ForWrite, false, true) as Hatch;
+                    h?.Erase();
                 }
             }
         }

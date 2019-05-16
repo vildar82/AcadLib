@@ -111,6 +111,20 @@
             throw new OperationCanceledException();
         }
 
+        public static List<ObjectId> Select([NotNull] this Editor ed, string msg,
+            Action<object, SelectionTextInputEventArgs> keywordInput, params string[] keywords)
+        {
+            var selOpt = new PromptSelectionOptions();
+            selOpt.Keywords.Add(AcadHelper.IsRussianAcad() ? "Все" : "ALL");
+            foreach (var keyword in keywords) selOpt.Keywords.Add(keyword);
+            selOpt.KeywordInput += (o, e) => keywordInput(o, e);
+            selOpt.MessageForAdding = msg + selOpt.Keywords.GetDisplayString(true);
+            var selRes = ed.GetSelection(selOpt);
+            if (selRes.Status == PromptStatus.OK)
+                return selRes.Value.GetObjectIds().ToList();
+            throw new OperationCanceledException();
+        }
+
         [NotNull]
         public static List<ObjectId> Select([NotNull] this Editor ed, string msg, Func<List<ObjectId>> selectAll)
         {
