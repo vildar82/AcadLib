@@ -117,8 +117,9 @@
             var selOpt = new PromptSelectionOptions();
             selOpt.Keywords.Add(AcadHelper.IsRussianAcad() ? "Все" : "ALL");
             foreach (var keyword in keywords) selOpt.Keywords.Add(keyword);
-            selOpt.KeywordInput += (o, e) => keywordInput(o, e);
             selOpt.MessageForAdding = msg + selOpt.Keywords.GetDisplayString(true);
+            selOpt.MessageForRemoval = "Исключить";
+            selOpt.KeywordInput += (o, e) => keywordInput(o, e);
             var selRes = ed.GetSelection(selOpt);
             if (selRes.Status == PromptStatus.OK)
                 return selRes.Value.GetObjectIds().ToList();

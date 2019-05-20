@@ -22,7 +22,18 @@
         [NotNull]
         public static Cell SetValue([NotNull] this Cell cell, [CanBeNull] object value)
         {
-            if (value == null) return cell;
+            return SetValue(cell, value, null);
+        }
+
+        [NotNull]
+        public static Cell SetValue([NotNull] this Cell cell, [CanBeNull] object value, object defaultValue)
+        {
+            if (value == null)
+            {
+                if (defaultValue != null) cell.SetValue(defaultValue, ParseOption.ParseOptionNone);
+                return cell;
+            }
+
             cell.SetValue(value, ParseOption.ParseOptionNone);
             return cell;
         }
@@ -90,21 +101,19 @@
             table.RecomputeTableBlock(true);
             var btr = (BlockTableRecord)table.OwnerId.GetObject(OpenMode.ForWrite);
             var cellExt = OffsetExtToMarginCell(cell.GetExtents().ToExtents3d(), cell);
-            using (var cellPl = cellExt.GetPolyline())
-            {
-                var h = cellPl.GetPoints().CreateHatch();
-                h.PatternAngle = patternAngleRad;
-                h.PatternScale = patternScale;
-                h.SetHatchPattern(HatchPatternType.PreDefined, standartPattern);
-                h.ColorIndex = colorIndex;
-                h.LineWeight = lineWeight;
-                h.Linetype = SymbolUtilityServices.LinetypeContinuousName;
-                var t = btr.Database.TransactionManager.TopTransaction;
-                btr.AppendEntity(h);
-                t.AddNewlyCreatedDBObject(h, true);
-                h.EvaluateHatch(true);
-                return h;
-            }
+            using var cellPl = cellExt.GetPolyline();
+            var h = cellPl.GetPoints().CreateHatch();
+            h.PatternAngle = patternAngleRad;
+            h.PatternScale = patternScale;
+            h.SetHatchPattern(HatchPatternType.PreDefined, standartPattern);
+            h.ColorIndex = colorIndex;
+            h.LineWeight = lineWeight;
+            h.Linetype   = SymbolUtilityServices.LinetypeContinuousName;
+            var t = btr.Database.TransactionManager.TopTransaction;
+            btr.AppendEntity(h);
+            t.AddNewlyCreatedDBObject(h, true);
+            h.EvaluateHatch(true);
+            return h;
         }
 
         private static Extents3d OffsetExtToMarginCell(Extents3d ext, [NotNull] Cell cell)
