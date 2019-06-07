@@ -33,7 +33,7 @@
     <DocumentationFile>..\..\..\Autodesk\AutoCAD\Pik\Settings\Dll\AcadLib.xml</DocumentationFile>
     <NoWarn>CS1591</NoWarn>
     <ShouldCreateLogs>False</ShouldCreateLogs>
-    <LangVersion>7.3</LangVersion>
+    <LangVersion>8</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>x64</PlatformTarget>

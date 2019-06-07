@@ -415,21 +415,16 @@ namespace AcadLib
             CommandStart.Start(doc =>
             {
                 var ed = doc.Editor;
-                var res = ed.GetString("\nВведи ObjectID, например:8796086050096");
-                if (res.Status != PromptStatus.OK)
-                    return;
-                var id = long.Parse(res.StringResult);
+                var res = ed.GetString("\nВведи ObjectID, например: 8796086050096");
+                if (res.Status != PromptStatus.OK) return;
+                var idLong = long.Parse(res.StringResult);
                 var db = doc.Database;
-                using (var t = db.TransactionManager.StartTransaction())
-                {
-                    var ms = (BlockTableRecord)SymbolUtilityServices.GetBlockModelSpaceId(db).GetObject(OpenMode.ForRead);
-                    var entId = ms.Cast<ObjectId>().FirstOrDefault(f => f.OldId == id);
-                    if (entId.IsNull)
-                        "Элемент не найден в Моделе.".WriteToCommandLine();
-                    else
-                        entId.ShowEnt();
-                    t.Commit();
-                }
+                using var t = db.TransactionManager.StartTransaction();
+                var objectId = new ObjectId(new IntPtr(idLong));
+                var dbo = objectId.GetObject<DBObject>();
+                $"{dbo.Id.ObjectClass.Name}, Owner={dbo.OwnerId.ObjectClass.Name}, IsErased={dbo.IsErased}, IsPersistent={dbo.IsPersistent}, IsAProxy={dbo.IsAProxy}".WriteToCommandLine();
+                dbo.Id.ShowEnt();
+                t.Commit();
             });
         }
 
