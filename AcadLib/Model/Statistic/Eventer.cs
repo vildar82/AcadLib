@@ -1,18 +1,16 @@
 ﻿namespace AcadLib.Statistic
 {
     using System;
-    using System.Collections.Generic;
     using System.IO;
-    using System.Linq;
     using System.Threading.Tasks;
-    using FileLog.Entities;
     using JetBrains.Annotations;
     using Microsoft.Win32;
+    using Naming.Common;
     using Naming.Dto;
     using Naming.Sdk;
-    using NetLib;
     using NetLib.AD;
     using PathChecker;
+    using PathChecker.Models;
     using UserData = Naming.Dto.UserData;
 
     /// <summary>
@@ -42,7 +40,7 @@
 
         private string App { get; }
 
-        private AppType AppType { get; }
+        private NamingV2.Dto.AppType AppType { get; }
 
         private DateTime StartEvent { get; set; }
 
@@ -76,22 +74,24 @@
                         var fileSize = fi.Length / 1024000;
                         var eventTimeSec = (int)(eventEnd - StartEvent).TotalSeconds;
                         _client.Log.AddEvent(
-                            new StatEvent(
-                                App,
-                                userName,
-                                compName,
-                                fileName,
-                                docPath,
-                                eventType,
-                                StartEvent,
-                                eventEnd,
-                                Version,
-                                fileSize,
-                                eventTimeSec,
-                                serialNumber,
-                                _userData?.Fio,
-                                _userData?.Department,
-                                _userData?.Position));
+                            new StatEventDto
+                            {
+                                App = App,
+                                UserName = userName,
+                                CompName = compName,
+                                DocName = fileName,
+                                DocPath = docPath,
+                                EventName = eventType,
+                                Start = StartEvent,
+                                Finish = eventEnd,
+                                Version = Version,
+                                FinishSizeMb = fileSize,
+                                EventTimeSec = eventTimeSec,
+                                SerialNumber = serialNumber,
+                                Fio = _userData?.Fio,
+                                Departament = _userData?.Department,
+                                UserPosition = _userData?.Position
+                            });
                     }
                     catch (Exception e)
                     {
@@ -105,7 +105,7 @@
         /// </summary>
         /// <param name="case">Кейс</param>
         /// <param name="docPath">Документ</param>
-        public PathCheckerResult Start(Case @case, [CanBeNull] string docPath)
+        public PathCheckerResult Start(SaveType @case, [CanBeNull] string docPath)
         {
             StartEvent = DateTime.Now;
             PathCheckerResult pathCheckerResult = null;
@@ -114,8 +114,8 @@
                 try
                 {
                     Logger.Log.Info($"Eventer Start Check case={@case}, doc={docPath}");
-                    pathCheckerResult = _pathChecker.Check(AppType, @case, docPath, _userData);
-                    Logger.Log.Info($"Eventer pathCheckerResult={pathCheckerResult?.CheckResultDto?.Status}");
+                    pathCheckerResult = _pathChecker.Check(AppType, @case, docPath, Environment.UserName);
+                    Logger.Log.Info($"Eventer pathCheckerResult={pathCheckerResult?.CheckResultDto?.Success}");
                 }
                 catch (Exception ex)
                 {
@@ -166,15 +166,15 @@
             }
         }
 
-        private static AppType GetAppType(string app)
+        private static NamingV2.Dto.AppType GetAppType(string app)
         {
             switch (app.ToLower())
             {
-                case "autocad": return AppType.Autocad;
-                case "civil": return AppType.Civil;
+                case "autocad": return NamingV2.Dto.AppType.Autocad;
+                case "civil": return NamingV2.Dto.AppType.Civil;
             }
 
-            return AppType.Autocad;
+            return NamingV2.Dto.AppType.Autocad;
         }
 
         private bool NeedCheck(string docPath)

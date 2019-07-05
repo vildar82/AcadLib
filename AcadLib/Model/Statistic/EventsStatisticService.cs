@@ -1,4 +1,7 @@
-﻿namespace AcadLib.Statistic
+﻿using Naming.Common;
+using PathChecker.Models;
+
+namespace AcadLib.Statistic
 {
     using System;
     using System.Collections.Generic;
@@ -11,7 +14,6 @@
     using Autodesk.AutoCAD.ApplicationServices;
     using Autodesk.AutoCAD.DatabaseServices;
     using Autodesk.AutoCAD.Runtime;
-    using FileLog.Entities;
     using JetBrains.Annotations;
     using NetLib;
     using PathChecker;
@@ -56,7 +58,7 @@
 
                 foreach (Document doc in Application.DocumentManager)
                 {
-                    eventer?.Start(Case.Default, null);
+                    eventer?.Start(global::PathChecker.Models.SaveType.Default, null);
                     SubscribeDoc(doc);
                 }
 
@@ -122,7 +124,7 @@
 
         private static void DocumentManager_DocumentToBeDestroyed(object sender, DocumentCollectionEventArgs e)
         {
-            eventer?.Start(Case.Default, null);
+            eventer?.Start(global::PathChecker.Models.SaveType.Default, null);
         }
 
         private static void DocumentManager_DocumentLockModeChanged(object sender, DocumentLockModeChangedEventArgs e)
@@ -135,7 +137,7 @@
                 {
                     case "QSAVE":
                         Logger.Log.Info("Eventer DocumentLockModeChanged=QSAVE");
-                        StopSave(e, Case.Default);
+                        StopSave(e, global::PathChecker.Models.SaveType.Default);
                         lastModeChange = "QSAVE";
                         break;
                     case "SAVEAS":
@@ -143,7 +145,7 @@
                         if (lastModeChange != "SAVEAS")
                         {
                             lastModeChange = "SAVEAS";
-                            StopSave(e, Case.SaveAs);
+                            StopSave(e, global::PathChecker.Models.SaveType.SaveAs);
                         }
 
                         break;
@@ -151,7 +153,7 @@
                         Logger.Log.Info("Eventer DocumentLockModeChanged=#SAVEAS");
                         if (lastModeChange != "SAVEAS" || lastSaveAsFile != e.Document.Name)
                         {
-                            StopSave(e, Case.SaveAs);
+                            StopSave(e, global::PathChecker.Models.SaveType.SaveAs);
                         }
 
                         lastModeChange = "#SAVEAS";
@@ -164,7 +166,7 @@
                                 MessageBoxButton.YesNoCancel, MessageBoxImage.Warning))
                             {
                                 case MessageBoxResult.Yes:
-                                    if (!StopSave(e, Case.Default))
+                                    if (!StopSave(e, global::PathChecker.Models.SaveType.Default))
                                     {
                                         e.Veto();
                                         CloseSave(e.Document);
@@ -249,7 +251,7 @@
             }
         }
 
-        private static bool StopSave(DocumentLockModeChangedEventArgs e, Case @case)
+        private static bool StopSave(DocumentLockModeChangedEventArgs e, global::PathChecker.Models.SaveType @case)
         {
             Logger.Log.Info($"Eventer StopSave case={@case}, doc={e?.Document?.Name}.");
             lastSaveAsFile = e.Document.Name;
@@ -273,7 +275,7 @@
 
         private static void DocumentManager_DocumentCreateStarted(object sender, DocumentCollectionEventArgs e)
         {
-            eventer?.Start(Case.Default, null);
+            eventer?.Start(global::PathChecker.Models.SaveType.Default, null);
         }
 
         private static void DocumentManager_DocumentCreated(object sender, [NotNull] DocumentCollectionEventArgs e)
@@ -333,7 +335,7 @@
             }
         }
 
-        private static void BeginSave(string file, Case @case)
+        private static void BeginSave(string file, global::PathChecker.Models.SaveType @case)
         {
             veto = false;
             Debug.WriteLine($"Db_BeginSave {file}");
@@ -359,13 +361,13 @@
             Debug.WriteLine($"checkRes FilePathOverride={checkRes?.FilePathOverride}");
             if (checkRes != null)
             {
-                switch (checkRes.NexAction)
+                switch (checkRes.NextAction)
                 {
-                    case NexAction.Proceed: return false;
-                    case NexAction.SaveOverride:
+                    case NextAction.Proceed: return false;
+                    case NextAction.SaveOverride:
                         SaveOverride(checkRes.FilePathOverride);
                         return true;
-                    case NexAction.Cancel: throw new OperationCanceledException();
+                    case NextAction.Cancel: throw new OperationCanceledException();
                     default: throw new ArgumentOutOfRangeException();
                 }
             }
