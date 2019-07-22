@@ -1,4 +1,6 @@
-﻿namespace AcadLib.Statistic
+﻿using NetLib;
+
+namespace AcadLib.Statistic
 {
     using System;
     using System.IO;
@@ -32,7 +34,7 @@
         {
             App = app;
             AppType = GetAppType(app);
-            Version = version;
+            Version = version.IsNullOrEmpty() ? "0" : version;
             _client = new ApiClient(GetUrl("baseUrl"));
             _pathChecker = new PathChecker(_client);
             _userData = GetUserDataAd();

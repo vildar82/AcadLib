@@ -117,7 +117,6 @@ namespace AcadLib
                 // Лента
                 RibbonBuilder.InitRibbon();
                 Logger.Log.Info("end Initialize AcadLib");
-                EventsStatisticService.Start();
                 AcadLibAssembly.AcadLoadInfo();
                 if (AutocadUserService.User == null)
                 {
