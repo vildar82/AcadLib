@@ -1,7 +1,7 @@
-﻿using System;
-
-namespace AcadLib
+﻿namespace AcadLib
 {
+    using System;
+    using Autodesk.AutoCAD.Colors;
     using Autodesk.AutoCAD.DatabaseServices;
     using Autodesk.AutoCAD.Geometry;
     using JetBrains.Annotations;
@@ -35,6 +35,7 @@ namespace AcadLib
             if (ent is Polyline pl && pl.HasWidth)
                 PoliylineWidth = pl.Try(p => (double?)p.ConstantWidth, e => null);
             BlockScale = (ent as BlockReference)?.ScaleFactors.X;
+            Transperency = ent.Transparency.Alpha > 0 ? ent.Transparency.Alpha : (byte?) null;
         }
 
         public ObjectId LayerId { get; set; }
@@ -49,6 +50,8 @@ namespace AcadLib
 
         public double? PoliylineWidth { get; set; }
         public double? BlockScale { get; set; }
+
+        public byte? Transperency { get; set; }
 
         public LineWeight LineWeight
         {
@@ -81,7 +84,8 @@ namespace AcadLib
 
         public virtual void SetOptions([NotNull] Entity ent)
         {
-            if (!ent.IsWriteEnabled) ent = ent.UpgradeOpenTr();
+            if (!ent.IsWriteEnabled)
+                ent = ent.UpgradeOpenTr();
             SetLayer(ent);
             SetColor(ent);
             SetLineWeight(ent);
@@ -92,6 +96,11 @@ namespace AcadLib
                 Math.Abs(blRef.ScaleFactors.X - BlockScale.Value) > 0.0001)
             {
                 blRef.ScaleFactors = new Scale3d(BlockScale.Value);
+            }
+
+            if (Transperency != null)
+            {
+                ent.Transparency = new Transparency(Transperency.Value);
             }
         }
 
