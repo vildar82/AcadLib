@@ -17,7 +17,8 @@
         protected List<Entity> draws;
         private readonly Document doc = AcadHelper.Doc;
 
-        public VisualTransient([CanBeNull] string layer = null) : base(layer)
+        public VisualTransient([CanBeNull] string layer = null)
+            : base(layer)
         {
         }
 

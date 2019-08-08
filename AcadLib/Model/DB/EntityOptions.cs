@@ -35,7 +35,7 @@
             if (ent is Polyline pl && pl.HasWidth)
                 PoliylineWidth = pl.Try(p => (double?)p.ConstantWidth, e => null);
             BlockScale = (ent as BlockReference)?.ScaleFactors.X;
-            Transperency = ent.Transparency.Alpha > 0 ? ent.Transparency.Alpha : (byte?) null;
+            Transperency = ent.Transparency.IsByAlpha ? ent.Transparency.Alpha : (byte?) null;
         }
 
         public ObjectId LayerId { get; set; }
