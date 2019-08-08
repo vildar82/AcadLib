@@ -507,6 +507,7 @@
     <Compile Include="Model\Visual\IVisualElement.cs" />
     <Compile Include="Model\Visual\IVisualService.cs" />
     <Compile Include="Model\Visual\VisualBase.cs" />
+    <Compile Include="Model\Visual\VisualEntities.cs" />
     <Compile Include="Model\Visual\VisualHelper.cs" />
     <Compile Include="Model\Visual\VisualOption.cs" />
     <Compile Include="Model\VisualStyle\VisualStyleExt.cs" />
