@@ -24,5 +24,10 @@
         /// Удаление визуализации
         /// </summary>
         void VisualsDelete();
+
+        /// <summary>
+        /// Отрисовка в чертеже
+        /// </summary>
+        void DrawInDb(Database db);
     }
 }

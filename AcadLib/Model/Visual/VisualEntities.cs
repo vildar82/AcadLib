@@ -2,6 +2,7 @@ namespace AcadLib.Visual
 {
     using System.Collections.Generic;
     using System.Linq;
+    using AcadLib.Layers;
     using Autodesk.AutoCAD.DatabaseServices;
     using JetBrains.Annotations;
 
@@ -27,13 +28,17 @@ namespace AcadLib.Visual
         protected override void DrawVisuals(List<Entity> draws)
         {
             EraseDraws();
+            if (draws?.Any() != true)
+                return;
             var doc = AcadHelper.Doc;
             using var _ = doc.LockDocument();
             using var t = doc.TransactionManager.StartTransaction();
             var ms = doc.Database.MS(OpenMode.ForWrite);
             _drawIds = new List<ObjectId>();
+            var layer = new LayerInfo(LayerForUser ?? "999_visuals").CheckLayerState();
             foreach (var entity in draws)
             {
+                entity.LayerId = layer;
                 ms.AppendEntity(entity);
                 t.AddNewlyCreatedDBObject(entity, true);
                 _drawIds.Add(entity.Id);

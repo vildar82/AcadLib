@@ -1,5 +1,6 @@
 ﻿namespace AcadLib.Visual
 {
+    using System;
     using System.Collections.Generic;
     using Autodesk.AutoCAD.DatabaseServices;
     using JetBrains.Annotations;
@@ -31,14 +32,7 @@
 
         public virtual void Dispose()
         {
-            try
-            {
-                EraseDraws();
-            }
-            catch
-            {
-                //
-            }
+            VisualsDelete();
         }
 
         public virtual void VisualsDelete()
@@ -53,14 +47,37 @@
             }
         }
 
+        public virtual void DrawInDb(Database db)
+        {
+            using var t = db.TransactionManager.StartTransaction();
+            var ms = db.MS(OpenMode.ForWrite);
+            var visuals = CreateVisual();
+            var layer = new LayerInfo(LayerForUser ?? "999_visuals").CheckLayerState();
+            foreach (var visual in visuals)
+            {
+                visual.LayerId = layer;
+                ms.AppendEntity(visual);
+                t.AddNewlyCreatedDBObject(visual, true);
+            }
+
+            t.Commit();
+        }
+
         public virtual void VisualUpdate()
         {
-            EraseDraws();
+            VisualsDelete();
 
             // Включение визуализации на чертеже
             if (isOn)
             {
-                DrawVisuals(CreateVisual());
+                try
+                {
+                    DrawVisuals(CreateVisual());
+                }
+                catch (Exception ex)
+                {
+                    Logger.Log.Error(ex);
+                }
             }
         }
 
