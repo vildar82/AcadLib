@@ -876,7 +876,7 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>if $(ConfigurationName) == ReleaseLocal (
-   nuget.exe pack "$(ProjectPath)" -IncludeReferencedProjects -properties Configuration=ReleaseLocal
+   c:\dev\nuget pack "$(ProjectPath)" -IncludeReferencedProjects -properties Configuration=ReleaseLocal
    xcopy "$(TargetDir)*.nupkg" "\\picompany.ru\pikp\Dep\IT\IRA\03_NuGet\AcadLib" /C /Y
    xcopy "$(ProjectDir)bin\Release" "c:\Autodesk\AutoCAD\Pik\Settings\Dll\" /Y /C /Q
 )</PostBuildEvent>
