@@ -13,7 +13,8 @@ namespace AcadLib.Visual
         private readonly List<Entity> _ents;
         private List<ObjectId> _drawIds;
 
-        public VisualEntities([NotNull] List<Entity> ents)
+        public VisualEntities([NotNull] List<Entity> ents, string layerName)
+            : base(layerName)
         {
             _ents = ents;
         }
