@@ -38,6 +38,7 @@ namespace AcadLib.Visual
             var layer = new LayerInfo(LayerForUser ?? "999_visuals").CheckLayerState();
             foreach (var entity in draws)
             {
+                entity.RemoveAllXdata();
                 entity.LayerId = layer;
                 ms.AppendEntity(entity);
                 t.AddNewlyCreatedDBObject(entity, true);

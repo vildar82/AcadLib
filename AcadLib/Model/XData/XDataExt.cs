@@ -1,4 +1,7 @@
-﻿namespace AcadLib
+﻿using System.Linq;
+using Autodesk.AutoCAD.Runtime;
+
+namespace AcadLib
 {
     using System;
     using System.Collections.Generic;
@@ -54,16 +57,30 @@
                 var isWriteEnabled = dbo.IsWriteEnabled;
                 if (!isWriteEnabled)
                 {
-                    using (var dboWrite = dbo.Id.Open(OpenMode.ForWrite, false, true))
-                    {
-                        dboWrite.XData = rb;
-                    }
+                    using var dboWrite = dbo.Id.Open(OpenMode.ForWrite, false, true);
+                    dboWrite.XData = rb;
                 }
                 else
                 {
                     dbo.XData = rb;
                 }
             }
+        }
+
+        public static void RemoveAllXdata(this DBObject dbObj)
+        {
+            if (dbObj == null)
+                return;
+
+            var data = dbObj.XData;
+            if (data == null)
+                return;
+
+            if (!dbObj.IsWriteEnabled)
+                dbObj = dbObj.UpgradeOpenTr();
+
+            foreach (var tv in data.AsArray().Where(tv => tv.TypeCode == 1001))
+                dbObj.XData = new ResultBuffer(tv);
         }
 
         public static bool HasXData([NotNull] this DBObject dbo, [NotNull] string regApp)
@@ -82,26 +99,24 @@
         /// </summary>
         public static void SetXData([NotNull] this DBObject dbo, string regAppName, string value)
         {
-            using (var rb = new ResultBuffer(
-                new TypedValue((short)DxfCode.ExtendedDataRegAppName, regAppName)))
+            using var rb = new ResultBuffer(
+                new TypedValue((short)DxfCode.ExtendedDataRegAppName, regAppName));
+            if (value.Length <= 255)
             {
-                if (value.Length <= 255)
+                var tv = new TypedValue((short)DxfCode.ExtendedDataAsciiString, value);
+                rb.Add(tv);
+            }
+            else
+            {
+                var index = 0;
+                foreach (var s in value.Split(250))
                 {
-                    var tv = new TypedValue((short)DxfCode.ExtendedDataAsciiString, value);
+                    var tv = new TypedValue((short)DxfCode.ExtendedDataAsciiString, $"{index++}#{s}");
                     rb.Add(tv);
                 }
-                else
-                {
-                    var index = 0;
-                    foreach (var s in value.Split(250))
-                    {
-                        var tv = new TypedValue((short)DxfCode.ExtendedDataAsciiString, $"{index++}#{s}");
-                        rb.Add(tv);
-                    }
-                }
-
-                dbo.XData = rb;
             }
+
+            dbo.XData = rb;
         }
 
         /// <summary>
@@ -109,12 +124,10 @@
         /// </summary>
         public static void SetXData([NotNull] this DBObject dbo, string regAppName, int value)
         {
-            using (var rb = new ResultBuffer(
+            using var rb = new ResultBuffer(
                 new TypedValue((short)DxfCode.ExtendedDataRegAppName, regAppName),
-                new TypedValue((short)DxfCode.ExtendedDataInteger32, value)))
-            {
-                dbo.XData = rb;
-            }
+                new TypedValue((short)DxfCode.ExtendedDataInteger32, value));
+            dbo.XData = rb;
         }
 
         /// <summary>
@@ -128,10 +141,8 @@
         {
             RegApp(dbo.Database, regAppName);
             var tvValu = GetTypedValue(value);
-            using (var rb = new ResultBuffer(new TypedValue((short)DxfCode.ExtendedDataRegAppName, regAppName), tvValu))
-            {
-                dbo.XData = rb;
-            }
+            using var rb = new ResultBuffer(new TypedValue((short)DxfCode.ExtendedDataRegAppName, regAppName), tvValu);
+            dbo.XData = rb;
         }
 
         /// <summary>
@@ -245,21 +256,20 @@
         public static T GetXData<T>([NotNull] this DBObject dbo, string regAppName)
         {
             var rb = dbo.GetXDataForApplication(regAppName);
-            if (rb != null)
+            if (rb == null)
+                return default;
+            var dxfT = dictXDataTypedValues[typeof(T)];
+            var rbEnumerator = rb.GetEnumerator();
+            while (rbEnumerator.MoveNext())
             {
-                var dxfT = dictXDataTypedValues[typeof(T)];
-                var rbEnumerator = rb.GetEnumerator();
-                while (rbEnumerator.MoveNext())
+                if (rbEnumerator.Current.TypeCode == dxfT)
                 {
-                    if (rbEnumerator.Current.TypeCode == dxfT)
+                    if (rbEnumerator.Current.TypeCode == (short)DxfCode.ExtendedDataAsciiString)
                     {
-                        if (rbEnumerator.Current.TypeCode == (short)DxfCode.ExtendedDataAsciiString)
-                        {
-                            return (T)(object)GetStringValue(rbEnumerator, true);
-                        }
-
-                        return (T)rbEnumerator.Current.Value;
+                        return (T)(object)GetStringValue(rbEnumerator, true);
                     }
+
+                    return (T)rbEnumerator.Current.Value;
                 }
             }
 
