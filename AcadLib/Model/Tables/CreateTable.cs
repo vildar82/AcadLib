@@ -117,18 +117,16 @@
 
         private void insertTable([NotNull] Table table, [NotNull] Document doc)
         {
-            using (var t = doc.TransactionManager.StartTransaction())
+            using var t = doc.TransactionManager.StartTransaction();
+            var jigTable = new TableJig(table, scale, "Вставка таблицы");
+            if (doc.Editor.Drag(jigTable).Status == PromptStatus.OK)
             {
-                var jigTable = new TableJig(table, scale, "Вставка таблицы");
-                if (doc.Editor.Drag(jigTable).Status == PromptStatus.OK)
-                {
-                    var cs = db.CurrentSpaceId.GetObjectT<BlockTableRecord>(OpenMode.ForWrite);
-                    cs.AppendEntity(table);
-                    t.AddNewlyCreatedDBObject(table, true);
-                }
-
-                t.Commit();
+                var cs = db.CurrentSpaceId.GetObjectT<BlockTableRecord>(OpenMode.ForWrite);
+                cs.AppendEntity(table);
+                t.AddNewlyCreatedDBObject(table, true);
             }
+
+            t.Commit();
         }
     }
 }

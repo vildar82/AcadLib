@@ -129,15 +129,20 @@
                 <!-- Создание кнопок -->
                 <WrapPanel>
                     <!-- Команда -->
-                    <Button Content="{iconPacks:FontAwesome TerminalSolid}" Command="{Binding AddCommandItem}"/>
+                    <Button Content="{iconPacks:FontAwesome TerminalSolid}" Command="{Binding AddCommandItem}"
+                            ToolTip="Команда"/>
                     <!-- Список элементов -->
-                    <Button Content="{iconPacks:Material FormatListBulleted}" Command="{Binding AddSplitItem}"/>
+                    <Button Content="{iconPacks:Material FormatListBulleted}" Command="{Binding AddSplitItem}"
+                            ToolTip="Выпадающий список"/>
                     <!-- Вставка блока -->
-                    <Button Content="{iconPacks:FontAwesome ObjectGroupRegular}" Command="{Binding AddInsertBlockItem}"/>
+                    <Button Content="{iconPacks:FontAwesome ObjectGroupRegular}" Command="{Binding AddInsertBlockItem}"
+                            ToolTip="Вставка блока"/>
                     <!-- Визуадьная вставка блоков - по фильтру -->
-                    <Button Content="{iconPacks:FontAwesome WindowsBrands}" Command="{Binding AddVisualInsertBlockItem}"/>
+                    <Button Content="{iconPacks:FontAwesome WindowsBrands}" Command="{Binding AddVisualInsertBlockItem}"
+                            ToolTip="Вставка блоков из списка в окне"/>
                     <!-- Переключатель -->
-                    <Button Content="{iconPacks:Material Check}" Command="{Binding AddToggleItem}"/>
+                    <Button Content="{iconPacks:Material Check}" Command="{Binding AddToggleItem}"
+                            ToolTip="Переключатель"/>
                 </WrapPanel>
             </StackPanel>
             <!-- Выбранная кнопка -->

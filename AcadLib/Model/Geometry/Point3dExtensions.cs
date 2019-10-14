@@ -1,4 +1,6 @@
-﻿namespace Autodesk.AutoCAD.Geometry
+﻿using AcadLib.Geometry.Polylines;
+
+namespace Autodesk.AutoCAD.Geometry
 {
     using System;
     using System.Globalization;
@@ -52,7 +54,7 @@
         {
             return pt.Trans(CoordSystem.UCS, CoordSystem.WCS);
         }
-        
+
         public static Point3d FromWcsToUcs(this Point3d pt)
         {
             return pt.Trans(CoordSystem.WCS, CoordSystem.UCS);
