@@ -75,7 +75,7 @@
 
         public static void AddError(string group, string msg)
         {
-            var err = new Error(msg, SystemIcons.Error);
+            var err = new Error(msg, SystemIcons.Error) { Group = group };
             AddErrorInternal(err);
         }
 

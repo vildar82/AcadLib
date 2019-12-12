@@ -11,31 +11,31 @@
     [PublicAPI]
     public class DbUsers : IDisposable
     {
-        private readonly CAD_AutoCADEntities entities;
+        private readonly AcadUsersDbContext _db;
 
         public DbUsers()
         {
-            entities = new CAD_AutoCADEntities();
+            _db = new AcadUsersDbContext();
         }
 
-        public List<AutocadUsers> GetUsers()
+        public List<AcadUsersDbContext.AutocadUser> GetUsers()
         {
-            return entities.AutocadUsers.ToList();
+            return _db.AutocadUsers.ToList();
         }
 
-        public void DeleteUser(AutocadUsers user)
+        public void DeleteUser(AcadUsersDbContext.AutocadUser user)
         {
-            entities.AutocadUsers.Remove(user);
+            _db.AutocadUsers.Remove(user);
         }
 
         public void Save()
         {
-            entities.SaveChanges();
+            _db.SaveChanges();
         }
 
         public void Dispose()
         {
-            entities?.Dispose();
+            _db?.Dispose();
         }
     }
 }

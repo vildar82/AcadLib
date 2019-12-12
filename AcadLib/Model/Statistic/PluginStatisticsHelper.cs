@@ -1,6 +1,4 @@
-﻿using System.Linq;
-
-namespace AcadLib.Statistic
+﻿namespace AcadLib.Statistic
 {
     using System;
     using System.Diagnostics;
@@ -10,11 +8,11 @@ namespace AcadLib.Statistic
     using AutoCAD_PIK_Manager.Settings;
     using Autodesk.AutoCAD.ApplicationServices.Core;
     using Autodesk.AutoCAD.DatabaseServices;
+    using Db;
     using JetBrains.Annotations;
-    using Model.Statistic.DataSetStatisticTableAdapters;
     using NetLib;
     using Yandex.Metrica;
-    using General = AcadLib.General;
+    using General = General;
 
     [PublicAPI]
     public static class PluginStatisticsHelper
@@ -22,6 +20,15 @@ namespace AcadLib.Statistic
         private static string _app;
         private static string _acadLibVer;
         private static bool? _isCivil = GetIsCivil();
+        private static PluginStatisticDbContext _db;
+
+        static PluginStatisticsHelper()
+        {
+            _db = new PluginStatisticDbContext();
+            _db.Configuration.LazyLoadingEnabled = false;
+            _db.Configuration.AutoDetectChangesEnabled = false;
+            _db.Configuration.ValidateOnSaveEnabled = false;
+        }
 
         [NotNull]
         public static string AcadYear => HostApplicationServices.Current.releaseMarketVersion;
@@ -29,7 +36,7 @@ namespace AcadLib.Statistic
         public static bool IsCivil => _isCivil ?? false;
 
         [NotNull]
-        public static string App => _app ?? (_app = IsCivil ? "Civil" : "AutoCAD");
+        public static string App => _app ??= IsCivil ? "Civil" : "AutoCAD";
 
         public static void AddStatistic()
         {
@@ -117,11 +124,19 @@ namespace AcadLib.Statistic
             {
                 try
                 {
-                    using (var pg = new C_PluginStatisticTableAdapter())
+                    _db.C_PluginStatistics.Add(new C_PluginStatistic
                     {
-                        pg.Insert(appName, plugin ?? string.Empty, command ?? string.Empty, version.Truncate(40) ?? string.Empty,
-                            doc.Truncate(500) ?? string.Empty, Environment.UserName, DateTime.Now, null, Path.GetFileName(doc));
-                    }
+                        Application = appName,
+                        Plugin = plugin ?? string.Empty,
+                        Command = command ?? string.Empty,
+                        Build = version.Truncate(40) ?? string.Empty,
+                        Doc = doc.Truncate(500) ?? string.Empty,
+                        UserName = Environment.UserName,
+                        DateStart = DateTime.Now,
+                        DocName = Path.GetFileName(doc)
+                    });
+
+                    _db.SaveChanges();
                 }
                 catch (Exception ex)
                 {

@@ -1,12 +1,10 @@
 ﻿namespace UtilsEditUsers.Model.User.UsersEditor
 {
     using System;
-    using System.Reactive.Linq;
     using System.Windows.Media;
     using System.Windows.Media.Imaging;
     using DB;
     using NetLib.WPF;
-    using ReactiveUI;
 
     public class EditAutocadUsers : BaseModel
     {
@@ -14,7 +12,7 @@
         {
         }
 
-        public EditAutocadUsers(AutocadUsers dbUser)
+        public EditAutocadUsers(AcadUsersDbContext.AutocadUser dbUser)
         {
             DbUser = dbUser;
             Login = dbUser.Login;
@@ -28,7 +26,7 @@
             AdditionalGroup = dbUser.AdditionalGroup;
         }
 
-        public AutocadUsers DbUser { get; set; }
+        public AcadUsersDbContext.AutocadUser DbUser { get; set; }
 
         public string Login { get; set; }
 
@@ -68,9 +66,7 @@
             DbUser.PreviewUpdate = PreviewUpdate;
             DbUser.DateRun = DateRun;
             if (AdditionalGroup == Group)
-            {
                 AdditionalGroup = null;
-            }
 
             DbUser.AdditionalGroup = AdditionalGroup;
         }

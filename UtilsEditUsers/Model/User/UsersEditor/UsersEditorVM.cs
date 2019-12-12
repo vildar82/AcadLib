@@ -127,7 +127,7 @@ namespace UtilsEditUsers.Model.User.UsersEditor
             FilterGroups.Insert(0, "Все");
         }
 
-        private EditAutocadUsers GetUser(AutocadUsers userDb)
+        private EditAutocadUsers GetUser(AcadUsersDbContext.AutocadUser userDb)
         {
             var (brush, tooltip) = GetUserVerionInfo(userDb);
             return new EditAutocadUsers(userDb)
@@ -137,7 +137,7 @@ namespace UtilsEditUsers.Model.User.UsersEditor
             };
         }
 
-        private (Brush color, string tooltip) GetUserVerionInfo(AutocadUsers userDb)
+        private (Brush color, string tooltip) GetUserVerionInfo(AcadUsersDbContext.AutocadUser userDb)
         {
             if (userDb.Group.IsNullOrEmpty())
                 return (colorErr, "Нет группы");
@@ -236,7 +236,7 @@ namespace UtilsEditUsers.Model.User.UsersEditor
                 {
                     if (!dictUsersEx.TryGetValue(u.Login, out var exUser))
                     {
-                        var uData = u.Login.Try(l => ADUtils.GetUserData(l, null), e=> new UserData
+                        var uData = u.Login.Try(l => ADUtils.GetUserData(l, null), e => new UserData
                         {
                             Fio = u.Login
                         });

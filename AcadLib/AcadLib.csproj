@@ -16,7 +16,7 @@
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <TargetFrameworkProfile />
     <NullableContextOptions>enable</NullableContextOptions>
-    <Nullable>warnings</Nullable>
+    <Nullable>enable</Nullable>
     <LangVersion>8</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -250,6 +250,7 @@
     <Compile Include="Model\RTree\SpatialIndex\RtreeExt.cs" />
     <Compile Include="Model\Statistic\CheckUpdates.cs" />
     <Compile Include="Model\Statistic\CivilTest.cs" />
+    <Compile Include="Model\Statistic\Db\PluginStatisticDbContext.cs" />
     <Compile Include="Model\Statistic\Eventer.cs" />
     <Compile Include="Model\Statistic\EventsStatisticService.cs" />
     <Compile Include="Model\Files\FileDataExt.cs" />
@@ -362,11 +363,6 @@
     <Compile Include="Model\Registry\RegExt.cs" />
     <Compile Include="Model\RTree\SpatialIndex\RectangleExt.cs" />
     <Compile Include="Model\Scale\ScaleHelper.cs" />
-    <Compile Include="Model\Statistic\DataSetStatistic.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>DataSetStatistic.xsd</DependentUpon>
-    </Compile>
     <Compile Include="Model\Statistic\PluginStatisticsHelper.cs" />
     <Compile Include="Model\Tables\CreateTable.cs" />
     <Compile Include="Model\Tables\ICreateTable.cs" />
@@ -471,25 +467,7 @@
     <Compile Include="Model\Utils\ClearObjectsExtData.cs" />
     <Compile Include="Model\Utils\ListModules.cs" />
     <Compile Include="Model\Utils\Tabs\Data\Session.cs" />
-    <Compile Include="Model\Utils\Tabs\History\Db\DbEvents.Context.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>DbEvents.Context.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Model\Utils\Tabs\History\Db\DbEvents.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>DbEvents.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Model\Utils\Tabs\History\Db\DbEvents.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>DbEvents.edmx</DependentUpon>
-    </Compile>
     <Compile Include="Model\Utils\Tabs\History\Db\DbHistory.cs" />
-    <Compile Include="Model\Utils\Tabs\History\Db\StatEvents.cs">
-      <DependentUpon>DbEvents.tt</DependentUpon>
-    </Compile>
     <Compile Include="Model\Utils\Tabs\RestoreTabs.cs" />
     <Compile Include="Model\Utils\Tabs\Data\Tabs.cs" />
     <Compile Include="Model\Utils\Tabs\UI\ErrConverter.cs" />
@@ -633,26 +611,9 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Model\Utils\Tabs\History\Db\DbEvents.Context.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>DbEvents.edmx</DependentUpon>
-      <LastGenOutput>DbEvents.Context.cs</LastGenOutput>
-    </Content>
-    <Content Include="Model\Utils\Tabs\History\Db\DbEvents.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>DbEvents.edmx</DependentUpon>
-      <LastGenOutput>DbEvents.cs</LastGenOutput>
-    </Content>
     <None Include="AcadLib.nuspec" />
     <None Include="Resources\restoreFiles16.ico" />
     <None Include="Resources\restoreFiles32.ico" />
-    <EntityDeploy Include="Model\Utils\Tabs\History\Db\DbEvents.edmx">
-      <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>DbEvents.Designer.cs</LastGenOutput>
-    </EntityDeploy>
-    <None Include="Model\Utils\Tabs\History\Db\DbEvents.edmx.diagram">
-      <DependentUpon>DbEvents.edmx</DependentUpon>
-    </None>
     <Resource Include="Resources\no-user.png" />
     <None Include="App.Config" />
     <None Include="Resources\userSettings.png" />
@@ -676,17 +637,6 @@
     <Resource Include="Resources\send2.png" />
     <Resource Include="Resources\txt.png" />
     <Resource Include="Resources\update.png" />
-    <None Include="Model\Statistic\DataSetStatistic.xsc">
-      <DependentUpon>DataSetStatistic.xsd</DependentUpon>
-    </None>
-    <None Include="Model\Statistic\DataSetStatistic.xsd">
-      <SubType>Designer</SubType>
-      <Generator>MSDataSetGenerator</Generator>
-      <LastGenOutput>DataSetStatistic.Designer.cs</LastGenOutput>
-    </None>
-    <None Include="Model\Statistic\DataSetStatistic.xss">
-      <DependentUpon>DataSetStatistic.xsd</DependentUpon>
-    </None>
     <EmbeddedResource Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -848,7 +798,7 @@
       <Version>5.5.13</Version>
     </PackageReference>
     <PackageReference Include="NetLib">
-      <Version>1.1.511</Version>
+      <Version>1.1.528</Version>
     </PackageReference>
     <PackageReference Include="PropertyChanged.Fody">
       <Version>3.0.0</Version>

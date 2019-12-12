@@ -14,7 +14,6 @@ namespace AcadLib.Utils.Tabs.UI
     using Data;
     using History;
     using JetBrains.Annotations;
-    using Model.Utils.Tabs.History.Db;
     using NetLib;
     using NetLib.Notification;
     using NetLib.WPF;
@@ -192,7 +191,7 @@ namespace AcadLib.Utils.Tabs.UI
             });
         }
 
-        private HistoryTab GetHistoryTab(StatEvents item)
+        private HistoryTab GetHistoryTab(DbHistory.StatEvents item)
         {
             return new HistoryTab { File = item.DocPath, Start = item.Start };
         }

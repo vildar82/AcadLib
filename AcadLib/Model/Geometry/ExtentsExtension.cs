@@ -1,7 +1,5 @@
 ﻿// ReSharper disable once CheckNamespace
 
-using System;
-
 namespace Autodesk.AutoCAD.DatabaseServices
 {
     using System.Collections.Generic;
@@ -11,6 +9,40 @@ namespace Autodesk.AutoCAD.DatabaseServices
     [PublicAPI]
     public static class ExtentsExtension
     {
+        /// <summary>
+        /// Пересечение границ
+        /// </summary>
+        /// <param name="ext">Граница</param>
+        /// <param name="otherExt">Другая граница</param>
+        /// <returns>Граница пересечения</returns>
+        public static Extents2d Intersect(this Extents2d ext, Extents2d otherExt)
+        {
+            if (ext.MaxPoint.X <= otherExt.MinPoint.X ||
+                ext.MaxPoint.Y <= otherExt.MinPoint.Y ||
+                ext.MinPoint.X >= otherExt.MaxPoint.X ||
+                ext.MinPoint.Y >= otherExt.MaxPoint.Y)
+                return new Extents2d();
+
+            var d = ext.MinPoint.X - otherExt.MinPoint.X;
+            var ixMin = d < 0 ? ext.MinPoint.X - d : ext.MinPoint.X;
+
+            d = ext.MaxPoint.X - otherExt.MaxPoint.X;
+            var ixMax = d > 0 ? ext.MaxPoint.X - d : ext.MaxPoint.X;
+
+            d = ext.MinPoint.Y - otherExt.MinPoint.Y;
+            var iyMin = d < 0 ? ext.MinPoint.Y - d : ext.MinPoint.Y;
+
+            d = ext.MaxPoint.Y - otherExt.MaxPoint.Y;
+            var iyMax = d < 0 ? ext.MaxPoint.Y - d : ext.MaxPoint.Y;
+
+            return new Extents2d(ixMin, iyMin, ixMax, iyMax);
+        }
+
+        /// <summary>
+        /// Общая граница
+        /// </summary>
+        /// <param name="exts"></param>
+        /// <returns></returns>
         public static Extents3d Union([NotNull] this IEnumerable<Extents3d> exts)
         {
             var ext = new Extents3d();
@@ -59,6 +91,11 @@ namespace Autodesk.AutoCAD.DatabaseServices
         }
 
         public static double GetArea(this Extents3d ext)
+        {
+            return (ext.MaxPoint.X - ext.MinPoint.X) * (ext.MaxPoint.Y - ext.MinPoint.Y);
+        }
+
+        public static double GetArea(this Extents2d ext)
         {
             return (ext.MaxPoint.X - ext.MinPoint.X) * (ext.MaxPoint.Y - ext.MinPoint.Y);
         }
