@@ -19,7 +19,7 @@
         public static System.Data.DataTable GetBlockPropertiesTable([NotNull] this BlockTableRecord dynBtr)
         {
             var t = dynBtr.Database.TransactionManager.TopTransaction;
-            var bpt = GetBPT(dynBtr, t);
+            using var bpt = GetBPT(dynBtr, t);
             if (bpt == null)
                 return null;
             var dTable = new System.Data.DataTable($"Таблица свойств блока {dynBtr.Name}");
@@ -56,9 +56,16 @@
                 return null;
 
             // graph.GetNode - в 2017 не работает! Метод не найден! через dynamic работает.
-            return graph.GetAllNodes()
-                .Select(f => ((dynamic)graph).GetNode((uint)f, OpenMode.ForRead, t) as BlockPropertiesTable)
-                .FirstOrDefault(w => w != null);
+            var nodes = graph.GetAllNodes().Select(f =>
+                     ((dynamic)graph).GetNode((uint)f, OpenMode.ForRead, t) as DBObject);
+            foreach (var node in nodes)
+            {
+                if (node is BlockPropertiesTable bpt)
+                    return bpt;
+                node?.Dispose();
+            }
+
+            return null;
         }
 
         [NotNull]

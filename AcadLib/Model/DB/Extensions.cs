@@ -114,10 +114,8 @@
         /// </summary>
         public static string GetEffectiveName([NotNull] this BlockReference br)
         {
-            using (var btrDyn = (BlockTableRecord)br.DynamicBlockTableRecord.Open(OpenMode.ForRead))
-            {
-                return btrDyn.Name;
-            }
+            using var btrDyn = (BlockTableRecord)br.DynamicBlockTableRecord.Open(OpenMode.ForRead);
+            return btrDyn.Name;
         }
     }
 }
