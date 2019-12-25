@@ -266,9 +266,7 @@
         public void FillPropValue(string propMatch, object value, bool exactMatch = true, bool isRequired = true)
         {
             if (exactMatch)
-            {
                 propMatch = $"^{propMatch}$";
-            }
 
             FillProp(GetProperty(propMatch, isRequired), value);
         }
@@ -281,6 +279,7 @@
                 {
                     Group = $"Ошибка в блоке '{BlName}'"
                 };
+
                 if (!DontAddErrorsToInspector)
                     Inspector.AddError(Error);
             }
@@ -311,11 +310,9 @@
             if (!idEnt.IsNull)
             {
                 var idCopy = idEnt.CopyEnt(idBtrNew);
-                using (var entCopy = idCopy.GetObject<Entity>(OpenMode.ForWrite))
-                {
-                    entCopy.TransformBy(Transform);
-                    return entCopy.Id;
-                }
+                using var entCopy = idCopy.GetObject<Entity>(OpenMode.ForWrite);
+                entCopy.TransformBy(Transform);
+                return entCopy.Id;
             }
 
             return ObjectId.Null;
@@ -365,50 +362,99 @@
             }
         }
 
+        /// <summary>
+        /// Запись знеачения свойства - обязательное - выкидывает исключения
+        /// </summary>
+        /// <param name="propName">Имя свойства</param>
+        /// <param name="value">Значение</param>
+        public void FillPropExact(string propName, object value)
+        {
+            var prop = GetProperty(propName, false);
+            if (prop == null)
+                throw new Exception($"Не найдено свойство '{propName}' в блоке '{BlName}'.");
+            FillPropExact(prop, value);
+        }
+
+        /// <summary>
+        /// Запись значения свойства - обязательное - выкидывает исключения
+        /// </summary>
+        /// <param name="prop">Свойство</param>
+        /// <param name="value">Значение</param>
+        public void FillPropExact(Property prop, object value)
+        {
+            if (prop == null)
+                throw new NullReferenceException(nameof(prop));
+            if (prop.Type != PropertyType.Attribute)
+                throw new Exception($"Это не атрибут '{prop.Name}' в блоке '{BlName}'.");
+
+            if (prop.Type == PropertyType.Attribute)
+                FillAtr(prop, value);
+            else
+                FillDyn(prop, value);
+        }
+
+        private void FillAtr(Property prop, object value)
+        {
+            var atr = prop.IdAtrRef.GetObject<AttributeReference>(OpenMode.ForWrite);
+            var text = value?.ToString() ?? string.Empty;
+            if (atr.IsMTextAttribute)
+            {
+                var mt = atr.MTextAttribute;
+                mt.Contents = text;
+                atr.MTextAttribute = mt;
+                atr.UpdateMTextAttribute();
+            }
+            else
+            {
+                atr.TextString = text;
+            }
+
+            if (!atr.IsDefaultAlignment)
+                atr.AdjustAlignment(Db);
+        }
+
+        private void FillDyn(Property prop, object value)
+        {
+            var blRef = IdBlRef.GetObjectT<BlockReference>(OpenMode.ForWrite);
+            var dynProp = blRef.DynamicBlockReferencePropertyCollection.Cast<DynamicBlockReferenceProperty>()
+                .FirstOrDefault(p => p.PropertyName.Equals(prop.Name, StringComparison.OrdinalIgnoreCase));
+            dynProp.Value = value;
+        }
+
         protected void FillProp([CanBeNull] Property prop, object value)
         {
             if (prop == null)
                 return;
-            var blRef = IdBlRef.GetObjectT<BlockReference>(OpenMode.ForWrite);
-            if (prop.Type == PropertyType.Attribute && !prop.IdAtrRef.IsNull)
+            if (prop.Type == PropertyType.Attribute)
             {
-                var atr = prop.IdAtrRef.GetObject<AttributeReference>(OpenMode.ForWrite);
-                var text = value?.ToString() ?? string.Empty;
-                if (atr.IsMTextAttribute)
+                try
                 {
-                    var mt = atr.MTextAttribute;
-                    mt.Contents = text;
-                    atr.MTextAttribute = mt;
-                    atr.UpdateMTextAttribute();
+                    FillAtr(prop, value);
                 }
-                else
+                catch
                 {
-                    atr.TextString = text;
+                    Inspector.AddError(
+                        $"Не удалось установить записать в атрибут '{prop.Name}' " +
+                        $"значение '{prop.Value}' в блок '{BlName}'.",
+                        IdBlRef,
+                        System.Drawing.SystemIcons.Error);
                 }
-
-                if (!atr.IsDefaultAlignment)
-                    atr.AdjustAlignment(Db);
             }
             else if (prop.Type == PropertyType.Dynamic)
             {
                 if (value == null)
                     return;
-                var dynProp = blRef.DynamicBlockReferencePropertyCollection.Cast<DynamicBlockReferenceProperty>()
-                    .FirstOrDefault(p => p.PropertyName.Equals(prop.Name, StringComparison.OrdinalIgnoreCase));
-                if (dynProp != null)
+                try
                 {
-                    try
-                    {
-                        dynProp.Value = value;
-                    }
-                    catch
-                    {
-                        Inspector.AddError(
-                            $"Не удалосось установить динамический параметр {prop.Name} " +
-                                           $"со значением {prop.Value} в блок {BlName}",
-                            IdBlRef,
-                            System.Drawing.SystemIcons.Error);
-                    }
+                    FillDyn(prop, value);
+                }
+                catch
+                {
+                    Inspector.AddError(
+                        $"Не удалось установить динамический параметр '{prop.Name}' " +
+                        $"со значением {prop.Value} в блок '{BlName}'.",
+                        IdBlRef,
+                        System.Drawing.SystemIcons.Error);
                 }
             }
         }
