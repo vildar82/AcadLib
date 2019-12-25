@@ -188,6 +188,7 @@
     <Compile Include="Model\Filer\ReferenceFiler.cs" />
     <Compile Include="Model\Filer\ReferenceFilerExt.cs" />
     <Compile Include="Model\Filer\ReferenceFilerResult.cs" />
+    <Compile Include="Model\Geometry\AlgebraicArea.cs" />
     <Compile Include="Model\Geometry\CircleExt.cs" />
     <Compile Include="Model\Geometry\LineExt.cs" />
     <Compile Include="Model\Geometry\Polylines\MergePolylineEx.cs" />
