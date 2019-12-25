@@ -384,8 +384,6 @@
         {
             if (prop == null)
                 throw new NullReferenceException(nameof(prop));
-            if (prop.Type != PropertyType.Attribute)
-                throw new Exception($"Это не атрибут '{prop.Name}' в блоке '{BlName}'.");
 
             if (prop.Type == PropertyType.Attribute)
                 FillAtr(prop, value);
@@ -463,15 +461,11 @@
         {
             if (blRef.Color.IsByLayer && !blRef.LayerId.IsNull)
             {
-                using (var lay = (LayerTableRecord)blRef.LayerId.Open(OpenMode.ForRead))
-                {
-                    if (lay.IsFrozen || !blRef.Visible)
-                    {
-                        IsVisible = false;
-                    }
+                using var lay = (LayerTableRecord)blRef.LayerId.Open(OpenMode.ForRead);
+                if (lay.IsFrozen || !blRef.Visible)
+                    IsVisible = false;
 
-                    return lay.Color;
-                }
+                return lay.Color;
             }
 
             return blRef.Color;
