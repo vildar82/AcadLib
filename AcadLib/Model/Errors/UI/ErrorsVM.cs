@@ -1,6 +1,4 @@
-﻿using AcadLib.Visual;
-
-namespace AcadLib.Errors
+﻿namespace AcadLib.Errors
 {
     using System;
     using System.Collections.Generic;
@@ -16,13 +14,16 @@ namespace AcadLib.Errors
     using NetLib.WPF;
     using OfficeOpenXml;
     using ReactiveUI;
-    using ReactiveUI.Legacy;
     using UI;
     using Unit = System.Reactive.Unit;
+    using System.Collections.ObjectModel;
+    using Visual;
+    using DynamicData;
 
     public class ErrorsVM : BaseViewModel
     {
         private readonly VisualTransientSimple errorsVisual;
+        private readonly SourceList<ErrorModelBase> errorsSrc;
 
         public ErrorsVM()
         {
@@ -32,9 +33,7 @@ namespace AcadLib.Errors
         {
             ErrorsOrig = errors;
 
-            // Группировка ошибок
-            // "Дублирование блоков"
-            Errors = new ReactiveList<ErrorModelBase>(errors.Where(w => !string.IsNullOrEmpty(w.Message)).GroupBy(g => g.Group)
+            var errorVMs = errors.Where(w => !string.IsNullOrEmpty(w.Message)).GroupBy(g => g.Group)
                 .Select(s =>
                 {
                     ErrorModelBase errModel;
@@ -48,16 +47,27 @@ namespace AcadLib.Errors
                     {
                         errModel = new ErrorModelOne(s.First(), null);
                     }
+
                     errModel.SelectionChanged += ErrModel_SelectionChanged;
                     return errModel;
-                }).ToList());
+                });
+
+            errorsSrc = new SourceList<ErrorModelBase>();
+            errorsSrc.AddRange(errorVMs);
+
+            errorsSrc.Connect()
+                .ObserveOnDispatcher()
+                .Bind(out var data)
+                .Subscribe();
+            Errors = data;
+
             IsDublicateBlocksEnabled = errors.Any(e => e.Message?.StartsWith("Дублирование блоков") == true ||
                                                        e.Message?.StartsWith("Наложение блоков") == true);
             ErrorsCountInfo = errors.Count;
 
-            var canCollapse = Errors.CountChanged.Select(s => Errors.OfType<ErrorModelList>().Any(a => a.IsExpanded));
+            var canCollapse = errorsSrc.CountChanged.Select(s => Errors.OfType<ErrorModelList>().Any(a => a.IsExpanded));
             CollapseAll = CreateCommand(CollapseAllExecute, canCollapse);
-            var canExpand = Errors.CountChanged.Select(s =>
+            var canExpand = errorsSrc.CountChanged.Select(s =>
                 Errors.OfType<ErrorModelList>().Any(a => a.SameErrors != null && !a.IsExpanded));
             ExpandeAll = CreateCommand(ExpandedAllExecute, canExpand);
             ExportToExcel = CreateCommand(ExportToExcelExecute);
@@ -82,7 +92,7 @@ namespace AcadLib.Errors
         public ReactiveCommand<Unit, Unit> DeleteSelectedDublicateBlocks { get; set; }
         public ReactiveCommand<Unit, Unit> DeleteAllDublicateBlocks { get; set; }
 
-        public new ReactiveList<ErrorModelBase> Errors { get; set; }
+        public new ReadOnlyObservableCollection<ErrorModelBase> Errors { get; set; }
 
         [Reactive]
         public int ErrorsCountInfo { get; set; }
@@ -136,7 +146,7 @@ namespace AcadLib.Errors
             }
             else
             {
-                Errors.Remove(errorBase);
+                errorsSrc.Remove(errorBase);
             }
 
             if (errorBase.Error == null)
@@ -346,7 +356,7 @@ namespace AcadLib.Errors
                 }
                 else
                 {
-                    Errors.Remove(item);
+                    errorsSrc.Remove(item);
                 }
 
                 if (item.IsSelected)

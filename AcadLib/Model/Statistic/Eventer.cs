@@ -42,7 +42,7 @@ namespace AcadLib.Statistic
 
         private string App { get; }
 
-        private NamingV2.Dto.AppType AppType { get; }
+        private AppType AppType { get; }
 
         private DateTime StartEvent { get; set; }
 
@@ -168,15 +168,15 @@ namespace AcadLib.Statistic
             }
         }
 
-        private static NamingV2.Dto.AppType GetAppType(string app)
+        private static AppType GetAppType(string app)
         {
             switch (app.ToLower())
             {
-                case "autocad": return NamingV2.Dto.AppType.Autocad;
-                case "civil": return NamingV2.Dto.AppType.Civil;
+                case "autocad": return AppType.Autocad;
+                case "civil": return AppType.Civil;
             }
 
-            return NamingV2.Dto.AppType.Autocad;
+            return AppType.Autocad;
         }
 
         private bool NeedCheck(string docPath)

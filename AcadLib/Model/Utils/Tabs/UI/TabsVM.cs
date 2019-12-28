@@ -1,4 +1,7 @@
-﻿using System.Reactive;
+﻿using System.Collections.ObjectModel;
+using System.Reactive;
+using DynamicData;
+using DynamicData.Binding;
 
 namespace AcadLib.Utils.Tabs.UI
 {
@@ -23,7 +26,7 @@ namespace AcadLib.Utils.Tabs.UI
 
     public class TabsVM : BaseViewModel
     {
-        private ReactiveList<TabVM> history = new ReactiveList<TabVM>();
+        private readonly SourceList<TabVM> historySrc = new SourceList<TabVM>();
 
         public TabsVM([NotNull] Tabs tabs)
         {
@@ -44,8 +47,16 @@ namespace AcadLib.Utils.Tabs.UI
                     HasHistory = true;
                 }
 
-                this.WhenAnyValue(v => v.HistorySearch).Skip(1).Subscribe(s => History.Reset());
-                History = history.CreateDerivedCollection(t => t, HistoryFilter, HistoryOrder);
+                var searchObs = this.WhenAnyValue(v => v.HistorySearch).Skip(1);
+                historySrc.Connect()
+                    .Sort(SortExpressionComparer<TabVM>.Ascending(s => s.Start))
+                    .AutoRefreshOnObservable(c => searchObs)
+                    .Filter(HistoryFilter)
+                    .ObserveOnDispatcher()
+                    .Bind(out var data)
+                    .Subscribe();
+                History = data;
+
                 LoadHistory();
             }
             catch (Exception ex)
@@ -68,7 +79,7 @@ namespace AcadLib.Utils.Tabs.UI
 
         public string HistorySearch { get; set; }
 
-        public IReactiveDerivedList<TabVM> History { get; set; }
+        public ReadOnlyObservableCollection<TabVM> History { get; set; }
 
         public bool IsOn { get; set; }
 
@@ -132,7 +143,7 @@ namespace AcadLib.Utils.Tabs.UI
                     {
                         try
                         {
-                            tabs.ForEach(t => history.Add(t));
+                            tabs.ForEach(t => historySrc.Add(t));
                         }
                         catch (Exception ex)
                         {
@@ -154,14 +165,15 @@ namespace AcadLib.Utils.Tabs.UI
                 {
                     try
                     {
-                        tabs.ForEach(t => history.Add(t));
+                        tabs.ForEach(t => historySrc.Add(t));
                     }
                     catch (Exception ex)
                     {
                         Logger.Error(ex, "RestoreTabs TabsVM dispatcher.Invoke History");
                     }
                 });
-                var removeTabs = history.GroupBy(g => g.File).SelectMany(s => s.OrderByDescending(o => o.Start).Skip(1));
+
+                var removeTabs = historySrc.Items.GroupBy(g => g.File).SelectMany(s => s.OrderByDescending(o => o.Start).Skip(1));
                 Task.Delay(TimeSpan.FromMilliseconds(300)).Wait();
                 foreach (var tab in removeTabs)
                 {
@@ -169,7 +181,7 @@ namespace AcadLib.Utils.Tabs.UI
                     {
                         try
                         {
-                            history.Remove(tab);
+                            historySrc.Remove(tab);
                         }
                         catch
                         {

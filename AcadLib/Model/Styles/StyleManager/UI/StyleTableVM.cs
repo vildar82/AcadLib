@@ -1,18 +1,13 @@
 ﻿namespace AcadLib.Styles.StyleManager.UI
 {
     using System;
-    using System.Collections;
-    using System.Linq;
-    using AcadLib.Styles.StyleManager.Model;
-    using Autodesk.AutoCAD.DatabaseServices;
+    using Model;
     using Errors;
-    using Filer;
     using JetBrains.Annotations;
     using NetLib.WPF;
-    using NLog;
     using ReactiveUI;
-    using ReactiveUI.Legacy;
     using Unit = System.Reactive.Unit;
+    using DynamicData.Binding;
 
     public class StyleTableVM : BaseModel
     {
@@ -31,7 +26,7 @@
         public ReactiveCommand<IStyleItem, Unit> Delete { get; set; }
 
         [CanBeNull]
-        public ReactiveList<IStyleItem> Styles { get; set; }
+        public ObservableCollectionExtended<IStyleItem> Styles { get; set; }
 
         private void DeleteExec([NotNull] IStyleItem styleItem)
         {

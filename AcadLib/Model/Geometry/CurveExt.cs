@@ -21,19 +21,14 @@
             var center = curve.Centroid();
             if (curve.IsPointInsidePolylineByRay(center, Tolerance.Global)) return center;
             var ptClosest = curve.GetClosestPointTo(center, Vector3d.ZAxis, false);
-            using (var ray = new Ray())
-            using (var plane = new Plane())
-            {
-                ray.BasePoint = center;
-                ray.SecondPoint = ptClosest;
-                var ptsIntersects = new Point3dCollection();
-                curve.IntersectWith(ray, Intersect.OnBothOperands, plane, ptsIntersects, IntPtr.Zero, IntPtr.Zero);
-                if (ptsIntersects.Count > 1)
-                {
-                    return ptsIntersects[0].Center(ptsIntersects[1]);
-                }
-            }
-
+            using var ray = new Ray();
+            using var plane = new Plane();
+            ray.BasePoint = center;
+            ray.SecondPoint = ptClosest;
+            var ptsIntersects = new Point3dCollection();
+            curve.IntersectWith(ray, Intersect.OnBothOperands, plane, ptsIntersects, IntPtr.Zero, IntPtr.Zero);
+            if (ptsIntersects.Count > 1)
+                return ptsIntersects[0].Center(ptsIntersects[1]);
             return center;
         }
 
@@ -90,10 +85,8 @@
 
         public static bool IsPointInsidePolylineByRay(this Curve c, Point3d pt, Tolerance tolerance)
         {
-            using (var ray = new Ray { BasePoint = pt, UnitDir = Vector3d.YAxis })
-            {
-                return IsPointInsidePolylineByRay(ray, pt, c, tolerance);
-            }
+            using var ray = new Ray { BasePoint = pt, UnitDir = Vector3d.YAxis };
+            return IsPointInsidePolylineByRay(ray, pt, c, tolerance);
         }
 
         public static bool IsPointInsidePolylineByRay([NotNull] Ray ray, Point3d pt, Curve c, Tolerance tolerance)

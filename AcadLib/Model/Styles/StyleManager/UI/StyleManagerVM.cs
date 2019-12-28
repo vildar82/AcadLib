@@ -1,4 +1,6 @@
-﻿namespace AcadLib.Styles.StyleManager.UI
+﻿using DynamicData.Binding;
+
+namespace AcadLib.Styles.StyleManager.UI
 {
     using System.Collections;
     using System.Collections.Generic;
@@ -49,7 +51,7 @@
             return new StyleTableVM(this, new StyleTable(styleDictId))
             {
                 Name = name,
-                Styles = new ReactiveList<IStyleItem>(styles),
+                Styles = new ObservableCollectionExtended<IStyleItem>(styles),
             };
         }
 
@@ -65,7 +67,7 @@
             return new StyleTableVM(this, new StyleTable(symbolTableId))
             {
                 Name = name,
-                Styles = new ReactiveList<IStyleItem>(styles),
+                Styles = new ObservableCollectionExtended<IStyleItem>(styles),
             };
         }
     }

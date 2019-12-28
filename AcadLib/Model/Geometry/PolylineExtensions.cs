@@ -533,57 +533,53 @@
         /// <exception cref="Exceptions.ErrorException">Не удалось определить за несколько попыток.</exception>
         public static bool IsPointInsidePolyline([NotNull] this Polyline pl, Point3d pt, bool onIsInside = false)
         {
-            using (var ray = new Ray())
+            using var ray = new Ray();
+            ray.BasePoint = pt;
+            var vec = new Vector3d(0, 1, pt.Z);
+            ray.SecondPoint = pt + vec;
+            using var ptsIntersects = new Point3dCollection();
+            bool isContinue;
+            var isPtOnPolyline = false;
+            var countWhile = 0;
+            do
             {
-                ray.BasePoint = pt;
-                var vec = new Vector3d(0, 1, pt.Z);
-                ray.SecondPoint = pt + vec;
-                using (var ptsIntersects = new Point3dCollection())
+                using (var plane = new Plane())
                 {
-                    bool isContinue;
-                    var isPtOnPolyline = false;
-                    var countWhile = 0;
-                    do
-                    {
-                        using (var plane = new Plane())
-                        {
-                            pl.IntersectWith(ray, Intersect.OnBothOperands, plane, ptsIntersects, IntPtr.Zero, IntPtr.Zero);
-                        }
-
-                        isContinue = ptsIntersects.Cast<Point3d>().Any(p =>
-                        {
-                            if (pt.IsEqualTo(p))
-                            {
-                                isPtOnPolyline = true;
-                                return true;
-                            }
-                            var param = pl.GetParameterAtPointTry(p);
-                            return Math.Abs(param % 1) < 0.0001;
-                        });
-
-                        if (isPtOnPolyline)
-                        {
-                            return onIsInside;
-                        }
-
-                        if (isContinue)
-                        {
-                            vec = vec.RotateBy(0.01, Vector3d.ZAxis);
-                            ray.SecondPoint = pt + vec;
-                            ptsIntersects.Clear();
-                            countWhile++;
-                            if (countWhile > 3)
-                            {
-                                throw new ErrorException(new Errors.Error(
-                                    "Не определено попадает ли точка внутрь полилинии.",
-                                    pt.GetRectangleFromCenter(3), Matrix3d.Identity,
-                                    System.Drawing.SystemIcons.Error));
-                            }
-                        }
-                    } while (isContinue);
-                    return NetLib.MathExt.IsOdd(ptsIntersects.Count);
+                    pl.IntersectWith(ray, Intersect.OnBothOperands, plane, ptsIntersects, IntPtr.Zero, IntPtr.Zero);
                 }
-            }
+
+                isContinue = ptsIntersects.Cast<Point3d>().Any(p =>
+                {
+                    if (pt.IsEqualTo(p))
+                    {
+                        isPtOnPolyline = true;
+                        return true;
+                    }
+                    var param = pl.GetParameterAtPointTry(p);
+                    return Math.Abs(param % 1) < 0.0001;
+                });
+
+                if (isPtOnPolyline)
+                {
+                    return onIsInside;
+                }
+
+                if (isContinue)
+                {
+                    vec = vec.RotateBy(0.01, Vector3d.ZAxis);
+                    ray.SecondPoint = pt + vec;
+                    ptsIntersects.Clear();
+                    countWhile++;
+                    if (countWhile > 3)
+                    {
+                        throw new ErrorException(new Errors.Error(
+                            "Не определено попадает ли точка внутрь полилинии.",
+                            pt.GetRectangleFromCenter(3), Matrix3d.Identity,
+                            System.Drawing.SystemIcons.Error));
+                    }
+                }
+            } while (isContinue);
+            return ptsIntersects.Count.IsOdd();
         }
 
         /// <summary>
@@ -593,10 +589,8 @@
         /// </summary>
         public static bool IsPointInsidePolylineByRay(this Polyline pl, Point3d pt, Tolerance tolerance)
         {
-            using (var ray = new Ray { BasePoint = pt, UnitDir = Vector3d.YAxis })
-            {
-                return CurveExt.IsPointInsidePolylineByRay(ray, pt, pl, tolerance);
-            }
+            using var ray = new Ray { BasePoint = pt, UnitDir = Vector3d.YAxis };
+            return CurveExt.IsPointInsidePolylineByRay(ray, pt, pl, tolerance);
         }
 
         [Obsolete("Используй новую перегрузку с параметром допуска, она работает быстрее.")]

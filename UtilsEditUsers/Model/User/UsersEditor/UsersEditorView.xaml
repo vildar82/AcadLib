@@ -6,7 +6,6 @@
                 xmlns:wpf="clr-namespace:NetLib.WPF;assembly=NetLib"
         xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
         xmlns:usersEditor="clr-namespace:UtilsEditUsers.Model.User.UsersEditor"
-        xmlns:converters="clr-namespace:NetLib.WPF.Converters;assembly=NetLib"
         xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
         d:DataContext="{d:DesignInstance usersEditor:UsersEditorVM}"
         mc:Ignorable="d"
@@ -77,9 +76,9 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTextColumn Header="Дата запуска" Binding="{Binding DateRun, StringFormat=dd.MM.yyyy HH:mm}" 
+                <DataGridTextColumn Header="Дата запуска" Binding="{Binding DateRun, StringFormat=dd.MM.yyyy HH:mm}"
                                     IsReadOnly="True" />
-                <DataGridCheckBoxColumn Header="Отключен" Binding="{Binding Disabled}" 
+                <DataGridCheckBoxColumn Header="Отключен" Binding="{Binding Disabled}"
                                         ElementStyle="{DynamicResource MetroDataGridCheckBox}"
                                         EditingElementStyle="{DynamicResource MetroDataGridCheckBox}"/>
                 <DataGridCheckBoxColumn Header="PreviewUpdate" Binding="{Binding PreviewUpdate}"
@@ -91,7 +90,7 @@
                 <DataGridTemplateColumn Header="Удалить" >
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate DataType="usersEditor:EditAutocadUsers">
-                            <Button Content="x" VerticalContentAlignment="Center" 
+                            <Button Content="x" VerticalContentAlignment="Center"
                                     Command="{Binding DataContext.DeleteUser, ElementName=DgUsers}" HorizontalAlignment="Center"
                                     CommandParameter="{Binding}"
                                     VerticalAlignment="Center"/>
