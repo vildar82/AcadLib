@@ -1,3 +1,7 @@
+using System;
+using System.Reactive.Linq;
+using ReactiveUI;
+
 namespace AcadLib.UI.Ribbon.Editor.Data
 {
     using System.Collections.Generic;
@@ -15,13 +19,22 @@ namespace AcadLib.UI.Ribbon.Editor.Data
             File = blockFiles.FirstOrDefault(f => f.FileName.EqualsIgnoreCase(item.File));
             Layer = item.Layer;
             Explode = item.Explode;
-            BlockName = item.BlockName;
+            Block = new BlockItem { Name = item.BlockName };
             Properties = new ObservableCollection<Property>(item.Properties ?? new List<Property>());
+
+            this.WhenAnyValue(v => v.Block).Skip(1)
+                .Throttle(TimeSpan.FromMilliseconds(150))
+                .ObserveOnDispatcher()
+                .Subscribe(s =>
+                {
+                    if (Block?.Image != null)
+                        Image = Block.Image;
+                });
         }
 
         public ObservableCollection<Property> Properties { get; set; }
 
-        public string BlockName { get; set; }
+        public BlockItem Block { get; set; }
 
         public bool Explode { get; set; }
 
@@ -42,7 +55,7 @@ namespace AcadLib.UI.Ribbon.Editor.Data
             blItem.File = File.FileName;
             blItem.Layer = Layer;
             blItem.Explode = Explode;
-            blItem.BlockName = BlockName;
+            blItem.BlockName = Block.Name;
             blItem.Properties = Properties.ToList();
         }
     }

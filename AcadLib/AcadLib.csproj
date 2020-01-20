@@ -425,6 +425,7 @@
     <Compile Include="Model\UI\Ribbon\Data\RibbonTabData.cs" />
     <Compile Include="Model\UI\Ribbon\Editor\AccessItem.cs" />
     <Compile Include="Model\UI\Ribbon\Editor\BlockFile.cs" />
+    <Compile Include="Model\UI\Ribbon\Editor\BlockItem.cs" />
     <Compile Include="Model\UI\Ribbon\Editor\Converters\ItemTypeConverter.cs" />
     <Compile Include="Model\UI\Ribbon\Editor\Converters\RibbonItemToolTipConverter.cs" />
     <Compile Include="Model\UI\Ribbon\Editor\Data\RibbonInsertBlockVM.cs" />

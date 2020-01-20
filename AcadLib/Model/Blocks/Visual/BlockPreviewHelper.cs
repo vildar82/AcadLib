@@ -35,14 +35,12 @@
         [NotNull]
         private static System.Drawing.Image ImageSourceToGDI([NotNull] BitmapSource src)
         {
-            using (var ms = new MemoryStream())
-            {
-                var encoder = new BmpBitmapEncoder();
-                encoder.Frames.Add(BitmapFrame.Create(src));
-                encoder.Save(ms);
-                ms.Flush();
-                return System.Drawing.Image.FromStream(ms);
-            }
+            using var ms = new MemoryStream();
+            var encoder = new BmpBitmapEncoder();
+            encoder.Frames.Add(BitmapFrame.Create(src));
+            encoder.Save(ms);
+            ms.Flush();
+            return System.Drawing.Image.FromStream(ms);
         }
     }
 }

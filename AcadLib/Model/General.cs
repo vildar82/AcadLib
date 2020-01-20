@@ -44,7 +44,8 @@
             "vrublevskiyba",
             "khisyametdinovvt",
             "arslanovti",
-            "karadzhayanra"
+            "karadzhayanra",
+            "kagramanianag"
         };
 
         static General()

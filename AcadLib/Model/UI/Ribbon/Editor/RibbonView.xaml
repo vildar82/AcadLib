@@ -225,7 +225,13 @@
                                     <TextBlock Text="Блок" MinWidth="100" VerticalAlignment="Center" />
                                     <ComboBox ItemsSource="{Binding File.Blocks}" MinWidth="100"
                                               VerticalAlignment="Center"
-                                              SelectedItem="{Binding BlockName}" />
+                                              SelectedItem="{Binding Block}">
+                                        <ComboBox.ItemTemplate>
+                                            <DataTemplate DataType="editor:BlockItem">
+                                                <TextBlock Text="{Binding Name}"/>
+                                            </DataTemplate>
+                                        </ComboBox.ItemTemplate>
+                                    </ComboBox>
                                 </StackPanel>
                                 <CheckBox IsChecked="{Binding Explode}" Content="Разбивать"/>
                             </StackPanel>
