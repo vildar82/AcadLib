@@ -14,7 +14,7 @@ namespace AcadLib.Geometry.Polylines
         {
             return CreateRectangle(pt.Convert2d(), length, width, alignment, dir.Convert2d());
         }
-        
+
         public static Polyline CreateRectangle(this Point2d pt, double length, double width, CellAlignment alignment, Vector2d dir)
         {
             if (length < 0 || width < 0)
@@ -24,7 +24,7 @@ namespace AcadLib.Geometry.Polylines
             switch (alignment)
             {
                 case CellAlignment.BottomLeft:
-                    vec = Vector3d.XAxis;
+                    vec = new Vector3d();
                     break;
                 case CellAlignment.TopLeft:
                     vec = new Vector3d(0, -width, 0);
@@ -52,8 +52,9 @@ namespace AcadLib.Geometry.Polylines
                     break;
             }
 
-            var matrix = Matrix3d.Displacement(vec);
-            matrix *= Matrix3d.Rotation(dir.Angle, Vector3d.ZAxis, pt.Convert3d() + vec);
+            var move = Matrix3d.Displacement(vec);
+            var rotate = Matrix3d.Rotation(dir.Angle, Vector3d.ZAxis, pt.Convert3d() + vec);
+            var matrix = move.PostMultiplyBy(rotate);
             pl.TransformBy(matrix);
             return pl;
         }
