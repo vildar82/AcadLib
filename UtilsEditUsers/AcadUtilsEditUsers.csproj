@@ -166,11 +166,11 @@
       <Version>1.1.533</Version>
     </PackageReference>
     <PackageReference Update="Fody">
-      <Version>6.0.6</Version>
+      <Version>6.0.8</Version>
     </PackageReference>
     <PackageReference Update="Nerdbank.GitVersioning" Version="2.3.38" />
     <PackageReference Include="PropertyChanged.Fody">
-      <Version>3.2.2</Version>
+      <Version>3.2.4</Version>
     </PackageReference>
   </ItemGroup>
   <ItemGroup>

@@ -20,15 +20,6 @@
         private static string _app;
         private static string _acadLibVer;
         private static bool? _isCivil = GetIsCivil();
-        private static PluginStatisticDbContext _db;
-
-        static PluginStatisticsHelper()
-        {
-            _db = new PluginStatisticDbContext();
-            _db.Configuration.LazyLoadingEnabled = false;
-            _db.Configuration.AutoDetectChangesEnabled = false;
-            _db.Configuration.ValidateOnSaveEnabled = false;
-        }
 
         [NotNull]
         public static string AcadYear => HostApplicationServices.Current.releaseMarketVersion;
@@ -124,7 +115,11 @@
             {
                 try
                 {
-                    _db.C_PluginStatistics.Add(new C_PluginStatistic
+                    var db = new PluginStatisticDbContext();
+                    db.Configuration.LazyLoadingEnabled = false;
+                    db.Configuration.AutoDetectChangesEnabled = false;
+                    db.Configuration.ValidateOnSaveEnabled = false;
+                    db.C_PluginStatistics.Add(new C_PluginStatistic
                     {
                         Application = appName,
                         Plugin = plugin ?? string.Empty,
@@ -136,7 +131,7 @@
                         DocName = Path.GetFileName(doc)
                     });
 
-                    _db.SaveChanges();
+                    db.SaveChanges();
                 }
                 catch (Exception ex)
                 {
