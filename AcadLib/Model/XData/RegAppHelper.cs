@@ -21,10 +21,10 @@
 
             using (var rat = (RegAppTable) db.RegAppTableId.Open(OpenMode.ForWrite, false))
             {
-                using (var ratr = new RegAppTableRecord())
+                using (var rt = new RegAppTableRecord())
                 {
-                    ratr.Name = regAppName;
-                    rat.Add(ratr);
+                    rt.Name = regAppName;
+                    rat.Add(rt);
                 }
             }
         }

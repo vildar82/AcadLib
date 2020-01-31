@@ -29,6 +29,11 @@
 
         public static bool HasErrors => Errors.Count > 0;
 
+        public static UsingInspector Using()
+        {
+            return new UsingInspector();
+        }
+
         public static void Clear()
         {
             if (Errors?.Any() == true)
