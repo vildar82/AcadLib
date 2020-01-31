@@ -15,9 +15,6 @@
     using NetLib;
 
     /// <inheritdoc />
-    /// <summary>
-    /// Базовое описание блока
-    /// </summary>
     [PublicAPI]
     public class BlockBase : IBlock
     {
@@ -32,7 +29,6 @@
         public BlockBase([NotNull] BlockReference blRef, string blName)
         {
             BlName = blName;
-
             Update(blRef);
         }
 

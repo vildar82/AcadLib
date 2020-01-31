@@ -1,4 +1,6 @@
-﻿namespace AcadLib.Blocks
+﻿using System.Linq;
+
+namespace AcadLib.Blocks
 {
     using System;
     using System.Collections.Generic;
@@ -46,6 +48,14 @@
             IdAtr = atrRef.Id;
         }
 
+        public AttributeInfo([NotNull] AttributeDefinition atrDef)
+        {
+            Tag = atrDef.Tag;
+            Text = atrDef.TextString;
+            IdAtr = atrDef.Id;
+            IsAtrDefinition = true;
+        }
+
         public string Tag { get; set; }
 
         public string Text { get; set; }
@@ -77,7 +87,6 @@
         }
 
         [NotNull]
-        [Obsolete("Use DisposableCol")]
         public static List<AttributeInfo> GetAttrRefs([CanBeNull] BlockReference blRef)
         {
             var resVal = new List<AttributeInfo>();
@@ -91,6 +100,19 @@
                     if (atrRef.Visible)
                     {
                         var ai = new AttributeInfo(atrRef);
+                        resVal.Add(ai);
+                    }
+                }
+
+                using var btr = (BlockTableRecord)blRef.BlockTableRecord.Open(OpenMode.ForRead);
+                if (btr.HasAttributeDefinitions)
+                {
+                    foreach (var id in btr.Cast<ObjectId>().Where(i => i.ObjectClass == General.ClassAttDef))
+                    {
+                        using var atrDef = (AttributeDefinition) id.Open(OpenMode.ForRead, false, true);
+                        if (!atrDef.Constant)
+                            continue;
+                        var ai = new AttributeInfo(atrDef);
                         resVal.Add(ai);
                     }
                 }
