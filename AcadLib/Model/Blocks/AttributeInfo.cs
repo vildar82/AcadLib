@@ -110,7 +110,7 @@ namespace AcadLib.Blocks
                     foreach (var id in btr.Cast<ObjectId>().Where(i => i.ObjectClass == General.ClassAttDef))
                     {
                         using var atrDef = (AttributeDefinition) id.Open(OpenMode.ForRead, false, true);
-                        if (!atrDef.Constant)
+                        if (!atrDef.Constant || !atrDef.Visible)
                             continue;
                         var ai = new AttributeInfo(atrDef);
                         resVal.Add(ai);
