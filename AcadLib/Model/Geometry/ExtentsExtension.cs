@@ -33,7 +33,7 @@ namespace Autodesk.AutoCAD.DatabaseServices
             var iyMin = d < 0 ? ext.MinPoint.Y - d : ext.MinPoint.Y;
 
             d = ext.MaxPoint.Y - otherExt.MaxPoint.Y;
-            var iyMax = d < 0 ? ext.MaxPoint.Y - d : ext.MaxPoint.Y;
+            var iyMax = d > 0 ? ext.MaxPoint.Y - d : ext.MaxPoint.Y;
 
             return new Extents2d(ixMin, iyMin, ixMax, iyMax);
         }
