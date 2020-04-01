@@ -30,25 +30,24 @@ namespace AcadLib.Doc
             if (keys.Count == 0) return;
             foreach (var key in keys)
             {
-                using (var dict = dictId.Open(OpenMode.ForRead, false, true) as DBDictionary)
+                using var dict = dictId.Open(OpenMode.ForRead, false, true) as DBDictionary;
+                if (dict?.Contains(key) == true)
                 {
-                    if (dict?.Contains(key) == true)
-                    {
-                        dictId = dict.GetAt(key);
-                    }
-                    else
-                    {
-                        Logger.Log.Warn($"DbDictionaryCleaner Не найден словарь по пути: {keys.JoinToString("/")}");
-                        return;
-                    }
+                    dictId = dict.GetAt(key);
+                }
+                else
+                {
+                    Logger.Log.Warn($"DbDictionaryCleaner Не найден словарь по пути: {keys.JoinToString("/")}");
+                    return;
                 }
             }
 
-            using (var dbo = dictId.Open(OpenMode.ForWrite, false, true))
-            {
-                dbo?.Erase();
-                Logger.Log.Info($"DbDictionaryCleaner Удален словарь по пути: {keys.JoinToString("/")}");
-            }
+            using var dbo = dictId.Open(OpenMode.ForWrite, false, true);
+            dbo?.Erase();
+
+            var msg = $"DbDictionaryCleaner: Удален словарь по пути '{keys.JoinToString("/")}'";
+            msg.WriteToCommandLine();
+            Logger.Log.Info(msg);
         }
 
         private static List<string> GetPathKeys(string path)

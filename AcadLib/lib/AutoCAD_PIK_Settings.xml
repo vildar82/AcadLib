@@ -9,6 +9,11 @@
             Префикс команд (группа)
             </summary>
         </member>
+        <member name="M:AutoCAD_PIK_Manager.Commands.SkipUpdate(System.String@)">
+            <summary>
+            Пропустить обновление
+            </summary>
+        </member>
         <member name="T:AutoCAD_PIK_Manager.Log">
             <summary>
             Debug: сообщения отладки, профилирования. В production системе обычно сообщения этого уровня включаются при первоначальном запуске системы или для поиска узких мест (bottleneck-ов).
@@ -217,6 +222,11 @@
         <member name="P:AutoCAD_PIK_Manager.Settings.SettingsPikFile.DbDictionaryCleans">
             <summary>
             Очистка словаря чертежа - можно указывать название через путь '/'
+            </summary>
+        </member>
+        <member name="P:AutoCAD_PIK_Manager.Settings.SettingsPikFile.Optimization">
+            <summary>
+            Настройки переменных для оптимизации
             </summary>
         </member>
         <member name="M:AutoCAD_PIK_Manager.Update.GetCopyedFiles(System.IO.DirectoryInfo,System.IO.DirectoryInfo,System.Threading.CancellationToken,System.Boolean)">

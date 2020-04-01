@@ -6,7 +6,7 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{2008AE5D-550A-4478-A9B5-297832058377}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <CodeAnalysisRuleSet>..\stylecop.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSet>$(SolutionDir)stylecop.ruleset</CodeAnalysisRuleSet>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>AcadLib</RootNamespace>
     <AssemblyName>AcadLib</AssemblyName>
@@ -34,14 +34,12 @@
     <UseVSHostingProcess>true</UseVSHostingProcess>
     <Prefer32Bit>false</Prefer32Bit>
     <RunCodeAnalysis>false</RunCodeAnalysis>
-    <CodeAnalysisRuleSet>..\stylecop.ruleset</CodeAnalysisRuleSet>
     <DocumentationFile>..\..\..\Autodesk\AutoCAD\Pik\Settings\Dll\AcadLib.xml</DocumentationFile>
     <NoWarn>CS1591</NoWarn>
     <ShouldCreateLogs>False</ShouldCreateLogs>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>x64</PlatformTarget>
-    <CodeAnalysisRuleSet>..\stylecop.ruleset</CodeAnalysisRuleSet>
     <DebugType>pdbonly</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -64,7 +62,6 @@
     <DebugType>pdbonly</DebugType>
     <PlatformTarget>x64</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>..\stylecop.ruleset</CodeAnalysisRuleSet>
     <WarningLevel>0</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
@@ -472,6 +469,7 @@
     <Compile Include="Model\User\UserSettingsService.cs" />
     <Compile Include="Model\Utils\ClearObjectsExtData.cs" />
     <Compile Include="Model\Utils\ListModules.cs" />
+    <Compile Include="Model\Utils\Optimization.cs" />
     <Compile Include="Model\Utils\Tabs\Data\Session.cs" />
     <Compile Include="Model\Utils\Tabs\History\Db\DbHistory.cs" />
     <Compile Include="Model\Utils\Tabs\RestoreTabs.cs" />

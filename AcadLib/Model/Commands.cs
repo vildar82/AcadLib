@@ -402,6 +402,15 @@ namespace AcadLib
             });
         }
 
+        [CommandMethod(Group, nameof(PIK_Optimization), CommandFlags.Modal)]
+        public void PIK_Optimization()
+        {
+            CommandStart.Start(doc =>
+            {
+                new Optimization().Optimize(doc);
+            });
+        }
+
         [CommandMethod(Group, nameof(PIK_Ribbon), CommandFlags.Modal)]
         public void PIK_Ribbon()
         {

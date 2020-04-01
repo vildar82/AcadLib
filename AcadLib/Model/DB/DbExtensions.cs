@@ -41,7 +41,7 @@
         {
             return MsId(db).GetObjectT<BlockTableRecord>(mode);
         }
-        
+
         public static ObjectId MsId(this Database db)
         {
             using (var bt = (BlockTable)db.BlockTableId.Open(OpenMode.ForRead))
@@ -303,26 +303,17 @@
                 templateName + ".dwt");
             if (File.Exists(fileTemplate))
             {
-                using (var dbTemplate = new Database(false, true))
+                using var dbTemplate = new Database(false, true);
+                dbTemplate.ReadDwgFile(fileTemplate, FileOpenMode.OpenForReadAndAllShare, false, string.Empty);
+                dbTemplate.CloseInput(true);
+                var idStyleInTemplate = getObjectId(dbTemplate, styleName);
+                if (!idStyleInTemplate.IsNull)
                 {
-                    dbTemplate.ReadDwgFile(fileTemplate, FileOpenMode.OpenForReadAndAllShare, false, string.Empty);
-                    dbTemplate.CloseInput(true);
-                    var idStyleInTemplate = getObjectId(dbTemplate, styleName);
-                    if (!idStyleInTemplate.IsNull)
-                    {
-                        using (var map = new IdMapping())
-                        {
-                            using (var ids = new ObjectIdCollection(new[] { idStyleInTemplate }))
-                            {
-                                using (Application.DocumentManager.MdiActiveDocument?.LockDocument())
-                                {
-                                    db.WblockCloneObjects(ids, ownerIdTable, map, DuplicateRecordCloning.Replace, false);
-                                }
-
-                                idStyleDest = map[idStyleInTemplate].Value;
-                            }
-                        }
-                    }
+                    using var map = new IdMapping();
+                    using var ids = new ObjectIdCollection(new[] {idStyleInTemplate});
+                    using var lockDoc = Application.DocumentManager.MdiActiveDocument?.LockDocument();
+                    db.WblockCloneObjects(ids, ownerIdTable, map, DuplicateRecordCloning.Replace, false);
+                    idStyleDest = map[idStyleInTemplate].Value;
                 }
             }
 
