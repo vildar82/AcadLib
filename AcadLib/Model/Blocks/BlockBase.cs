@@ -104,22 +104,18 @@
         {
             get
             {
-                if (!_alreadyCalcExtents)
+                if (_alreadyCalcExtents) return _extentsToShow;
+                using var blRef = (BlockReference)IdBlRef.Open(OpenMode.ForRead, false, true);
+                try
                 {
-                    using (var blRef = (BlockReference)IdBlRef.Open(OpenMode.ForRead, false, true))
-                    {
-                        try
-                        {
-                            _extentsToShow = blRef.GeometricExtents;
-                            _alreadyCalcExtents = true;
-                        }
-                        catch
-                        {
-                            _isNullExtents = true;
-                            _extentsToShow = new Extents3d(new Point3d(blRef.Position.X - 100, blRef.Position.Y - 100, 0),
-                                new Point3d(blRef.Position.X + 100, blRef.Position.Y + 100, 0));
-                        }
-                    }
+                    _extentsToShow = blRef.GeometricExtents;
+                    _alreadyCalcExtents = true;
+                }
+                catch
+                {
+                    _isNullExtents = true;
+                    _extentsToShow = new Extents3d(new Point3d(blRef.Position.X - 100, blRef.Position.Y - 100, 0),
+                        new Point3d(blRef.Position.X + 100, blRef.Position.Y + 100, 0));
                 }
 
                 return _extentsToShow;
@@ -139,27 +135,25 @@
         public virtual void Show()
         {
             var doc = Application.DocumentManager.MdiActiveDocument;
-            if (doc != null)
+            if (doc == null) return;
+            if (doc.Database != IdBlRef.Database)
             {
-                if (doc.Database != IdBlRef.Database)
+                Application.ShowAlertDialog(
+                    $"Переключитесь на чертеж {Path.GetFileNameWithoutExtension(IdBlRef.Database.Filename)}");
+                return;
+            }
+
+            using (doc.LockDocument())
+            {
+                var ed = doc.Editor;
+                var ext = ExtentsToShow;
+                if (_isNullExtents)
                 {
-                    Application.ShowAlertDialog(
-                        $"Переключитесь на чертеж {Path.GetFileNameWithoutExtension(IdBlRef.Database.Filename)}");
-                    return;
+                    Application.ShowAlertDialog("Границы объекта не определены.");
                 }
 
-                using (doc.LockDocument())
-                {
-                    var ed = doc.Editor;
-                    var ext = ExtentsToShow;
-                    if (_isNullExtents)
-                    {
-                        Application.ShowAlertDialog("Границы объекта не определены.");
-                    }
-
-                    ed.Zoom(ext);
-                    IdBlRef.FlickObjectHighlight(2, 100, 100);
-                }
+                ed.Zoom(ext);
+                IdBlRef.FlickObjectHighlight(2, 100, 100);
             }
         }
 
@@ -303,15 +297,11 @@
         /// <returns>Скопированный объект</returns>
         public ObjectId CopyEntToModel(ObjectId idBtrNew, ObjectId idEnt)
         {
-            if (!idEnt.IsNull)
-            {
-                var idCopy = idEnt.CopyEnt(idBtrNew);
-                using var entCopy = idCopy.GetObject<Entity>(OpenMode.ForWrite);
-                entCopy.TransformBy(Transform);
-                return entCopy.Id;
-            }
-
-            return ObjectId.Null;
+            if (idEnt.IsNull) return ObjectId.Null;
+            var idCopy = idEnt.CopyEnt(idBtrNew);
+            using var entCopy = idCopy.GetObject<Entity>(OpenMode.ForWrite);
+            entCopy.TransformBy(Transform);
+            return entCopy.Id;
         }
 
         public bool Equals(IBlock other)

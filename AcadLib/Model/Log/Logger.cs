@@ -27,6 +27,11 @@
                 AutoCAD_PIK_Manager.Log.Error(ex, "YandexMetrica Activate error");
             }
         }
+
+        public static void LogError(this Exception ex, string? msg = null)
+        {
+            Log.Error(ex, msg);
+        }
     }
 
     [PublicAPI]

@@ -41,7 +41,7 @@ namespace UtilsEditUsers.Model.User.UsersEditor
         {
             imageNo = new BitmapImage(new Uri("pack://application:,,,/Resources/no-user.png"));
             var groups = ADUtils.GetCurrentUserADGroups(out _);
-            IsBimUser = groups.Any(g => g.EqualsIgnoreCase("010583_Отдел разработки и автоматизации") ||
+            IsBimUser = groups.Any(g => g.EqualsIgnoreCase("Отдел разработки и автоматизации") ||
                                         g.EqualsIgnoreCase("010596_Отдел внедрения ВIM") ||
                                         g.EqualsIgnoreCase("010576_УИТ"));
             dbUsers = new DbUsers();
