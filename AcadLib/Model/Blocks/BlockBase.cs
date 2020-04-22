@@ -402,7 +402,27 @@
             var blRef = IdBlRef.GetObjectT<BlockReference>(OpenMode.ForWrite);
             var dynProp = blRef.DynamicBlockReferencePropertyCollection.Cast<DynamicBlockReferenceProperty>()
                 .FirstOrDefault(p => p.PropertyName.Equals(prop.Name, StringComparison.OrdinalIgnoreCase));
-            dynProp.Value = value;
+            SetValue(dynProp, value);
+        }
+
+        private static void SetValue(DynamicBlockReferenceProperty dynProp, object value)
+        {
+            // https://adn-cis.org/forum/index.php?topic=9816.msg43581#msg43581
+            switch (dynProp.PropertyTypeCode)
+            {
+                // kDwgNull
+                case 0:
+                    return;
+
+                // kDwgReal
+                case 1:
+                    dynProp.Value = value.GetValue<double>();
+                    break;
+
+                default:
+                    dynProp.Value = Convert.ChangeType(value, dynProp.Value.GetType());
+                    break;
+            }
         }
 
         protected void FillProp([CanBeNull] Property prop, object value)

@@ -21,12 +21,26 @@ namespace AcadLib.Blocks
                 _templates.Add(blData, template);
             }
 
-            return (BlockReference)template.Clone();
+            var blRef = template.Id.CopyEnt(blData.Owner.Id).GetObject<BlockReference>(OpenMode.ForWrite);
+
+            var matrix = Matrix3d.Identity;
+            var vec = blData.Point - blRef.Position;
+            if (vec.Length > 0)
+                matrix = Matrix3d.Displacement(vec);
+
+            if (Math.Abs(blData.Scale - 1) > 0.0001)
+                matrix.PreMultiplyBy(Matrix3d.Scaling(blData.Scale, blRef.Position));
+
+            if (!matrix.IsEqualTo(Matrix3d.Identity))
+                blRef.TransformBy(matrix);
+
+            return blRef;
         }
 
         private BlockReference InsertTemplate(InsertData blData, Action<Exception, DynProp, BlockReference>? setDynPropException)
         {
-            var blRef = BlockInsert.InsertBlockRef(blData.Btr, Point3d.Origin, blData.Owner, blData.Transaction, blData.Scale);
+            var owner = blData.Btr.Database.MS(OpenMode.ForWrite);
+            var blRef = BlockInsert.InsertBlockRef(blData.Btr, Point3d.Origin, owner, blData.Transaction, blData.Scale);
             var blBase = new BlockBase(blRef, blData.Btr.Name);
 
             foreach (var dynProp in blData.DynProps)
@@ -59,7 +73,6 @@ namespace AcadLib.Blocks
         public bool Equals(InsertData i1, InsertData i2)
         {
             return i1.Btr.Id == i2.Btr.Id &&
-                   i1.Owner.Id == i2.Owner.Id &&
                    i1.DynProps.EqualLists(i2.DynProps, new DynPropComparer());
         }
 
@@ -89,7 +102,7 @@ namespace AcadLib.Blocks
         public Point3d Point { get; set; }
         public BlockTableRecord Owner { get; set; }
         public Transaction Transaction { get; set; }
-        public double Scale { get; set; }
+        public double Scale { get; set; } = 1;
         public List<DynProp> DynProps { get; set; }
     }
 
