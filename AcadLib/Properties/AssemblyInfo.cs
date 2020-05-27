@@ -1,6 +1,7 @@
 using System.Reflection;
 using System.Runtime.InteropServices;
 using AcadLib;
+using AcadLib.Properties;
 using Autodesk.AutoCAD.Runtime;
 
 [assembly: AssemblyTitle("AcadLib")]
@@ -15,3 +16,6 @@ using Autodesk.AutoCAD.Runtime;
 [assembly: Guid("2008ae5d-550a-4478-a9b5-297832058377")] // Следующий GUID служит для идентификации библиотеки типов, если этот проект будет видимым для COM
 [assembly: CommandClass(typeof(Commands))]
 [assembly: ExtensionApplication(typeof(Commands))]
+[assembly: AssemblyVersion(Version.Value)]
+[assembly: AssemblyFileVersion(Version.Value)]
+[assembly: AssemblyInformationalVersion(Version.Value)]

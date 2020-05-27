@@ -55,7 +55,7 @@ namespace AcadLib
         public const string Group = AutoCAD_PIK_Manager.Commands.Group;
 
         public static readonly Assembly AcadLibAssembly = Assembly.GetExecutingAssembly();
-        public static readonly Version AcadLibVersion = new Version(FileVersionInfo.GetVersionInfo(AcadLibAssembly.Location).FileVersion);
+        public static readonly System.Version AcadLibVersion = new System.Version(Properties.Version.Value);
         public static readonly string CurDllDir = Path.GetDirectoryName(AcadLibAssembly.Location);
 
         internal static readonly string FileCommonBlocks =
