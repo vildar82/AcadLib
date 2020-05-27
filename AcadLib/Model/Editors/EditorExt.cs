@@ -74,6 +74,8 @@ namespace AcadLib.Editors
                         if (o.Bounds.HasValue)
                             ext.AddExtents(o.Bounds.Value);
                     });
+
+                    ext = ext.Offset();
                     ed.Zoom(ext);
                     Autodesk.AutoCAD.Internal.Utils.SelectObjects(ids.ToArray());
                     t.Commit();

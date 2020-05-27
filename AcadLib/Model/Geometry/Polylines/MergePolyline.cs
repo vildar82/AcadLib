@@ -18,19 +18,19 @@ namespace AcadLib.Geometry
         /// <param name="tolerancePoint">Допуск для определения совпадения вершин полилиний</param>
         /// <returns>Объединенная полилиния</returns>
         /// <exception cref="Exception">Ошибка объединения полининий без самопересечения.</exception>
-        [CanBeNull]
-        public static Polyline Merge([CanBeNull] this List<Polyline> pls, double tolerancePoint = 2)
+        public static Polyline? Merge([CanBeNull] this List<Polyline> pls, double tolerancePoint = 2)
         {
             if (pls == null || pls.Count == 0)
                 return null;
 
-            Polyline merge = null;
+            Polyline? merge = null;
             if (pls.Count == 1)
             {
                 return (Polyline)pls[0].Clone();
             }
 
             var plsList = pls.ToList(); // Копирование списка
+
             // Сортировка полилиний по расстоянию между центрами
             plsList = SortByNearestCenterExtents(plsList);
 

@@ -158,7 +158,7 @@
         }
 
         [NotNull]
-        private static string GetMessage(string msg)
+        private static string GetMessage(string? msg)
         {
             return $"{msg};Doc={Application.DocumentManager?.MdiActiveDocument?.Name}";
         }
