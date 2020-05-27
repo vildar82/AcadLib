@@ -38,19 +38,19 @@
                 {
                     if (!id.IsValidEx())
                         continue;
-                    var attdef = id.GetObject(OpenMode.ForRead) as AttributeDefinition;
-                    if (attdef == null)
+                    var atrDef = id.GetObject(OpenMode.ForRead) as AttributeDefinition;
+                    if (atrDef == null)
                         continue;
-                    if (attdef.Constant)
-                        yield return new AttributeInfo(attdef);
+                    if (atrDef.Constant)
+                        yield return new AttributeInfo(atrDef);
                 }
             }
         }
 
         [NotNull]
-        public static Dictionary<string, DBText> GetAttributeDictionary([NotNull] this BlockReference blockref)
+        public static Dictionary<string, DBText> GetAttributeDictionary([NotNull] this BlockReference blockRef)
         {
-            return blockref.GetAttributes().Where(a => a.Visible).ToDictionary(GetTag, StringComparer.OrdinalIgnoreCase);
+            return blockRef.GetAttributes().Where(a => a.Visible).ToDictionary(GetTag, StringComparer.OrdinalIgnoreCase);
         }
 
         /// <summary>
@@ -78,11 +78,11 @@
                 {
                     if (!id.IsValidEx())
                         continue;
-                    var attdef = tr.GetObject(id, OpenMode.ForRead) as AttributeDefinition;
-                    if (attdef == null)
+                    var attDef = tr.GetObject(id, OpenMode.ForRead) as AttributeDefinition;
+                    if (attDef == null)
                         continue;
-                    if (attdef.Constant)
-                        yield return attdef;
+                    if (attDef.Constant)
+                        yield return attDef;
                 }
             }
         }
@@ -119,12 +119,12 @@
             }
         }
 
-        private static string GetTag([NotNull] DBText dbtext)
+        private static string GetTag([NotNull] DBText dbText)
         {
-            switch (dbtext)
+            switch (dbText)
             {
-                case AttributeDefinition attdef: return attdef.Tag;
-                case AttributeReference attref: return attref.Tag;
+                case AttributeDefinition attDef: return attDef.Tag;
+                case AttributeReference attRef: return attRef.Tag;
             }
 
             throw new ArgumentException("requires an AttributeDefintion or AttributeReference");

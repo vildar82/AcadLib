@@ -65,18 +65,15 @@
         public static Extents3d GeometricExtentsVisible([NotNull] this BlockReference blRef)
         {
 #pragma warning disable 618
-            using (var btr = (BlockTableRecord)blRef.BlockTableRecord.Open(OpenMode.ForRead))
-#pragma warning restore 618
+            using var btr = (BlockTableRecord)blRef.BlockTableRecord.Open(OpenMode.ForRead);
+            var ext = new Extents3d();
+            foreach (var extents3D in btr.GetObjects<Entity>().Where(w => w.Visible && w.Bounds.HasValue)
+                .Select(s => s.Bounds!.Value))
             {
-                var ext = new Extents3d();
-                foreach (var extents3D in btr.GetObjects<Entity>().Where(w => w.Visible && w.Bounds.HasValue)
-                    .Select(s => s.Bounds.Value))
-                {
-                    ext.AddExtents(extents3D);
-                }
-
-                return ext;
+                ext.AddExtents(extents3D);
             }
+
+            return ext;
         }
 
         /// <summary>

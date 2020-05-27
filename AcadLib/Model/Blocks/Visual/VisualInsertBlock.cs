@@ -19,13 +19,13 @@
         private static readonly Dictionary<Func<string, string>, List<IVisualBlock>> dictGroup =
             new Dictionary<Func<string, string>, List<IVisualBlock>>();
 
-        private static LayerInfo _layer;
-        private static WindowVisualBlocks winVisual;
+        private static LayerInfo? _layer;
+        private static WindowVisualBlocks? winVisual;
 
         public static void InsertBlockGroups(
             string fileBlocks,
             [NotNull] Func<string, string> filterGroup,
-            [CanBeNull] LayerInfo layer = null)
+            LayerInfo? layer = null)
         {
             _layer = layer;
             if (!dictGroup.TryGetValue(filterGroup, out var visuals))
@@ -57,29 +57,27 @@
         public static List<IVisualBlock> LoadVisuals(string file, Func<string, string> filter)
         {
             var visualBlocks = new List<IVisualBlock>();
-            using (var dbTemp = new Database(false, true))
+            using var dbTemp = new Database(false, true);
+            dbTemp.ReadDwgFile(file, FileOpenMode.OpenForReadAndReadShare, true, string.Empty);
+            using (var t = dbTemp.TransactionManager.StartTransaction())
             {
-                dbTemp.ReadDwgFile(file, FileOpenMode.OpenForReadAndReadShare, true, string.Empty);
-                using (var t = dbTemp.TransactionManager.StartTransaction())
+                var bt = (BlockTable)dbTemp.BlockTableId.GetObject(OpenMode.ForRead);
+                foreach (var idBtr in bt)
                 {
-                    var bt = (BlockTable)dbTemp.BlockTableId.GetObject(OpenMode.ForRead);
-                    foreach (var idBtr in bt)
+                    var btr = (BlockTableRecord)idBtr.GetObject(OpenMode.ForRead);
+                    var group = filter(btr.Name);
+                    if (@group != null)
                     {
-                        var btr = (BlockTableRecord)idBtr.GetObject(OpenMode.ForRead);
-                        var group = filter(btr.Name);
-                        if (group != null)
-                        {
-                            var visualBl = new VisualBlock(btr) { File = file, Group = group };
-                            visualBlocks.Add(visualBl);
-                        }
+                        var visualBl = new VisualBlock(btr) { File = file, Group = @group };
+                        visualBlocks.Add(visualBl);
                     }
-
-                    t.Commit();
                 }
 
-                var alpha = NetLib.Comparers.AlphanumComparator.New;
-                visualBlocks.Sort((v1, v2) => alpha.Compare(v1.Name, v2.Name));
+                t.Commit();
             }
+
+            var alpha = NetLib.Comparers.AlphanumComparator.New;
+            visualBlocks.Sort((v1, v2) => alpha.Compare(v1.Name, v2.Name));
 
             return visualBlocks;
         }

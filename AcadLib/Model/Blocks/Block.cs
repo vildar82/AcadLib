@@ -1,5 +1,4 @@
-﻿using System.ServiceModel.Configuration;
-using AcadLib.Strings;
+﻿using AcadLib.Strings;
 
 namespace AcadLib.Blocks
 {
@@ -143,10 +142,10 @@ namespace AcadLib.Blocks
         public static bool HasBlockThisDrawing(string name)
         {
             var doc = AcadHelper.Doc;
-            using (var bt = (BlockTable)doc.Database.BlockTableId.Open(OpenMode.ForRead))
-            {
-                return bt.Has(name);
-            }
+#pragma warning disable 618
+            using var bt = (BlockTable)doc.Database.BlockTableId.Open(OpenMode.ForRead);
+#pragma warning restore 618
+            return bt.Has(name);
         }
 
         /// <summary>
@@ -165,12 +164,12 @@ namespace AcadLib.Blocks
         {
             if (mode == DuplicateRecordCloning.Ignore)
             {
-                using (var bt = (BlockTable)destDb.BlockTableId.Open(OpenMode.ForRead))
+#pragma warning disable 618
+                using var bt = (BlockTable)destDb.BlockTableId.Open(OpenMode.ForRead);
+#pragma warning restore 618
+                if (bt.Has(blName))
                 {
-                    if (bt.Has(blName))
-                    {
-                        return bt[blName];
-                    }
+                    return bt[blName];
                 }
             }
 
@@ -213,40 +212,36 @@ namespace AcadLib.Blocks
             DuplicateRecordCloning mode = DuplicateRecordCloning.Ignore)
         {
             var resVal = new Dictionary<string, ObjectId>();
-            using (var extDb = new Database(false, true))
+            using var extDb = new Database(false, true);
+            extDb.ReadDwgFile(fileDrawing, System.IO.FileShare.ReadWrite, true, string.Empty);
+            extDb.CloseInput(true);
+            var valToCopy = new Dictionary<ObjectId, string>();
+#pragma warning disable 618
+            using (var bt = (BlockTable)extDb.BlockTableId.Open(OpenMode.ForRead))
+#pragma warning restore 618
             {
-                extDb.ReadDwgFile(fileDrawing, System.IO.FileShare.ReadWrite, true, string.Empty);
-                extDb.CloseInput(true);
-                var valToCopy = new Dictionary<ObjectId, string>();
-                using (var bt = (BlockTable)extDb.BlockTableId.Open(OpenMode.ForRead))
+                foreach (var idBtr in bt)
                 {
-                    foreach (var idBtr in bt)
+#pragma warning disable 618
+                    using var btr = (BlockTableRecord)idBtr.Open(OpenMode.ForRead);
+#pragma warning restore 618
+                    if (!btr.IsLayout && !btr.IsDependent && !btr.IsAnonymous && filter(btr.Name))
                     {
-                        using (var btr = (BlockTableRecord)idBtr.Open(OpenMode.ForRead))
-                        {
-                            if (!btr.IsLayout && !btr.IsDependent && !btr.IsAnonymous && filter(btr.Name))
-                            {
-                                valToCopy.Add(btr.Id, btr.Name);
-                            }
-                        }
+                        valToCopy.Add(btr.Id, btr.Name);
                     }
                 }
+            }
 
-                // Копир
-                if (valToCopy.Count > 0)
+            // Копир
+            if (valToCopy.Count > 0)
+            {
+                // Получаем текущую базу чертежа
+                using var map = new IdMapping();
+                using var ids = new ObjectIdCollection(valToCopy.Keys.ToArray());
+                destDb.WblockCloneObjects(ids, destDb.BlockTableId, map, mode, false);
+                foreach (var item in valToCopy)
                 {
-                    // Получаем текущую базу чертежа
-                    using (var map = new IdMapping())
-                    {
-                        using (var ids = new ObjectIdCollection(valToCopy.Keys.ToArray()))
-                        {
-                            destDb.WblockCloneObjects(ids, destDb.BlockTableId, map, mode, false);
-                            foreach (var item in valToCopy)
-                            {
-                                resVal.Add(item.Value, map[item.Key].Value);
-                            }
-                        }
-                    }
+                    resVal.Add(item.Value, map[item.Key].Value);
                 }
             }
 
@@ -275,22 +270,22 @@ namespace AcadLib.Blocks
             if (mode == DuplicateRecordCloning.Ignore)
             {
                 // Если уже есть эти блоки
-                using (var btDest = (BlockTable)destDb.BlockTableId.Open(OpenMode.ForRead))
+#pragma warning disable 618
+                using var btDest = (BlockTable)destDb.BlockTableId.Open(OpenMode.ForRead);
+#pragma warning restore 618
+                var existBls = new List<string>();
+                foreach (var uniqBlName in uniqBlNames)
                 {
-                    var existBls = new List<string>();
-                    foreach (var uniqBlName in uniqBlNames)
+                    if (btDest.Has(uniqBlName))
                     {
-                        if (btDest.Has(uniqBlName))
-                        {
-                            existBls.Add(uniqBlName);
-                            resVal.Add(uniqBlName, btDest[uniqBlName]);
-                        }
+                        existBls.Add(uniqBlName);
+                        resVal.Add(uniqBlName, btDest[uniqBlName]);
                     }
+                }
 
-                    if (existBls.Any())
-                    {
-                        uniqBlNames = uniqBlNames.Except(existBls).ToList();
-                    }
+                if (existBls.Any())
+                {
+                    uniqBlNames = uniqBlNames.Except(existBls).ToList();
                 }
             }
 
@@ -304,7 +299,9 @@ namespace AcadLib.Blocks
                 extDb.ReadDwgFile(fileDrawing, System.IO.FileShare.ReadWrite, true, string.Empty);
                 extDb.CloseInput(true);
                 var valToCopy = new Dictionary<ObjectId, string>();
+#pragma warning disable 618
                 using (var bt = (BlockTable)extDb.BlockTableId.Open(OpenMode.ForRead))
+#pragma warning restore 618
                 {
                     foreach (var blName in uniqBlNames)
                     {
@@ -320,16 +317,12 @@ namespace AcadLib.Blocks
                 if (valToCopy.Count > 0)
                 {
                     // Получаем текущую базу чертежа
-                    using (var map = new IdMapping())
+                    using var map = new IdMapping();
+                    using var ids = new ObjectIdCollection(valToCopy.Keys.ToArray());
+                    destDb.WblockCloneObjects(ids, destDb.BlockTableId, map, mode, false);
+                    foreach (var item in valToCopy)
                     {
-                        using (var ids = new ObjectIdCollection(valToCopy.Keys.ToArray()))
-                        {
-                            destDb.WblockCloneObjects(ids, destDb.BlockTableId, map, mode, false);
-                            foreach (var item in valToCopy)
-                            {
-                                resVal.Add(item.Value, map[item.Key].Value);
-                            }
-                        }
+                        resVal.Add(item.Value, map[item.Key].Value);
                     }
                 }
             }
@@ -337,30 +330,28 @@ namespace AcadLib.Blocks
             // Если задан режим переопределения - то перерисовка геометрии динамических блоков
             if (mode == DuplicateRecordCloning.Replace)
             {
-                using (var t = destDb.TransactionManager.StartTransaction())
+                using var t = destDb.TransactionManager.StartTransaction();
+                foreach (var item in resVal)
                 {
-                    foreach (var item in resVal)
+                    if (item.Value.IsValidEx())
                     {
-                        if (item.Value.IsValidEx())
+                        var btr = (BlockTableRecord)item.Value.GetObject(OpenMode.ForRead);
+                        if (btr.IsDynamicBlock)
                         {
-                            var btr = (BlockTableRecord)item.Value.GetObject(OpenMode.ForRead);
-                            if (btr.IsDynamicBlock)
+                            try
                             {
-                                try
-                                {
-                                    btr = (BlockTableRecord)item.Value.GetObject(OpenMode.ForWrite);
-                                    btr.UpdateAnonymousBlocks();
-                                }
-                                catch
-                                {
-                                    //
-                                }
+                                btr = (BlockTableRecord)item.Value.GetObject(OpenMode.ForWrite);
+                                btr.UpdateAnonymousBlocks();
+                            }
+                            catch
+                            {
+                                //
                             }
                         }
                     }
-
-                    t.Commit();
                 }
+
+                t.Commit();
             }
 
             return resVal;
@@ -376,37 +367,35 @@ namespace AcadLib.Blocks
         {
             ObjectId idBtrCopy;
             var db = idBtrSource.Database;
-            using (var t = db.TransactionManager.StartTransaction())
+            using var t = db.TransactionManager.StartTransaction();
+            var btrSource = (BlockTableRecord)t.GetObject(idBtrSource, OpenMode.ForRead);
+            var bt = (BlockTable)t.GetObject(db.BlockTableId, OpenMode.ForRead);
+
+            // проверка имени блока
+            if (bt.Has(name))
             {
-                var btrSource = (BlockTableRecord)t.GetObject(idBtrSource, OpenMode.ForRead);
-                var bt = (BlockTable)t.GetObject(db.BlockTableId, OpenMode.ForRead);
-
-                // проверка имени блока
-                if (bt.Has(name))
-                {
-                    idBtrCopy = bt[name];
-                }
-                else
-                {
-                    var btrCopy = (BlockTableRecord)btrSource.Clone();
-                    btrCopy.Name = name;
-                    bt = (BlockTable)bt.Id.GetObject(OpenMode.ForWrite);
-                    idBtrCopy = bt.Add(btrCopy);
-                    t.AddNewlyCreatedDBObject(btrCopy, true);
-
-                    // Копирование объектов блока
-                    var ids = new ObjectIdCollection();
-                    foreach (var idEnt in btrSource)
-                    {
-                        ids.Add(idEnt);
-                    }
-
-                    var map = new IdMapping();
-                    db.DeepCloneObjects(ids, idBtrCopy, map, false);
-                }
-
-                t.Commit();
+                idBtrCopy = bt[name];
             }
+            else
+            {
+                var btrCopy = (BlockTableRecord)btrSource.Clone();
+                btrCopy.Name = name;
+                bt = (BlockTable)bt.Id.GetObject(OpenMode.ForWrite);
+                idBtrCopy = bt.Add(btrCopy);
+                t.AddNewlyCreatedDBObject(btrCopy, true);
+
+                // Копирование объектов блока
+                var ids = new ObjectIdCollection();
+                foreach (var idEnt in btrSource)
+                {
+                    ids.Add(idEnt);
+                }
+
+                var map = new IdMapping();
+                db.DeepCloneObjects(ids, idBtrCopy, map, false);
+            }
+
+            t.Commit();
 
             return idBtrCopy;
         }
@@ -455,7 +444,9 @@ namespace AcadLib.Blocks
                 var curLayout = (Layout)existLayoutId.GetObject(OpenMode.ForRead);
                 newLayout.CopyFrom(curLayout);
                 idBtrNewLayout = newLayout.BlockTableRecordId;
+#pragma warning disable 618
                 using (var btrCurLayout = (BlockTableRecord)curLayout.BlockTableRecordId.Open(OpenMode.ForRead))
+#pragma warning restore 618
                 {
                     foreach (var objId in btrCurLayout)
                     {
@@ -506,10 +497,10 @@ namespace AcadLib.Blocks
         {
             foreach (var idEnt in btr)
             {
-                using (var ent = (Entity)idEnt.Open(OpenMode.ForWrite, false, true))
-                {
-                    ent.Erase();
-                }
+#pragma warning disable 618
+                using var ent = (Entity)idEnt.Open(OpenMode.ForWrite, false, true);
+#pragma warning restore 618
+                ent.Erase();
             }
         }
 

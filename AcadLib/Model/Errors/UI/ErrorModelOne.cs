@@ -9,12 +9,11 @@
     using JetBrains.Annotations;
     using Layers;
     using NetLib;
-    using ReactiveUI;
     using Visibility = System.Windows.Visibility;
 
     public class ErrorModelOne : ErrorModelBase
     {
-        public ErrorModelOne([NotNull] IError err, [CanBeNull] ErrorModelList parent)
+        public ErrorModelOne([NotNull] IError err, ErrorModelList? parent)
             : base(err)
         {
             VisibilityCount = Visibility.Collapsed;
@@ -56,7 +55,7 @@
             }
         }
 
-        public ErrorModelList Parent { get; set; }
+        public ErrorModelList? Parent { get; set; }
 
         private bool HasVisualButton()
         {

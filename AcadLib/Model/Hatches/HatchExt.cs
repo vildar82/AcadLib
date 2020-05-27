@@ -23,7 +23,7 @@
                 if (hatch.Id.IsNull)
                 {
                     using var t = db.TransactionManager.StartTransaction();
-                    var cs     = db.CurrentSpaceId.GetObject<BlockTableRecord>(OpenMode.ForWrite);
+                    var cs     = db.CurrentSpaceId.GetObjectT<BlockTableRecord>(OpenMode.ForWrite);
                     var hClone = (Hatch) hatch.Clone();
                     hId = cs.AppendEntity(hClone);
                     t.AddNewlyCreatedDBObject(hClone, true);
@@ -40,7 +40,9 @@
             {
                 if (!hId.IsNull)
                 {
+#pragma warning disable 618
                     using var h = hId.Open(OpenMode.ForWrite, false, true) as Hatch;
+#pragma warning restore 618
                     h?.Erase();
                 }
             }
@@ -66,8 +68,7 @@
         /// Создание ассоциативной штриховки по полилинии
         /// Полилиния должна быть в базе чертежа
         /// </summary>
-        [CanBeNull]
-        public static Hatch CreateAssociativeHatch(
+        public static Hatch? CreateAssociativeHatch(
             [NotNull] Curve loop,
             [NotNull] BlockTableRecord cs,
             [NotNull] Transaction t,
@@ -124,8 +125,7 @@
             return h;
         }
 
-        [CanBeNull]
-        public static Hatch CreateHatch([CanBeNull] this List<PolylineVertex> pts)
+        public static Hatch? CreateHatch([CanBeNull] this List<PolylineVertex> pts)
         {
             if (pts?.Any() != true)
                 return null;
@@ -152,8 +152,7 @@
         /// <summary>
         /// Создание штриховки по точкам полилинии
         /// </summary>
-        [CanBeNull]
-        public static Hatch CreateHatch([CanBeNull] this Polyline pl)
+        public static Hatch? CreateHatch(this Polyline? pl)
         {
             if (pl == null)
                 return null;
@@ -179,56 +178,52 @@
                     {
                         var hatchLoop = hatch.GetLoopAt(i);
                         var bulgeVertex = hatchLoop.Polyline;
-                        using (var pPoly = new Polyline(bulgeVertex.Count))
+                        using var pPoly = new Polyline(bulgeVertex.Count);
+                        for (var j = 0; j < bulgeVertex.Count; j++)
                         {
-                            for (var j = 0; j < bulgeVertex.Count; j++)
-                            {
-                                pPoly.AddVertexAt(j, bulgeVertex[j].Vertex, bulgeVertex[j].Bulge, 0, 0);
-                            }
-
-                            pPoly.Closed = (loopType & (int)HatchLoopTypes.NotClosed) == 0;
-                            looparea = pPoly.Area;
-                            if ((loopType & (int)HatchLoopTypes.External) > 0)
-                                area += Math.Abs(looparea);
-                            else
-                                area -= Math.Abs(looparea);
+                            pPoly.AddVertexAt(j, bulgeVertex[j].Vertex, bulgeVertex[j].Bulge, 0, 0);
                         }
+
+                        pPoly.Closed = (loopType & (int)HatchLoopTypes.NotClosed) == 0;
+                        looparea = pPoly.Area;
+                        if ((loopType & (int)HatchLoopTypes.External) > 0)
+                            area += Math.Abs(looparea);
+                        else
+                            area -= Math.Abs(looparea);
                     }
                     else
                     {
                         var hatchLoop = hatch.GetLoopAt(i);
                         var cur2ds = new Curve2d[hatchLoop.Curves.Count];
                         hatchLoop.Curves.CopyTo(cur2ds, 0);
-                        using (var compCurve = new CompositeCurve2d(cur2ds))
+                        using var compCurve = new CompositeCurve2d(cur2ds);
+                        var interval = compCurve.GetInterval();
+                        double dMin = interval.GetBounds()[0], dMax = interval.GetBounds()[1];
+                        if (Math.Abs(dMax - dMin) > 1e-6)
                         {
-                            var interval = compCurve.GetInterval();
-                            double dMin = interval.GetBounds()[0], dMax = interval.GetBounds()[1];
-                            if (Math.Abs(dMax - dMin) > 1e-6)
+                            try
                             {
-                                try
+                                looparea = compCurve.GetArea(dMin, dMax);
+                                if ((loopType & (int)HatchLoopTypes.External) > 0)
+                                    area += Math.Abs(looparea);
+                                else
+                                    area -= Math.Abs(looparea);
+                            }
+                            catch
+                            {
+                                // Разбиваем кривую на 1000000 точек. Надеюсь, что такой точности
+                                // будет достаточно.
+                                var pts = compCurve.GetSamplePoints(1000);
+                                var np = pts.Length;
+                                for (var j = 0; j < np; j++)
                                 {
-                                    looparea = compCurve.GetArea(dMin, dMax);
-                                    if ((loopType & (int)HatchLoopTypes.External) > 0)
-                                        area += Math.Abs(looparea);
-                                    else
-                                        area -= Math.Abs(looparea);
+                                    looparea += 0.5 * pts[j].X * (pts[(j + 1) % np].Y - pts[(j + np - 1) % np].Y);
                                 }
-                                catch
-                                {
-                                    // Разбиваем кривую на 1000000 точек. Надеюсь, что такой точности
-                                    // будет достаточно.
-                                    var pts = compCurve.GetSamplePoints(1000);
-                                    var np = pts.Length;
-                                    for (var j = 0; j < np; j++)
-                                    {
-                                        looparea += 0.5 * pts[j].X * (pts[(j + 1) % np].Y - pts[(j + np - 1) % np].Y);
-                                    }
 
-                                    if ((loopType & (int)HatchLoopTypes.External) > 0)
-                                        area += Math.Abs(looparea);
-                                    else
-                                        area -= Math.Abs(looparea);
-                                }
+                                if ((loopType & (int)HatchLoopTypes.External) > 0)
+                                    area += Math.Abs(looparea);
+                                else
+                                    area -= Math.Abs(looparea);
                             }
                         }
                     }
@@ -238,8 +233,7 @@
             return Math.Abs(area);
         }
 
-        [CanBeNull]
-        public static HatchOptions GetHatchOptions([CanBeNull] this Hatch h)
+        public static HatchOptions? GetHatchOptions([CanBeNull] this Hatch h)
         {
             return h == null ? null : new HatchOptions(h);
         }

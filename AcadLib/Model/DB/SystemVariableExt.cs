@@ -1,5 +1,4 @@
 ﻿using AutoCAD_PIK_Manager;
-using NCalc;
 
 namespace AcadLib
 {
@@ -63,7 +62,7 @@ namespace AcadLib
             }
         }
 
-        public static object GetSystemVariableTry(this string name)
+        public static object? GetSystemVariableTry(this string name)
         {
             try
             {

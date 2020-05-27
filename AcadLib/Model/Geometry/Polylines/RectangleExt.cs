@@ -9,13 +9,13 @@ namespace AcadLib.Geometry.Polylines
     [PublicAPI]
     public static class RectangleExt
     {
-        public static Polyline CreateRectangle(this Point3d pt, double length, double width, CellAlignment alignment,
+        public static Polyline? CreateRectangle(this Point3d pt, double length, double width, CellAlignment alignment,
             Vector3d dir)
         {
             return CreateRectangle(pt.Convert2d(), length, width, alignment, dir.Convert2d());
         }
 
-        public static Polyline CreateRectangle(this Point2d pt, double length, double width, CellAlignment alignment, Vector2d dir)
+        public static Polyline? CreateRectangle(this Point2d pt, double length, double width, CellAlignment alignment, Vector2d dir)
         {
             if (length < 0 || width < 0)
                 return null;

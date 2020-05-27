@@ -30,7 +30,9 @@ namespace AcadLib.Doc
             if (keys.Count == 0) return;
             foreach (var key in keys)
             {
+#pragma warning disable 618
                 using var dict = dictId.Open(OpenMode.ForRead, false, true) as DBDictionary;
+#pragma warning restore 618
                 if (dict?.Contains(key) == true)
                 {
                     dictId = dict.GetAt(key);
@@ -42,7 +44,9 @@ namespace AcadLib.Doc
                 }
             }
 
+#pragma warning disable 618
             using var dbo = dictId.Open(OpenMode.ForWrite, false, true);
+#pragma warning restore 618
             dbo?.Erase();
 
             var msg = $"DbDictionaryCleaner: Удален словарь по пути '{keys.JoinToString("/")}'";

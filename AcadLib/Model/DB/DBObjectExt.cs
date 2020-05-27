@@ -1,6 +1,4 @@
-﻿using OfficeOpenXml.FormulaParsing.Excel.Functions.Text;
-
-namespace AcadLib
+﻿namespace AcadLib
 {
     using System.Linq;
     using Autodesk.AutoCAD.DatabaseServices;

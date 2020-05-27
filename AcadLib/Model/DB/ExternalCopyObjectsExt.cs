@@ -21,12 +21,10 @@
         public static List<ObjectId> Copy(this Database dbDest, string externalFile, DuplicateRecordCloning mode,
             Func<Database, ObjectId> getOwnerId, Func<ObjectId, List<ObjectId>> getCopyIds)
         {
-            using (var dbSource = new Database(false, true))
-            {
-                dbSource.ReadDwgFile(externalFile, FileOpenMode.OpenForReadAndAllShare, false, string.Empty);
-                dbSource.CloseInput(true);
-                return Copy(dbDest, dbSource, mode, getOwnerId, getCopyIds);
-            }
+            using var dbSource = new Database(false, true);
+            dbSource.ReadDwgFile(externalFile, FileOpenMode.OpenForReadAndAllShare, false, string.Empty);
+            dbSource.CloseInput(true);
+            return Copy(dbDest, dbSource, mode, getOwnerId, getCopyIds);
         }
 
         /// <summary>
@@ -65,12 +63,10 @@
         public static List<ObjectId> WblockCloneObjects(this Database dbDest, ObjectId owner, List<ObjectId> idsCopy,
             DuplicateRecordCloning mode)
         {
-            using (var map = new IdMapping())
-            using (var ids = new ObjectIdCollection(idsCopy.ToArray()))
-            {
-                dbDest.WblockCloneObjects(ids, owner, map, mode, false);
-                return idsCopy.Select(s => map[s].Value).ToList();
-            }
+            using var map = new IdMapping();
+            using var ids = new ObjectIdCollection(idsCopy.ToArray());
+            dbDest.WblockCloneObjects(ids, owner, map, mode, false);
+            return idsCopy.Select(s => map[s].Value).ToList();
         }
     }
 }

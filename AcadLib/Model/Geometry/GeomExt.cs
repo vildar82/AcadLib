@@ -60,64 +60,61 @@
         /// <param name="plane">The plane onto which the curve is to be projected.</param>
         /// <param name="direction">Direction (in WCS coordinates) of the projection.</param>
         /// <returns>The projected Polyline.</returns>
-        [CanBeNull]
-        internal static Polyline ProjectPolyline(Curve pline, Plane plane, Vector3d direction)
+        internal static Polyline? ProjectPolyline(Curve pline, Plane plane, Vector3d direction)
         {
             if (!(pline is Polyline) && !(pline is Polyline2d) && !(pline is Polyline3d))
                 return null;
             plane = new Plane(Point3d.Origin.OrthoProject(plane), direction);
-            using (var oldCol = new DBObjectCollection())
-            using (var newCol = new DBObjectCollection())
+            using var oldCol = new DBObjectCollection();
+            using var newCol = new DBObjectCollection();
+            pline.Explode(oldCol);
+            foreach (DBObject obj in oldCol)
             {
-                pline.Explode(oldCol);
-                foreach (DBObject obj in oldCol)
+                if (obj is Curve crv)
                 {
-                    if (obj is Curve crv)
-                    {
-                        var flat = crv.GetProjectedCurve(plane, direction);
-                        newCol.Add(flat);
-                    }
-
-                    obj.Dispose();
+                    var flat = crv.GetProjectedCurve(plane, direction);
+                    newCol.Add(flat);
                 }
 
-                var psc = new PolylineSegmentCollection();
-                for (var i = 0; i < newCol.Count; i++)
+                obj.Dispose();
+            }
+
+            var psc = new PolylineSegmentCollection();
+            for (var i = 0; i < newCol.Count; i++)
+            {
+                if (newCol[i] is Ellipse)
                 {
-                    if (newCol[i] is Ellipse)
-                    {
-                        psc.AddRange(new PolylineSegmentCollection((Ellipse)newCol[i]));
-                        continue;
-                    }
-
-                    var crv = (Curve)newCol[i];
-                    var start = crv.StartPoint;
-                    var end = crv.EndPoint;
-                    var bulge = 0.0;
-                    if (crv is Arc arc)
-                    {
-                        var angle = arc.Center.GetVectorTo(start).GetAngleTo(arc.Center.GetVectorTo(end), arc.Normal);
-                        bulge = Math.Tan(angle / 4.0);
-                    }
-
-                    psc.Add(new PolylineSegment(start.Convert2d(plane), end.Convert2d(plane), bulge));
+                    psc.AddRange(new PolylineSegmentCollection((Ellipse)newCol[i]));
+                    continue;
                 }
 
-                foreach (DBObject o in newCol)
-                    o.Dispose();
-                var projectedPline = psc.Join(new Tolerance(1e-9, 1e-9))[0].ToPolyline();
-                projectedPline.Normal = direction;
+                var crv = (Curve)newCol[i];
+                var start = crv.StartPoint;
+                var end = crv.EndPoint;
+                var bulge = 0.0;
+                if (crv is Arc arc)
+                {
+                    var angle = arc.Center.GetVectorTo(start).GetAngleTo(arc.Center.GetVectorTo(end), arc.Normal);
+                    bulge = Math.Tan(angle / 4.0);
+                }
+
+                psc.Add(new PolylineSegment(start.Convert2d(plane), end.Convert2d(plane), bulge));
+            }
+
+            foreach (DBObject o in newCol)
+                o.Dispose();
+            var projectedPline = psc.Join(new Tolerance(1e-9, 1e-9))[0].ToPolyline();
+            projectedPline.Normal = direction;
+            projectedPline.Elevation =
+                plane.PointOnPlane.TransformBy(Matrix3d.WorldToPlane(new Plane(Point3d.Origin, direction))).Z;
+            if (!pline.StartPoint.Project(plane, direction).IsEqualTo(projectedPline.StartPoint, new Tolerance(1e-9, 1e-9)))
+            {
+                projectedPline.Normal = direction = direction.Negate();
                 projectedPline.Elevation =
                     plane.PointOnPlane.TransformBy(Matrix3d.WorldToPlane(new Plane(Point3d.Origin, direction))).Z;
-                if (!pline.StartPoint.Project(plane, direction).IsEqualTo(projectedPline.StartPoint, new Tolerance(1e-9, 1e-9)))
-                {
-                    projectedPline.Normal = direction = direction.Negate();
-                    projectedPline.Elevation =
-                        plane.PointOnPlane.TransformBy(Matrix3d.WorldToPlane(new Plane(Point3d.Origin, direction))).Z;
-                }
-
-                return projectedPline;
             }
+
+            return projectedPline;
         }
 
         /// <summary>

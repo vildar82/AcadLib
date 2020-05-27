@@ -11,7 +11,7 @@
     public class ManagedSystemVariable : IDisposable
     {
         private string name;
-        private object oldval;
+        private object? oldVal;
 
         public ManagedSystemVariable([NotNull] string name, object value)
             : this(name)
@@ -24,15 +24,15 @@
             if (string.IsNullOrWhiteSpace(name))
                 throw new ArgumentException(name);
             this.name = name;
-            oldval = Application.GetSystemVariable(name);
+            oldVal = Application.GetSystemVariable(name);
         }
 
         public void Dispose()
         {
-            if (oldval != null)
+            if (oldVal != null)
             {
-                var temp = oldval;
-                oldval = null;
+                var temp = oldVal;
+                oldVal = null;
                 Application.SetSystemVariable(name, temp);
             }
         }

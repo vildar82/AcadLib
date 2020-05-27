@@ -25,14 +25,9 @@
                 throw new AcRx.Exception(AcRx.ErrorStatus.NonPlanarEntity);
             if (spl.Closed != true)
                 throw new AcRx.Exception(AcRx.ErrorStatus.NotApplicable);
-            using (var curves = new DBObjectCollection())
-            {
-                curves.Add(spl);
-                using (var dboc = Region.CreateFromCurves(curves))
-                {
-                    return ((Region)dboc[0]).Centroid();
-                }
-            }
+            using var curves = new DBObjectCollection {spl};
+            using var dDoc = Region.CreateFromCurves(curves);
+            return ((Region)dDoc[0]).Centroid();
         }
     }
 }

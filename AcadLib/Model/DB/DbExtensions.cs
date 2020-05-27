@@ -3,7 +3,6 @@
     using System;
     using System.Collections.Generic;
     using System.IO;
-    using System.Linq;
     using AcadLib;
     using ApplicationServices.Core;
     using AutoCAD_PIK_Manager.Settings;
@@ -44,10 +43,10 @@
 
         public static ObjectId MsId(this Database db)
         {
-            using (var bt = (BlockTable)db.BlockTableId.Open(OpenMode.ForRead))
-            {
-                return bt[BlockTableRecord.ModelSpace];
-            }
+#pragma warning disable 618
+            using var bt = (BlockTable)db.BlockTableId.Open(OpenMode.ForRead);
+#pragma warning restore 618
+            return bt[BlockTableRecord.ModelSpace];
         }
 
         /// <summary>
@@ -99,16 +98,16 @@
         public static ObjectId GetLineTypeIdByName([NotNull] this Database db, string name)
         {
             var resVal = ObjectId.Null;
-            using (var ltTable = (LinetypeTable)db.LinetypeTableId.Open(OpenMode.ForRead))
+#pragma warning disable 618
+            using var ltTable = (LinetypeTable)db.LinetypeTableId.Open(OpenMode.ForRead);
+#pragma warning restore 618
+            if (ltTable.Has(name))
             {
-                if (ltTable.Has(name))
-                {
-                    resVal = ltTable[name];
-                }
-                else if (!string.Equals(name, SymbolUtilityServices.LinetypeContinuousName, StringComparison.OrdinalIgnoreCase))
-                {
-                    resVal = db.GetLineTypeIdContinuous();
-                }
+                resVal = ltTable[name];
+            }
+            else if (!string.Equals(name, SymbolUtilityServices.LinetypeContinuousName, StringComparison.OrdinalIgnoreCase))
+            {
+                resVal = db.GetLineTypeIdContinuous();
             }
 
             return resVal;
@@ -323,12 +322,12 @@
         private static ObjectId GetDictStyleId(Database db, string styleName, [NotNull] Func<Database, ObjectId> idDictTable)
         {
             var idStyle = ObjectId.Null;
-            using (var dictTableStyle = (DBDictionary)idDictTable(db).Open(OpenMode.ForRead))
+#pragma warning disable 618
+            using var dictTableStyle = (DBDictionary)idDictTable(db).Open(OpenMode.ForRead);
+#pragma warning restore 618
+            if (dictTableStyle.Contains(styleName))
             {
-                if (dictTableStyle.Contains(styleName))
-                {
-                    idStyle = dictTableStyle.GetAt(styleName);
-                }
+                idStyle = dictTableStyle.GetAt(styleName);
             }
 
             return idStyle;
@@ -347,12 +346,12 @@
         private static ObjectId GetStyleId(Database db, string styleName, [NotNull] Func<Database, ObjectId> idSymbolTable)
         {
             var idStyle = ObjectId.Null;
-            using (var symbolTable = (SymbolTable)idSymbolTable(db).Open(OpenMode.ForRead))
+#pragma warning disable 618
+            using var symbolTable = (SymbolTable)idSymbolTable(db).Open(OpenMode.ForRead);
+#pragma warning restore 618
+            if (symbolTable.Has(styleName))
             {
-                if (symbolTable.Has(styleName))
-                {
-                    idStyle = symbolTable[styleName];
-                }
+                idStyle = symbolTable[styleName];
             }
 
             return idStyle;

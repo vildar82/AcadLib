@@ -1,6 +1,5 @@
 ﻿namespace AcadLib
 {
-    using System;
     using System.IO;
     using Autodesk.AutoCAD.DatabaseServices;
     using JetBrains.Annotations;
@@ -10,10 +9,10 @@
     {
         public static ObjectId GetLineTypeId([NotNull] this Database db, string lineTypeName)
         {
-            using (var lt = (LinetypeTable)db.LinetypeTableId.Open(OpenMode.ForRead))
-            {
-                return lt.Has(lineTypeName) ? lt[lineTypeName] : ObjectId.Null;
-            }
+#pragma warning disable 618
+            using var lt = (LinetypeTable)db.LinetypeTableId.Open(OpenMode.ForRead);
+#pragma warning restore 618
+            return lt.Has(lineTypeName) ? lt[lineTypeName] : ObjectId.Null;
         }
 
         /// <summary>

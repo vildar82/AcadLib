@@ -20,17 +20,18 @@
         }
 
         [NotNull]
-        public static Cell SetValue([NotNull] this Cell cell, [CanBeNull] object value)
+        public static Cell SetValue([NotNull] this Cell cell, object? value)
         {
             return SetValue(cell, value, null);
         }
 
         [NotNull]
-        public static Cell SetValue([NotNull] this Cell cell, [CanBeNull] object value, object defaultValue)
+        public static Cell SetValue([NotNull] this Cell cell, object? value, object? defaultValue)
         {
             if (value == null)
             {
-                if (defaultValue != null) cell.SetValue(defaultValue, ParseOption.ParseOptionNone);
+                if (defaultValue != null)
+                    cell.SetValue(defaultValue, ParseOption.ParseOptionNone);
                 return cell;
             }
 
@@ -167,7 +168,7 @@
         /// <param name="startRow">Стартовая строка сравнения</param>
         public static void MergeCol(this Table t, int col, int startRow)
         {
-            Cell prevCell = null;
+            Cell? prevCell = null;
             var prewRow = startRow;
             for (var r = startRow; r < t.Rows.Count; r++)
             {

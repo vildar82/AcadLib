@@ -7,6 +7,7 @@
     /// <summary>
     /// Represents a triangle in the 3d space. It can be viewed as a structure consisting of three Point3d.
     /// </summary>
+    [PublicAPI]
     public class Triangle3d : Triangle<Point3d>
     {
         /// <summary>
@@ -62,8 +63,7 @@
         /// <summary>
         /// Gets the circumscribed circle.
         /// </summary>
-        [CanBeNull]
-        public CircularArc3d CircumscribedCircle
+        public CircularArc3d? CircumscribedCircle
         {
             get
             {
@@ -108,8 +108,7 @@
         /// <summary>
         /// Gets the inscribed circle.
         /// </summary>
-        [CanBeNull]
-        public CircularArc3d InscribedCircle
+        public CircularArc3d? InscribedCircle
         {
             get
             {

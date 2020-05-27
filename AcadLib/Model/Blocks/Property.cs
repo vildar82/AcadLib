@@ -1,7 +1,4 @@
-﻿using System.Linq;
-using ReactiveUI;
-
-namespace AcadLib.Blocks
+﻿namespace AcadLib.Blocks
 {
     using System;
     using System.Collections.Generic;

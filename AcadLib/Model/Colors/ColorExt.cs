@@ -18,8 +18,7 @@
         /// <summary>
         /// строку в цвет - из color?.ToString();
         /// </summary>
-        [CanBeNull]
-        public static Color AcadColorFromString2(this string color)
+        public static Color? AcadColorFromString2(this string color)
         {
             if (color.IsNullOrEmpty())
                 return null;

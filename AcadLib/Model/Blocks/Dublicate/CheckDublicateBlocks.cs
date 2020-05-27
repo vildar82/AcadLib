@@ -17,12 +17,12 @@
     public static class CheckDublicateBlocks
     {
         public static int DEPTH = 5;
-        private static List<IError> _errors;
-        private static HashSet<string> _ignoreBlocks;
-        private static List<BlockRefDublicateInfo> AllDublicBlRefInfos;
-        private static HashSet<ObjectId> attemptedblocks;
+        private static List<IError> _errors = new List<IError>();
+        private static HashSet<string>? _ignoreBlocks;
+        private static List<BlockRefDublicateInfo> allDublicBlRefInfos = new List<BlockRefDublicateInfo>();
+        private static HashSet<ObjectId> attemptedBlocks = new HashSet<ObjectId>();
         private static int curDepth;
-        private static Dictionary<string, Dictionary<PointTree, List<BlockRefDublicateInfo>>> dictBlRefInfos;
+        private static Dictionary<string, Dictionary<PointTree, List<BlockRefDublicateInfo>>> dictBlRefInfos = new Dictionary<string, Dictionary<PointTree, List<BlockRefDublicateInfo>>>();
 
         public static Tolerance Tolerance { get; set; } = new Tolerance(0.2, 10);
 
@@ -41,14 +41,14 @@
             Check(idsBlRefs, null);
         }
 
-        public static void Check(IEnumerable idsBlRefs, HashSet<string> ignoreBlocks)
+        public static void Check(IEnumerable? idsBlRefs, HashSet<string>? ignoreBlocks)
         {
             curDepth = 0;
             _ignoreBlocks = ignoreBlocks;
             var db = HostApplicationServices.WorkingDatabase;
             _errors = new List<IError>();
-            attemptedblocks = new HashSet<ObjectId>();
-            AllDublicBlRefInfos = new List<BlockRefDublicateInfo>();
+            attemptedBlocks = new HashSet<ObjectId>();
+            allDublicBlRefInfos = new List<BlockRefDublicateInfo>();
             dictBlRefInfos = new Dictionary<string, Dictionary<PointTree, List<BlockRefDublicateInfo>>>();
             try
             {
@@ -60,12 +60,12 @@
                         idsBlRefs = ms;
                     }
 
-                    GetDublicateBlocks(idsBlRefs, Matrix3d.Identity, 0);
+                    GetDuplicateBlocks(idsBlRefs, Matrix3d.Identity, 0);
                     t.Commit();
                 }
 
                 // дублирующиеся блоки
-                AllDublicBlRefInfos = dictBlRefInfos.SelectMany(s => s.Value.Values).Where(w => w.Count > 1)
+                allDublicBlRefInfos = dictBlRefInfos.SelectMany(s => s.Value.Values).Where(w => w.Count > 1)
                     .SelectMany(s => s.GroupBy(g => g).Where(w => w.Skip(1).Any()))
                     .Select(s =>
                     {
@@ -81,13 +81,13 @@
                 return;
             }
 
-            if (AllDublicBlRefInfos.Count == 0)
+            if (allDublicBlRefInfos.Count == 0)
             {
                 Application.DocumentManager.MdiActiveDocument.Editor.WriteMessage("\nДубликаты блоков не найдены.");
             }
             else
             {
-                foreach (var dublBlRefInfo in AllDublicBlRefInfos)
+                foreach (var dublBlRefInfo in allDublicBlRefInfos)
                 {
                     var err = new Error($"Дублирование блоков '{dublBlRefInfo.Name}' - " +
                                         $"{dublBlRefInfo.CountDublic} шт. в точке {dublBlRefInfo.Position.ToString()}",
@@ -112,14 +112,12 @@
             }
         }
 
-        public static void DeleteDublicates([CanBeNull] List<IError> errors)
+        public static void DeleteDublicates(List<IError>? errors)
         {
-            if (errors == null || errors.Count == 0)
-            {
+            if (errors?.Any() != true)
                 return;
-            }
 
-            var blDublicatesToDel = errors.Where(e => e.Tag is BlockRefDublicateInfo)
+            var blDuplicatesToDel = errors.Where(e => e.Tag is BlockRefDublicateInfo)
                 .SelectMany(e => ((BlockRefDublicateInfo)e.Tag).Dublicates).ToList();
             var doc = Application.DocumentManager.MdiActiveDocument;
             var countErased = 0;
@@ -128,7 +126,7 @@
             {
                 if (t == null)
                     return;
-                foreach (var dublBl in blDublicatesToDel)
+                foreach (var dublBl in blDuplicatesToDel)
                 {
                     var blTodel = dublBl.IdBlRef.GetObject<BlockReference>(OpenMode.ForWrite);
                     if (blTodel == null) continue;
@@ -141,7 +139,7 @@
             }
         }
 
-        private static void GetDublicateBlocks([NotNull] IEnumerable ids, Matrix3d transToModel, double rotate)
+        private static void GetDuplicateBlocks([NotNull] IEnumerable ids, Matrix3d transToModel, double rotate)
         {
             var idsBtrNext = new List<Tuple<ObjectId, Matrix3d, double>>();
 
@@ -160,7 +158,7 @@
                 if (isFirstDbo)
                 {
                     isFirstDbo = false;
-                    if (!attemptedblocks.Add(dbo.OwnerId))
+                    if (!attemptedBlocks.Add(dbo.OwnerId))
                     {
                         continue;
                     }
@@ -171,7 +169,7 @@
                     continue;
                 var blRefInfo = new BlockRefDublicateInfo(blRef, transToModel, rotate);
 
-                if (_ignoreBlocks != null && _ignoreBlocks.Contains(blRefInfo.Name, StringComparer.OrdinalIgnoreCase))
+                if (_ignoreBlocks?.Contains(blRefInfo.Name, StringComparer.OrdinalIgnoreCase) == true)
                 {
                     continue;
                 }
@@ -203,7 +201,7 @@
                 foreach (var btrNext in idsBtrNext)
                 {
                     var btr = (BlockTableRecord)btrNext.Item1.GetObject(OpenMode.ForRead);
-                    GetDublicateBlocks(btr, btrNext.Item2, btrNext.Item3);
+                    GetDuplicateBlocks(btr, btrNext.Item2, btrNext.Item3);
                 }
             }
         }

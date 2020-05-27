@@ -1,6 +1,4 @@
-﻿using AcadLib.Geometry.Polylines;
-
-namespace Autodesk.AutoCAD.Geometry
+﻿namespace Autodesk.AutoCAD.Geometry
 {
     using System;
     using System.Globalization;

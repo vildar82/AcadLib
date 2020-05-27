@@ -37,7 +37,7 @@
         /// <summary>
         /// Вставка блока в чертеж - интерактивная (BlockInsertJig)
         /// </summary>
-        public static ObjectId Insert(string blName, LayerInfo layer, List<Property> props, bool explode = false)
+        public static ObjectId Insert(string blName, LayerInfo? layer, List<Property>? props, bool explode = false)
         {
             var doc = Application.DocumentManager.MdiActiveDocument;
             if (doc == null)
@@ -101,18 +101,16 @@
                 if (explode)
                 {
                     var owner = br.BlockId.GetObject<BlockTableRecord>(OpenMode.ForWrite);
-                    using (var explodes = new DBObjectCollection())
+                    using var explodes = new DBObjectCollection();
+                    br.Explode(explodes);
+                    foreach (Entity ent in explodes)
                     {
-                        br.Explode(explodes);
-                        foreach (Entity ent in explodes)
-                        {
-                            owner.AppendEntity(ent);
-                            t.AddNewlyCreatedDBObject(ent, true);
-                            ent.Layer = br.Layer;
-                        }
-
-                        br.Erase();
+                        owner.AppendEntity(ent);
+                        t.AddNewlyCreatedDBObject(ent, true);
+                        ent.Layer = br.Layer;
                     }
+
+                    br.Erase();
                 }
             }
             else
@@ -129,7 +127,7 @@
         /// <summary>
         /// Вставка блока в чертеж - интерактивная (BlockInsertJig)
         /// </summary>
-        public static ObjectId Insert(string blName, LayerInfo layer, bool explode = false)
+        public static ObjectId Insert(string blName, LayerInfo? layer, bool explode = false)
         {
             return Insert(blName, layer, null, explode);
         }
@@ -148,7 +146,7 @@
         /// </summary>
         public static ObjectId Insert(string blName)
         {
-            return Insert(blName, (LayerInfo)null);
+            return Insert(blName, (LayerInfo?)null);
         }
 
         /// <summary>

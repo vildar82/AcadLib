@@ -117,10 +117,9 @@ namespace AcadLib.Geometry
             return plMerged;
         }
 
-        [CanBeNull]
-        private static Polyline MergeTwoPl([NotNull] Polyline pl1, [NotNull] Polyline pl2, double tolerance)
+        private static Polyline? MergeTwoPl([NotNull] Polyline pl1, [NotNull] Polyline pl2, double tolerance)
         {
-            Polyline plMerged = null;
+            Polyline? plMerged = null;
 
             // Точки полилиний
             var plVertexes = PolylineVertex.GetVertexes(pl1, "1");

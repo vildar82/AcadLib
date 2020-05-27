@@ -22,7 +22,7 @@
             TransformToModel = transToModel;
             Position = blRef.Position.TransformBy(TransformToModel);
             Name = blRef.GetEffectiveName();
-            Rotation = getRotateToModel(blRef.Rotation, rotateToModel);
+            Rotation = GetRotateToModel(blRef.Rotation, rotateToModel);
         }
 
         public int CountDublic { get; set; }
@@ -81,7 +81,7 @@
             return Name.GetHashCode();
         }
 
-        private double getRotateToModel(double rotation, double rotateToModel)
+        private double GetRotateToModel(double rotation, double rotateToModel)
         {
             var res = rotation + rotateToModel;
             if (res > pi2)

@@ -60,8 +60,7 @@
         /// <returns>An array of LineSegement3d representing the tangents (2) or null if there is none.</returns>
         /// <exception cref="Autodesk.AutoCAD.Runtime.Exception">
         /// eNonCoplanarGeometry is thrown if the objects do not lies on the same plane.</exception>
-        [CanBeNull]
-        public static LineSegment3d[] GetTangentsTo([NotNull] this CircularArc3d arc, Point3d pt)
+        public static LineSegment3d[]? GetTangentsTo([NotNull] this CircularArc3d arc, Point3d pt)
         {
             // check if arc and point lies on the plane
             var normal = arc.Normal;
@@ -103,8 +102,7 @@
         /// <returns>An array of LineSegment3d representing the tangents (maybe 2 or 4) or null if there is none.</returns>
         /// <exception cref="Autodesk.AutoCAD.Runtime.Exception">
         /// eNonCoplanarGeometry is thrown if the objects do not lies on the same plane.</exception>
-        [CanBeNull]
-        public static LineSegment3d[] GetTangentsTo(
+        public static LineSegment3d[]? GetTangentsTo(
             [NotNull] this CircularArc3d arc,
             [NotNull] CircularArc3d other,
             TangentType flags)

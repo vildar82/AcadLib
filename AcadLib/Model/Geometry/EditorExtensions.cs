@@ -26,26 +26,24 @@ namespace Autodesk.AutoCAD.EditorInput
             var db = ed.Document.Database;
             if (db.TileMode)
                 throw new AcRx.Exception(AcRx.ErrorStatus.NotInPaperspace);
-            using (var tr = db.TransactionManager.StartTransaction())
+            using var tr = db.TransactionManager.StartTransaction();
+            var vp =
+                (Viewport)tr.GetObject(ed.CurrentViewportObjectId, OpenMode.ForRead);
+            if (vp.Number == 1)
             {
-                var vp =
-                    (Viewport)tr.GetObject(ed.CurrentViewportObjectId, OpenMode.ForRead);
-                if (vp.Number == 1)
+                try
                 {
-                    try
-                    {
-                        ed.SwitchToModelSpace();
-                        vp = (Viewport)tr.GetObject(ed.CurrentViewportObjectId, OpenMode.ForRead);
-                        ed.SwitchToPaperSpace();
-                    }
-                    catch
-                    {
-                        throw new AcRx.Exception(AcRx.ErrorStatus.CannotChangeActiveViewport);
-                    }
+                    ed.SwitchToModelSpace();
+                    vp = (Viewport)tr.GetObject(ed.CurrentViewportObjectId, OpenMode.ForRead);
+                    ed.SwitchToPaperSpace();
                 }
-
-                return vp.DCS2PSDCS();
+                catch
+                {
+                    throw new AcRx.Exception(AcRx.ErrorStatus.CannotChangeActiveViewport);
+                }
             }
+
+            return vp.DCS2PSDCS();
         }
 
         /// <summary>
@@ -57,8 +55,8 @@ namespace Autodesk.AutoCAD.EditorInput
         public static Matrix3d DCS2WCS([NotNull] this Editor ed)
         {
             Matrix3d retVal;
-            var tilemode = ed.Document.Database.TileMode;
-            if (!tilemode)
+            var tileMode = ed.Document.Database.TileMode;
+            if (!tileMode)
                 ed.SwitchToModelSpace();
             using (var vtr = ed.GetCurrentView())
             {
@@ -68,7 +66,7 @@ namespace Autodesk.AutoCAD.EditorInput
                     Matrix3d.PlaneToWorld(vtr.ViewDirection);
             }
 
-            if (!tilemode)
+            if (!tileMode)
                 ed.SwitchToPaperSpace();
             return retVal;
         }

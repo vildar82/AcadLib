@@ -9,37 +9,32 @@
     [PublicAPI]
     public static class LineExt
     {
-        [CanBeNull]
         public static Line GetUnionLine([NotNull] this List<Line> lines)
         {
-            using (var wasteLines = new DisposableSet<Line>())
+            using var wasteLines = new DisposableSet<Line>();
+            Line prew = null!;
+            Line? unionLine = null;
+            foreach (var l in lines)
             {
-                Line prew = null;
-                Line unionLine = null;
-                foreach (var l in lines)
-                {
-                    if (prew == null)
-                    {
-                        prew = l;
-                        continue;
-                    }
-
-                    var line = prew.GetUnionLine(l);
-                    wasteLines.Add(line);
-                    unionLine = prew;
-                    prew = line;
-                }
-
                 if (prew == null)
-                    return null;
-                if (unionLine == null)
                 {
-                    return (Line)prew.Clone();
+                    prew = l;
+                    continue;
                 }
 
-                wasteLines.Remove(prew);
-                return prew;
+                var line = prew.GetUnionLine(l);
+                wasteLines.Add(line);
+                unionLine = prew;
+                prew = line;
             }
+
+            if (unionLine == null)
+            {
+                return (Line)prew.Clone();
+            }
+
+            wasteLines.Remove(prew);
+            return prew;
         }
 
         /// <summary>

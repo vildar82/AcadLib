@@ -10,6 +10,7 @@
     /// <summary>
     /// Настройки для объекта на чертеже
     /// </summary>
+    [PublicAPI]
     public class EntityOptions
     {
         private LineWeight lineWeight;

@@ -16,15 +16,13 @@
         public static ObjectId GetDimBlkObjectId([NotNull] this Database db, DimBlkEnum dimBlk)
         {
             var blkName = GetDimBlkName(dimBlk);
-            using (var bt = db.BlockTableId.GetObjectT<BlockTable>())
+            using var bt = db.BlockTableId.GetObjectT<BlockTable>();
+            if (!bt.Has(blkName))
             {
-                if (!bt.Has(blkName))
-                {
-                    Application.SetSystemVariable("DIMBLK", blkName);
-                }
-
-                return bt[blkName];
+                Application.SetSystemVariable("DIMBLK", blkName);
             }
+
+            return bt[blkName];
         }
 
         [NotNull]

@@ -4,7 +4,6 @@ namespace AcadLib.Hatches
 {
     using System;
     using Autodesk.AutoCAD.DatabaseServices;
-    using JetBrains.Annotations;
 
     public class HatchLoopPl : IDisposable
     {
@@ -17,8 +16,7 @@ namespace AcadLib.Hatches
             Loop?.Dispose();
         }
 
-        [CanBeNull]
-        public Polyline GetPolyline()
+        public Polyline? GetPolyline()
         {
             switch (Loop)
             {

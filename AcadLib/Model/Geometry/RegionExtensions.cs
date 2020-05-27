@@ -19,11 +19,9 @@ namespace AcadLib.Geometry
         /// <returns>The centroid of the region (WCS coordinates).</returns>
         public static Point3d Centroid([NotNull] this Region reg)
         {
-            using (var sol = new Solid3d())
-            {
-                sol.Extrude(reg, 2.0, 0.0);
-                return sol.MassProperties.Centroid - reg.Normal;
-            }
+            using var sol = new Solid3d();
+            sol.Extrude(reg, 2.0, 0.0);
+            return sol.MassProperties.Centroid - reg.Normal;
         }
 
         /// <summary>
@@ -35,11 +33,9 @@ namespace AcadLib.Geometry
         /// <returns></returns>
         public static ObjectId ConvertToHatch(this Region reg, Editor ed)
         {
-            using (var added = new AddedObjects(reg.Database))
-            {
-                ed.Command("_-HATCH", "_S", reg.Id, "", "");
-                return added.Added.FirstOrDefault(o => o.ObjectClass == General.ClassHatch);
-            }
+            using var added = new AddedObjects(reg.Database);
+            ed.Command("_-HATCH", "_S", reg.Id, "", "");
+            return added.Added.FirstOrDefault(o => o.ObjectClass == General.ClassHatch);
         }
     }
 }

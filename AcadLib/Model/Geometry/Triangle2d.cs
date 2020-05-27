@@ -8,6 +8,7 @@
     /// <summary>
     /// Represents a triangle in a 2d plane. It can be viewed as a structure consisting of three Point2d.
     /// </summary>
+    [PublicAPI]
     public class Triangle2d : Triangle<Point2d>
     {
         /// <summary>
@@ -62,8 +63,7 @@
         /// <summary>
         /// Gets the circumscribed circle.
         /// </summary>
-        [CanBeNull]
-        public CircularArc2d CircumscribedCircle
+        public CircularArc2d? CircumscribedCircle
         {
             get
             {
@@ -77,8 +77,7 @@
         /// <summary>
         /// Gets the inscribed circle.
         /// </summary>
-        [CanBeNull]
-        public CircularArc2d InscribedCircle
+        public CircularArc2d? InscribedCircle
         {
             get
             {

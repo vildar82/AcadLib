@@ -20,15 +20,15 @@
         /// <param name="attr"></param>
         public AttributeRefInfo([NotNull] DBText attr)
         {
-            if (attr is AttributeDefinition attdef)
+            if (attr is AttributeDefinition attDef)
             {
-                Tag = attdef.Tag;
+                Tag = attDef.Tag;
             }
             else
             {
-                if (attr is AttributeReference attref)
+                if (attr is AttributeReference attRef)
                 {
-                    Tag = attref.Tag;
+                    Tag = attRef.Tag;
                 }
                 else
                 {
@@ -55,18 +55,14 @@
             var resVal = new List<AttributeRefInfo>();
             if (idBtr.IsNull)
                 return resVal;
-            using (var btr = (BlockTableRecord)idBtr.Open(OpenMode.ForRead))
+            using var btr = (BlockTableRecord)idBtr.Open(OpenMode.ForRead);
+            foreach (var idEnt in btr)
             {
-                foreach (var idEnt in btr)
-                {
-                    using (var attrDef = (AttributeDefinition)idEnt.Open(OpenMode.ForRead, false, true))
-                    {
-                        if (attrDef == null)
-                            continue;
-                        var attrDefInfo = new AttributeRefInfo(attrDef);
-                        resVal.Add(attrDefInfo);
-                    }
-                }
+                using var attrDef = (AttributeDefinition)idEnt.Open(OpenMode.ForRead, false, true);
+                if (attrDef == null)
+                    continue;
+                var attrDefInfo = new AttributeRefInfo(attrDef);
+                resVal.Add(attrDefInfo);
             }
 
             return resVal;
@@ -80,11 +76,9 @@
             {
                 foreach (ObjectId idAttrRef in blRef.AttributeCollection)
                 {
-                    using (var atrRef = (AttributeReference)idAttrRef.Open(OpenMode.ForRead, false, true))
-                    {
-                        var ai = new AttributeRefInfo(atrRef);
-                        resVal.Add(ai);
-                    }
+                    using var atrRef = (AttributeReference)idAttrRef.Open(OpenMode.ForRead, false, true);
+                    var ai = new AttributeRefInfo(atrRef);
+                    resVal.Add(ai);
                 }
             }
 

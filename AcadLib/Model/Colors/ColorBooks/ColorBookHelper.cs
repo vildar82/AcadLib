@@ -30,30 +30,26 @@ namespace AcadLib.Colors
         public static void GenerateNCS()
         {
             doc = Application.DocumentManager.Add(string.Empty);
-            using (doc.LockDocument())
-            {
-                ed = doc.Editor;
-                db = doc.Database;
-                IdTextStylePik = db.GetTextStylePIK();
+            using var docLock = doc.LockDocument();
+            ed = doc.Editor;
+            db = doc.Database;
+            IdTextStylePik = db.GetTextStylePIK();
 
-                using (var t = db.TransactionManager.StartTransaction())
-                {
-                    // Форма стартовых настроек
-                    Options.Show();
+            using var t = db.TransactionManager.StartTransaction();
+            // Форма стартовых настроек
+            Options.Show();
 
-                    // Чтение палитры NCS
-                    var colorBookNcs = ColorBook.ReadFromFile(Options.Instance.NCSFile);
+            // Чтение палитры NCS
+            var colorBookNcs = ColorBook.ReadFromFile(Options.Instance.NCSFile);
 
-                    // Запрос точки начала генерации палитр цветов
-                    var ptStart = ed.GetPointWCS("Точка вставки");
+            // Запрос точки начала генерации палитр цветов
+            var ptStart = ed.GetPointWCS("Точка вставки");
 
-                    // Расположение цветов в модели
-                    var cs = db.CurrentSpaceId.GetObject(OpenMode.ForWrite) as BlockTableRecord;
-                    PlacementColors(cs, colorBookNcs, ptStart);
+            // Расположение цветов в модели
+            var cs = db.CurrentSpaceId.GetObjectT<BlockTableRecord>(OpenMode.ForWrite);
+            PlacementColors(cs, colorBookNcs, ptStart);
 
-                    t.Commit();
-                }
-            }
+            t.Commit();
         }
 
         private static void AddLayout(
@@ -103,36 +99,34 @@ namespace AcadLib.Colors
 
             var extPl = pl.GeometricExtents;
 
-            using (var lay = (Layout)idLay.GetObject(OpenMode.ForWrite))
+            using var lay = (Layout)idLay.GetObject(OpenMode.ForWrite);
+            var btrLay = (BlockTableRecord)lay.BlockTableRecordId.GetObject(OpenMode.ForWrite);
+
+            var view = new Viewport();
+            view.SetDatabaseDefaults();
+
+            btrLay.AppendEntity(view);
+            t.AddNewlyCreatedDBObject(view, true);
+
+            view.Width = widthLay;
+            view.Height = heightLay;
+            view.CenterPoint = new Point3d(widthLay * 0.5, heightLay * 0.5, 0);
+            view.On = true;
+
+            view.ViewCenter = extPl.Center().Convert2d();
+
+            var hvp = extPl.MaxPoint.Y - extPl.MinPoint.Y;
+            var wvp = extPl.MaxPoint.X - extPl.MinPoint.X;
+
+            var aspect = view.Width / view.Height;
+
+            if (wvp / hvp > aspect)
             {
-                var btrLay = (BlockTableRecord)lay.BlockTableRecordId.GetObject(OpenMode.ForWrite);
-
-                var view = new Viewport();
-                view.SetDatabaseDefaults();
-
-                btrLay.AppendEntity(view);
-                t.AddNewlyCreatedDBObject(view, true);
-
-                view.Width = widthLay;
-                view.Height = heightLay;
-                view.CenterPoint = new Point3d(widthLay * 0.5, heightLay * 0.5, 0);
-                view.On = true;
-
-                view.ViewCenter = extPl.Center().Convert2d();
-
-                var hvp = extPl.MaxPoint.Y - extPl.MinPoint.Y;
-                var wvp = extPl.MaxPoint.X - extPl.MinPoint.X;
-
-                var aspect = view.Width / view.Height;
-
-                if (wvp / hvp > aspect)
-                {
-                    hvp = wvp / aspect;
-                }
-
-                view.ViewHeight = hvp;
-                view.CustomScale = 1;
+                hvp = wvp / aspect;
             }
+
+            view.ViewHeight = hvp;
+            view.CustomScale = 1;
         }
 
         private static void PlacementColors(BlockTableRecord cs, [NotNull] ColorBook colorBookNcs, Point3d ptStart)

@@ -25,10 +25,10 @@
 
         public static void HighlightEntity(this ObjectId entId)
         {
-            using (var ent = (Entity)entId.Open(OpenMode.ForRead, false, true))
-            {
-                ent.Highlight();
-            }
+#pragma warning disable 618
+            using var ent = (Entity)entId.Open(OpenMode.ForRead, false, true);
+#pragma warning restore 618
+            ent.Highlight();
         }
 
         /// <summary>
@@ -109,32 +109,32 @@
             if (ids?.Any() != true)
                 return;
             var doc = Application.DocumentManager.MdiActiveDocument;
-            using (var ents = new DisposableSet<Entity>(ids.Select(s => (Entity)s.Open(OpenMode.ForRead))))
+#pragma warning disable 618
+            using var ents = new DisposableSet<Entity>(ids.Select(s => (Entity)s.Open(OpenMode.ForRead)));
+#pragma warning restore 618
+            for (var i = 0; i < num; i++)
             {
-                for (var i = 0; i < num; i++)
+                // Highlight entity
+                foreach (var entity in ents)
                 {
-                    // Highlight entity
-                    foreach (var entity in ents)
-                    {
-                        entity.Highlight();
-                    }
-
-                    doc.Editor.UpdateScreen();
-
-                    // Wait for delay1 msecs
-                    Thread.Sleep(delay1);
-
-                    // Unhighlight entity
-                    foreach (var entity in ents)
-                    {
-                        entity.Unhighlight();
-                    }
-
-                    doc.Editor.UpdateScreen();
-
-                    // Wait for delay2 msecs
-                    Thread.Sleep(delay2);
+                    entity.Highlight();
                 }
+
+                doc.Editor.UpdateScreen();
+
+                // Wait for delay1 msecs
+                Thread.Sleep(delay1);
+
+                // Unhighlight entity
+                foreach (var entity in ents)
+                {
+                    entity.Unhighlight();
+                }
+
+                doc.Editor.UpdateScreen();
+
+                // Wait for delay2 msecs
+                Thread.Sleep(delay2);
             }
         }
 
@@ -245,25 +245,23 @@
             if (doc == null || !id.IsValidEx())
                 return;
 
-            using (doc.LockDocument())
-            using (var t = id.Database.TransactionManager.StartTransaction())
+            using var docLock = doc.LockDocument();
+            using var t = id.Database.TransactionManager.StartTransaction();
+            if (id.GetObject(OpenMode.ForRead) is Entity ent)
             {
-                if (id.GetObject(OpenMode.ForRead) is Entity ent)
+                try
                 {
-                    try
-                    {
-                        doc.Editor.Zoom(ent.GeometricExtents.Offset());
-                        id.FlickObjectHighlight(num, delay1, delay2);
-                        doc.Editor.SetImpliedSelection(new[] { id });
-                    }
-                    catch
-                    {
-                        //
-                    }
+                    doc.Editor.Zoom(ent.GeometricExtents.Offset());
+                    id.FlickObjectHighlight(num, delay1, delay2);
+                    doc.Editor.SetImpliedSelection(new[] { id });
                 }
-
-                t.Commit();
+                catch
+                {
+                    //
+                }
             }
+
+            t.Commit();
         }
 
         public static void ShowEnt(this ObjectId id)

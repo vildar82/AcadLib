@@ -105,7 +105,9 @@
             get
             {
                 if (_alreadyCalcExtents) return _extentsToShow;
+#pragma warning disable 618
                 using var blRef = (BlockReference)IdBlRef.Open(OpenMode.ForRead, false, true);
+#pragma warning restore 618
                 try
                 {
                     _extentsToShow = blRef.GeometricExtents;
@@ -241,8 +243,7 @@
             return res;
         }
 
-        [CanBeNull]
-        public Property GetProperty(string nameMatch, bool isRequired = true)
+        public Property? GetProperty(string nameMatch, bool isRequired = true)
         {
             var prop = Properties.Find(p => Regex.IsMatch(p.Name, nameMatch, RegexOptions.IgnoreCase));
             if (prop == null && isRequired)
@@ -320,7 +321,7 @@
             return BlName.GetHashCode();
         }
 
-        public virtual void Update([NotNull] BlockReference blRef)
+        public virtual void Update(BlockReference blRef)
         {
             // Считать блок заново
             Db = blRef.Database;
@@ -425,7 +426,7 @@
             }
         }
 
-        protected void FillProp([CanBeNull] Property prop, object value)
+        protected void FillProp(Property? prop, object value)
         {
             if (prop == null)
                 return;

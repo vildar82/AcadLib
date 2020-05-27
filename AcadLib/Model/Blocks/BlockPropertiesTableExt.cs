@@ -15,11 +15,10 @@
         /// <summary>
         /// Таблица свойств блока. Должна быть запущена транзакция!
         /// </summary>
-        [CanBeNull]
-        public static System.Data.DataTable GetBlockPropertiesTable([NotNull] this BlockTableRecord dynBtr)
+        public static System.Data.DataTable? GetBlockPropertiesTable([NotNull] this BlockTableRecord dynBtr)
         {
             var t = dynBtr.Database.TransactionManager.TopTransaction;
-            using var bpt = GetBPT(dynBtr, t);
+            using var bpt = GetBpt(dynBtr, t);
             if (bpt == null)
                 return null;
             var dTable = new System.Data.DataTable($"Таблица свойств блока {dynBtr.Name}");
@@ -45,8 +44,7 @@
             return dTable;
         }
 
-        [CanBeNull]
-        private static BlockPropertiesTable GetBPT([NotNull] BlockTableRecord dynBtr, Transaction t)
+        private static BlockPropertiesTable? GetBpt([NotNull] BlockTableRecord dynBtr, Transaction t)
         {
             var extDic = dynBtr.ExtensionDictionary.GetObject<DBDictionary>();
             if (extDic == null)

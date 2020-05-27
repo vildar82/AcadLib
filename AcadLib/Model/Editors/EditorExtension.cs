@@ -12,16 +12,14 @@
         {
             if (ed == null)
                 return;
-            using (var view = ed.GetCurrentView())
-            {
-                ext.TransformBy(view.WorldToEye());
-                view.Width = ext.MaxPoint.X - ext.MinPoint.X;
-                view.Height = ext.MaxPoint.Y - ext.MinPoint.Y;
-                view.CenterPoint = new Point2d(
-                    (ext.MaxPoint.X + ext.MinPoint.X) / 2.0,
-                    (ext.MaxPoint.Y + ext.MinPoint.Y) / 2.0);
-                ed.SetCurrentView(view);
-            }
+            using var view = ed.GetCurrentView();
+            ext.TransformBy(view.WorldToEye());
+            view.Width = ext.MaxPoint.X - ext.MinPoint.X;
+            view.Height = ext.MaxPoint.Y - ext.MinPoint.Y;
+            view.CenterPoint = new Point2d(
+                (ext.MaxPoint.X + ext.MinPoint.X) / 2.0,
+                (ext.MaxPoint.Y + ext.MinPoint.Y) / 2.0);
+            ed.SetCurrentView(view);
         }
 
         public static void ZoomExtents([CanBeNull] this Editor ed)

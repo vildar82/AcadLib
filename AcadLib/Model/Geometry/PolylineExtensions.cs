@@ -202,24 +202,22 @@
         /// </summary>
         public static bool CheckCross(this Polyline pline)
         {
-            using (var mpoly = new MPolygon())
+            using var mpoly = new MPolygon();
+            var isValidBoundary = false;
+            try
             {
-                var isValidBoundary = false;
-                try
+                mpoly.AppendLoopFromBoundary(pline, true, Tolerance.Global.EqualPoint);
+                if (mpoly.NumMPolygonLoops != 0)
                 {
-                    mpoly.AppendLoopFromBoundary(pline, true, Tolerance.Global.EqualPoint);
-                    if (mpoly.NumMPolygonLoops != 0)
-                    {
-                        isValidBoundary = true;
-                    }
+                    isValidBoundary = true;
                 }
-                catch
-                {
-                    // Самопересечение
-                }
-
-                return isValidBoundary;
             }
+            catch
+            {
+                // Самопересечение
+            }
+
+            return isValidBoundary;
         }
 
         [NotNull]
@@ -461,8 +459,7 @@
         /// <param name="plane">The plane onto which the curve is to be projected.</param>
         /// <param name="direction">Direction (in WCS coordinates) of the projection.</param>
         /// <returns>The projected Polyline.</returns>
-        [CanBeNull]
-        public static Polyline GetProjectedPolyline(this Polyline pline, [NotNull] Plane plane, Vector3d direction)
+        public static Polyline? GetProjectedPolyline(this Polyline pline, [NotNull] Plane plane, Vector3d direction)
         {
             var tol = new Tolerance(1e-9, 1e-9);
             if (plane.Normal.IsPerpendicularTo(direction, tol))
@@ -600,7 +597,7 @@
             var ptZeroZ = new Point3d(pt.X, pt.Y, pl.Elevation);
             for (var i = 0; i < pl.NumberOfVertices; i++)
             {
-                Curve3d seg = null;
+                Curve3d? seg = null;
 
                 var segType = pl.GetSegmentType(i);
                 if (segType == SegmentType.Arc)
@@ -654,27 +651,25 @@
             }
 
             var t = new Tolerance(tolerance, tolerance);
-            using (var curve1 = pline.GetGeCurve(t))
-            using (var curve2 = pline.GetGeCurve(t))
-            using (var curveInter = new CurveCurveIntersector3d(curve1, curve2, pline.Normal, t))
+            using var curve1 = pline.GetGeCurve(t);
+            using var curve2 = pline.GetGeCurve(t);
+            using var curveInter = new CurveCurveIntersector3d(curve1, curve2, pline.Normal, t);
+            var interCount = curveInter.NumberOfIntersectionPoints;
+            var overlaps = curveInter.OverlapCount();
+            if (!pline.Closed)
+                overlaps += 1;
+            if (overlaps < pline.NumberOfVertices)
+                result += 2;
+            if (interCount > overlaps)
             {
-                var interCount = curveInter.NumberOfIntersectionPoints;
-                var overlaps = curveInter.OverlapCount();
-                if (!pline.Closed)
-                    overlaps += 1;
-                if (overlaps < pline.NumberOfVertices)
-                    result += 2;
-                if (interCount > overlaps)
+                result += 4;
+                var plPts = pline.GetPoints().DistinctPoints().Select(s => s.Convert3d()).ToList();
+                for (var i = 0; i < interCount; i++)
+                    intersections.Add(curveInter.GetIntersectionPoint(i));
+                var onlyIntersects = intersections.Except(plPts).ToList();
+                if (onlyIntersects.Any())
                 {
-                    result += 4;
-                    var plPts = pline.GetPoints().DistinctPoints().Select(s => s.Convert3d()).ToList();
-                    for (var i = 0; i < interCount; i++)
-                        intersections.Add(curveInter.GetIntersectionPoint(i));
-                    var onlyIntersects = intersections.Except(plPts).ToList();
-                    if (onlyIntersects.Any())
-                    {
-                        intersections = onlyIntersects;
-                    }
+                    intersections = onlyIntersects;
                 }
             }
 
@@ -683,7 +678,7 @@
 
         public static bool IsVertex([NotNull] this Polyline pl, Point3d pt, double tolerance = 0.0001)
         {
-            return NetLib.MathExt.IsWholeNumber(pl.GetParameterAtPointTry(pt), tolerance);
+            return pl.GetParameterAtPointTry(pt).IsWholeNumber(tolerance);
         }
 
         /// <summary>
@@ -726,8 +721,7 @@
         /// <param name="offsetDist">The offset distance.</param>
         /// <param name="side">The offset side(s).</param>
         /// <returns>A polyline sequence resulting from the offset of the source polyline.</returns>
-        [CanBeNull]
-        public static IEnumerable<Polyline> Offset([NotNull] this Polyline source, double offsetDist, OffsetSide side)
+        public static IEnumerable<Polyline>? Offset([NotNull] this Polyline source, double offsetDist, OffsetSide side)
         {
             offsetDist = Math.Abs(offsetDist);
             var offsetRight = source.GetOffsetCurves(offsetDist).Cast<Polyline>().ToList();

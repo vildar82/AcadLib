@@ -7,6 +7,7 @@ namespace AcadLib.Hatches
     using Autodesk.AutoCAD.DatabaseServices;
     using JetBrains.Annotations;
 
+    [PublicAPI]
     public class HatchOptions : EntityOptions
     {
         public HatchOptions()

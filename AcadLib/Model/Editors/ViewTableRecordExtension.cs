@@ -5,6 +5,7 @@
     using Autodesk.AutoCAD.Geometry;
     using JetBrains.Annotations;
 
+    [PublicAPI]
     public static class ViewTableRecordExtension
     {
         public static Matrix3d EyeToWorld([NotNull] this ViewTableRecord view)

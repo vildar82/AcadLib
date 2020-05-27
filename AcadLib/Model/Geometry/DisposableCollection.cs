@@ -37,7 +37,7 @@
         {
             if (Count > 0)
             {
-                Exception last = null;
+                Exception? last = null;
                 var list = this.ToList();
                 Clear();
                 foreach (var item in list)
@@ -50,7 +50,7 @@
                         }
                         catch (Exception ex)
                         {
-                            last = last ?? ex;
+                            last ??= ex;
                         }
                     }
                 }

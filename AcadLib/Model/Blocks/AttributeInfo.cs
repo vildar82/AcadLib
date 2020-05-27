@@ -71,10 +71,14 @@ namespace AcadLib.Blocks
 
             if (!idBtr.IsNull)
             {
+#pragma warning disable 618
                 using var btr = (BlockTableRecord)idBtr.Open(OpenMode.ForRead);
+#pragma warning restore 618
                 foreach (var idEnt in btr)
                 {
+#pragma warning disable 618
                     using var attrDef = (AttributeDefinition)idEnt.Open(OpenMode.ForRead, false, true);
+#pragma warning restore 618
                     if (attrDef != null && attrDef.Visible)
                     {
                         var attrDefInfo = new AttributeInfo(attrDef);
@@ -96,7 +100,9 @@ namespace AcadLib.Blocks
                 {
                     if (!idAttrRef.IsValidEx())
                         continue;
+#pragma warning disable 618
                     using var atrRef = (AttributeReference)idAttrRef.Open(OpenMode.ForRead, false, true);
+#pragma warning restore 618
                     if (atrRef.Visible)
                     {
                         var ai = new AttributeInfo(atrRef);
@@ -104,12 +110,16 @@ namespace AcadLib.Blocks
                     }
                 }
 
+#pragma warning disable 618
                 using var btr = (BlockTableRecord)blRef.BlockTableRecord.Open(OpenMode.ForRead);
+#pragma warning restore 618
                 if (btr.HasAttributeDefinitions)
                 {
                     foreach (var id in btr.Cast<ObjectId>().Where(i => i.ObjectClass == General.ClassAttDef))
                     {
+#pragma warning disable 618
                         using var atrDef = (AttributeDefinition) id.Open(OpenMode.ForRead, false, true);
+#pragma warning restore 618
                         if (!atrDef.Constant || !atrDef.Visible)
                             continue;
                         var ai = new AttributeInfo(atrDef);

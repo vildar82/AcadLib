@@ -54,12 +54,10 @@
         public static bool IsVisibleLayerOnAndUnfrozen([NotNull] this Entity ent)
         {
             if (!ent.Visible) return false;
-            using (var lay = ent.LayerId.GetObject<LayerTableRecord>())
-            {
-                if (lay == null)
-                    return true;
-                return !lay.IsOff && !lay.IsFrozen; // Слой включен и разморожен  и объект видимый
-            }
+            using var lay = ent.LayerId.GetObject<LayerTableRecord>();
+            if (lay == null)
+                return true;
+            return !lay.IsOff && !lay.IsFrozen; // Слой включен и разморожен  и объект видимый
         }
 
         /// <summary>

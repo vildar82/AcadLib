@@ -29,7 +29,7 @@
             return joinedPls;
         }
 
-        private static Polyline GetFirstPolyline([NotNull] List<Polyline> pls)
+        private static Polyline? GetFirstPolyline([NotNull] List<Polyline> pls)
         {
             if (pls.Any())
             {

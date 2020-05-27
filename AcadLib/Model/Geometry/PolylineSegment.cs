@@ -233,8 +233,7 @@
         /// Converts the PolylineSegment into a CircularArc2d.
         /// </summary>
         /// <returns>A new CircularArc2d instance or null if the PolylineSegment bulge is equal to 0.0.</returns>
-        [CanBeNull]
-        public CircularArc2d ToCircularArc()
+        public CircularArc2d? ToCircularArc()
         {
             return IsLinear ? null : new CircularArc2d(_startPoint, _endPoint, Bulge, false);
         }
@@ -255,8 +254,7 @@
         /// Converts the PolylineSegment into a LineSegment2d.
         /// </summary>
         /// <returns>A new LineSegment2d instance or null if the PolylineSegment bulge is not equal to 0.0.</returns>
-        [CanBeNull]
-        public LineSegment2d ToLineSegment()
+        public LineSegment2d? ToLineSegment()
         {
             return IsLinear ? new LineSegment2d(_startPoint, _endPoint) : null;
         }

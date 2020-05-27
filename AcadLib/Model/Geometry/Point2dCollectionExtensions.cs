@@ -7,6 +7,7 @@
     /// <summary>
     /// Provides extension methods for the Point2dCollection type.
     /// </summary>
+    [PublicAPI]
     public static class Point2dCollectionExtensions
     {
         /// <summary>
@@ -29,9 +30,9 @@
         /// <returns>true if the point is found; otherwise, false.</returns>
         public static bool Contains([NotNull] this Point2dCollection pts, Point2d pt, Tolerance tol)
         {
-            for (var i = 0; i < pts.Count; i++)
+            foreach (var t in pts)
             {
-                if (pt.IsEqualTo(pts[i], tol))
+                if (pt.IsEqualTo(t, tol))
                     return true;
             }
 
@@ -55,9 +56,9 @@
         public static void RemoveDuplicate([NotNull] this Point2dCollection pts, Tolerance tol)
         {
             var ptlst = new List<Point2d>();
-            for (var i = 0; i < pts.Count; i++)
+            foreach (var t in pts)
             {
-                ptlst.Add(pts[i]);
+                ptlst.Add(t);
             }
 
             ptlst.Sort((p1, p2) => p1.X.CompareTo(p2.X));

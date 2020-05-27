@@ -16,14 +16,12 @@
         /// <param name="id"></param>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        [CanBeNull]
-        public static T GetObject<T>(this ObjectId id) where T : DBObject
+        public static T? GetObject<T>(this ObjectId id) where T : DBObject
         {
             return id.GetObject<T>(OpenMode.ForRead);
         }
 
-        [CanBeNull]
-        public static T GetObject<T>(this ObjectId id, [NotNull] Transaction t) where T : DBObject
+        public static T? GetObject<T>(this ObjectId id, [NotNull] Transaction t) where T : DBObject
         {
             return id.GetObject<T>(OpenMode.ForRead, t);
         }
@@ -42,16 +40,14 @@
         }
 
         // Opens a DBObject in the given mode (kaefer @ TheSwamp)
-        [CanBeNull]
-        public static T GetObject<T>(this ObjectId id, OpenMode mode) where T : DBObject
+        public static T? GetObject<T>(this ObjectId id, OpenMode mode) where T : DBObject
         {
             if (!id.IsValidEx())
                 return null;
             return id.GetObject(mode, false, true) as T;
         }
 
-        [CanBeNull]
-        public static T GetObject<T>(this ObjectId id, OpenMode mode, [NotNull] Transaction t) where T : DBObject
+        public static T? GetObject<T>(this ObjectId id, OpenMode mode, [NotNull] Transaction t) where T : DBObject
         {
             if (!id.IsValidEx())
                 return null;
@@ -94,7 +90,7 @@
             return ids
                 .Cast<ObjectId>()
                 .Select(id => id.GetObject<T>(mode))
-                .Where(res => res != null);
+                .Where(res => res != null)!;
         }
 
         [NotNull]
@@ -104,7 +100,7 @@
             return ids
                 .Cast<ObjectId>()
                 .Select(id => id.GetObject<T>(mode, t))
-                .Where(res => res != null);
+                .Where(res => res != null)!;
         }
 
         /// <summary>

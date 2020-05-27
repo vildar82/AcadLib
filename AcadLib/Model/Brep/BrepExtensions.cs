@@ -23,8 +23,7 @@
         /// Определение контура для набора полилиний - объекдинением в регион и извлечением внешнего его контура.
         /// Должна быть запущена транзакция
         /// </summary>
-        [CanBeNull]
-        public static Polyline3d GetExteriorContour([NotNull] this List<Polyline> idsPl)
+        public static Polyline3d? GetExteriorContour([NotNull] this List<Polyline> idsPl)
         {
             var colReg = new List<Region>();
             foreach (var pl in idsPl)
@@ -61,36 +60,33 @@
             return GetRegionContour(r1);
         }
 
-        [CanBeNull]
-        public static Polyline3d GetRegionContour(this Region reg)
+        public static Polyline3d? GetRegionContour(this Region reg)
         {
-            Polyline3d resVal = null;
+            Polyline3d? resVal = null;
             double maxArea = 0;
-            using (var brep = new Brep(reg))
+            using var brep = new Brep(reg);
+            foreach (var face in brep.Faces)
             {
-                foreach (var face in brep.Faces)
+                foreach (var loop in face.Loops)
                 {
-                    foreach (var loop in face.Loops)
+                    if (loop.LoopType == LoopType.LoopExterior)
                     {
-                        if (loop.LoopType == LoopType.LoopExterior)
+                        var ptsVertex = new List<Point3d>();
+                        foreach (var vert in loop.Vertices)
                         {
-                            var ptsVertex = new List<Point3d>();
-                            foreach (var vert in loop.Vertices)
+                            if (!ptsVertex.Any(p => p.IsEqualTo(vert.Point, Tolerance.Global)))
                             {
-                                if (!ptsVertex.Any(p => p.IsEqualTo(vert.Point, Tolerance.Global)))
-                                {
-                                    ptsVertex.Add(vert.Point);
-                                }
+                                ptsVertex.Add(vert.Point);
                             }
+                        }
 
-                            var pts = new Point3dCollection(ptsVertex.ToArray());
-                            var pl = new Polyline3d(Poly3dType.SimplePoly, pts, true);
-                            var plArea = pl.Area;
-                            if (plArea > maxArea)
-                            {
-                                resVal = pl;
-                                maxArea = plArea;
-                            }
+                        var pts = new Point3dCollection(ptsVertex.ToArray());
+                        var pl = new Polyline3d(Poly3dType.SimplePoly, pts, true);
+                        var plArea = pl.Area;
+                        if (plArea > maxArea)
+                        {
+                            resVal = pl;
+                            maxArea = plArea;
                         }
                     }
                 }
@@ -106,19 +102,17 @@
         public static List<KeyValuePair<Polyline, BrepLoopType>> GetPolylines(this Region reg)
         {
             var resVal = new List<KeyValuePair<Polyline, BrepLoopType>>();
-            using (var brep = new Brep(reg))
+            using var brep = new Brep(reg);
+            foreach (var face in brep.Faces)
             {
-                foreach (var face in brep.Faces)
+                foreach (var loop in face.Loops)
                 {
-                    foreach (var loop in face.Loops)
-                    {
-                        var ptsVertex = new List<Point2d>();
-                        foreach (var vert in loop.Vertices)
-                            ptsVertex.Add(vert.Point.Convert2d());
+                    var ptsVertex = new List<Point2d>();
+                    foreach (var vert in loop.Vertices)
+                        ptsVertex.Add(vert.Point.Convert2d());
 
-                        var pl = ptsVertex.CreatePolyline();
-                        resVal.Add(new KeyValuePair<Polyline, BrepLoopType>(pl, (BrepLoopType)loop.LoopType));
-                    }
+                    var pl = ptsVertex.CreatePolyline();
+                    resVal.Add(new KeyValuePair<Polyline, BrepLoopType>(pl, (BrepLoopType)loop.LoopType));
                 }
             }
 
@@ -129,17 +123,15 @@
         public static List<KeyValuePair<Point2dCollection, BrepLoopType>> GetPoints2dByLoopType(this Region reg)
         {
             var resVal = new List<KeyValuePair<Point2dCollection, BrepLoopType>>();
-            using (var brep = new Brep(reg))
+            using var brep = new Brep(reg);
+            foreach (var face in brep.Faces)
             {
-                foreach (var face in brep.Faces)
+                foreach (var loop in face.Loops)
                 {
-                    foreach (var loop in face.Loops)
-                    {
-                        var pts2dCol =
-                            new Point2dCollection(loop.Vertices.Select(vert => vert.Point.Convert2d()).ToArray());
-                        resVal.Add(new KeyValuePair<Point2dCollection, BrepLoopType>(pts2dCol,
-                            (BrepLoopType)loop.LoopType));
-                    }
+                    var pts2dCol =
+                        new Point2dCollection(loop.Vertices.Select(vert => vert.Point.Convert2d()).ToArray());
+                    resVal.Add(new KeyValuePair<Point2dCollection, BrepLoopType>(pts2dCol,
+                        (BrepLoopType)loop.LoopType));
                 }
             }
 
@@ -150,16 +142,14 @@
         public static List<Point3d> GetVertices(this Region reg)
         {
             var ptsVertex = new List<Point3d>();
-            using (var brep = new Brep(reg))
+            using var brep = new Brep(reg);
+            foreach (var face in brep.Faces)
             {
-                foreach (var face in brep.Faces)
+                foreach (var loop in face.Loops)
                 {
-                    foreach (var loop in face.Loops)
+                    foreach (var vert in loop.Vertices)
                     {
-                        foreach (var vert in loop.Vertices)
-                        {
-                            ptsVertex.Add(vert.Point);
-                        }
+                        ptsVertex.Add(vert.Point);
                     }
                 }
             }
@@ -168,8 +158,7 @@
         }
 
         [Obsolete("Use CreateSurface")]
-        [CanBeNull]
-        public static Hatch CreateHatch(this Region region, bool createOut, [CanBeNull] out DisposableSet<Polyline> externalLoops)
+        public static Hatch? CreateHatch(this Region region, bool createOut, out DisposableSet<Polyline>? externalLoops)
         {
             externalLoops = createOut ? new DisposableSet<Polyline>() : null;
             var plsByLoop = region.GetPoints2dByLoopType();
@@ -191,7 +180,7 @@
                 h.AppendLoop(HatchLoopTypes.External, pts2dCol, new DoubleCollection(new double[extLoops.Count + 1]));
                 if (createOut)
                 {
-                    externalLoops.Add(pts2dCol.Cast<Point2d>().ToList().CreatePolyline());
+                    externalLoops!.Add(pts2dCol.Cast<Point2d>().ToList().CreatePolyline());
                 }
             }
 
@@ -209,22 +198,19 @@
             return h;
         }
 
-        [CanBeNull]
         [Obsolete("Use CreateSurface")]
-        public static Hatch CreateHatch(this Region region)
+        public static Hatch? CreateHatch(this Region region)
         {
             return CreateHatch(region, false, out _);
         }
 
         public static Surface CreateSurface(this Region region)
         {
-            using (var brep = new Brep(region))
-            {
-                return brep.Surf;
-            }
+            using var brep = new Brep(region);
+            return brep.Surf;
         }
 
-        public static Region Union(this List<Polyline> pls, Region over)
+        public static Region? Union(this List<Polyline> pls, Region over)
         {
             return Union((IEnumerable<Polyline>)pls, over);
         }
@@ -235,18 +221,21 @@
         /// </summary>
         /// <param name="pls">Поли</param>
         /// <param name="over">Контур который должен быть "над" объединенными полилиниями. Т.е. контур этой полилинии вырезается из полученного контура, если попадает на него.</param>
-        public static Region Union([CanBeNull] this IEnumerable<Polyline> pls, Region over)
+        public static Region? Union(this IEnumerable<Polyline>? pls, Region over)
         {
-            if (pls?.Any() != true) return null;
-            var regions = CreateRegion(pls);
-            Region union = null;
+            if (pls?.Any() != true)
+                return null;
+            var regions = CreateRegion(pls!);
+            Region? union = null;
             try
             {
                 union = UnionRegions(regions);
             }
             finally
             {
-                regions.Remove(union);
+                if (union != null)
+                    regions.Remove(union);
+
                 foreach (var item in regions)
                 {
                     item.Dispose();
@@ -256,18 +245,18 @@
             // Вырезание over региона
             if (over != null)
             {
-                union.BooleanOperation(BooleanOperationType.BoolSubtract, over);
+                union?.BooleanOperation(BooleanOperationType.BoolSubtract, over);
             }
 
             return union;
         }
 
-        public static Region CreateRegion(this Polyline pl)
+        public static Region? CreateRegion(this Polyline pl)
         {
             return CreateRegion((Curve)pl);
         }
 
-        public static Region CreateRegion([CanBeNull] this Curve curve)
+        public static Region? CreateRegion([CanBeNull] this Curve curve)
         {
             if (curve == null)
                 return null;
@@ -286,39 +275,37 @@
             return reg;
         }
 
-        [NotNull]
         [Obsolete("Используй CreateRegionFromHatch")]
-        public static Region CreateRegion([NotNull] this Hatch hatch)
+        public static Region? CreateRegion([NotNull] this Hatch hatch)
         {
-            using (var loops = hatch.GetPolylines2(Block.Tolerance01, HatchLoopTypes.External | HatchLoopTypes.Outermost))
-            {
-                var validLoops = loops.Where(w => w.Loop.Area > 0).ToList();
+            using var loops = hatch.GetPolylines2(Block.Tolerance01, HatchLoopTypes.External | HatchLoopTypes.Outermost);
+            var validLoops = loops.Where(w => w.Loop.Area > 0).ToList();
 #if DRAW
                 validLoops.Select(s=>(Curve)s.Loop.Clone()).AddEntityToCurrentSpace(new EntityOptions{Color = Color.DarkRed});
 #endif
-                var externalLoops = new List<Curve>();
-                var internalLoops = new List<Curve>();
-                foreach (var loop in validLoops)
+            var externalLoops = new List<Curve>();
+            var internalLoops = new List<Curve>();
+            foreach (var loop in validLoops)
+            {
+                if (loop.Types.HasFlag(HatchLoopTypes.External))
                 {
-                    if (loop.Types.HasFlag(HatchLoopTypes.External))
-                    {
-                        externalLoops.Add(loop.Loop);
-                    }
-                    else
-                    {
-                        internalLoops.Add(loop.Loop);
-                    }
+                    externalLoops.Add(loop.Loop);
                 }
-
-                if (!externalLoops.Any())
+                else
                 {
-                    Inspector.AddError("Штриховка без внешних контуров - пропущена", hatch);
+                    internalLoops.Add(loop.Loop);
                 }
+            }
 
-                var externalRegion = GetRegion(externalLoops);
-                if (internalLoops.Any())
-                {
-                    var internalRegion = GetRegion(internalLoops);
+            if (!externalLoops.Any())
+            {
+                Inspector.AddError("Штриховка без внешних контуров - пропущена", hatch);
+            }
+
+            var externalRegion = GetRegion(externalLoops);
+            if (internalLoops.Any())
+            {
+                var internalRegion = GetRegion(internalLoops);
 #if DRAW
                     ((Region) externalRegion.Clone()).AddEntityToCurrentSpace(new EntityOptions {Color = Color.Blue});
                     ((Region) internalRegion.Clone()).AddEntityToCurrentSpace(new EntityOptions
@@ -326,13 +313,12 @@
                         Color = Color.DarkOliveGreen
                     });
 #endif
-                    externalRegion.BooleanOperation(BooleanOperationType.BoolSubtract, internalRegion);
-                    internalRegion.Dispose();
-                }
-
-                var region = externalRegion;
-                return region;
+                externalRegion?.BooleanOperation(BooleanOperationType.BoolSubtract, internalRegion);
+                internalRegion?.Dispose();
             }
+
+            var region = externalRegion;
+            return region;
         }
 
         [NotNull]
@@ -394,7 +380,7 @@
             return res;
         }
 
-        public static Region UnionRegions([CanBeNull] this List<Region> regions)
+        public static Region? UnionRegions([CanBeNull] this List<Region> regions)
         {
             if (regions?.Any() != true)
                 return null;
@@ -425,14 +411,13 @@
             hatchEditAppendIds.Add(e.DBObject.Id);
         }
 
-        private static Region GetRegion([NotNull] IEnumerable<Curve> pls)
+        private static Region? GetRegion([NotNull] IEnumerable<Curve> pls)
         {
-            using (var regions = new DisposableSet<Region>(pls.CreateRegion()))
-            {
-                var reg = regions.Skip(1).Any() ? regions.ToList().UnionRegions() : regions.First();
+            using var regions = new DisposableSet<Region>(pls.CreateRegion());
+            var reg = regions.Skip(1).Any() ? regions.ToList().UnionRegions() : regions.First();
+            if (reg != null)
                 regions.Remove(reg);
-                return reg;
-            }
+            return reg;
         }
     }
 }

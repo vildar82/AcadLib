@@ -11,12 +11,10 @@
     {
         public static void SynchronizeAttributes(this ObjectId btrId)
         {
-            using (var t = btrId.Database.TransactionManager.StartTransaction())
-            {
-                var btr = btrId.GetObject<BlockTableRecord>();
-                btr.SynchronizeAttributes();
-                t.Commit();
-            }
+            using var t = btrId.Database.TransactionManager.StartTransaction();
+            var btr = btrId.GetObject<BlockTableRecord>();
+            btr.SynchronizeAttributes();
+            t.Commit();
         }
 
         /// <summary>
@@ -29,7 +27,7 @@
             var tr = target.Database.TransactionManager.TopTransaction;
             if (tr == null)
                 throw new Autodesk.AutoCAD.Runtime.Exception(ErrorStatus.NoActiveTransactions);
-            var attDefs = target.GetAttributes(tr);
+            var attDefs = target.GetAttributes();
             foreach (ObjectId id in target.GetBlockReferenceIds(true, false))
             {
                 var br = id.GetObjectT<BlockReference>();
@@ -42,7 +40,7 @@
                 foreach (ObjectId id in target.GetAnonymousBlockIds())
                 {
                     var btr = id.GetObjectT<BlockTableRecord>();
-                    attDefs = btr.GetAttributes(tr);
+                    attDefs = btr.GetAttributes();
                     foreach (ObjectId brId in btr.GetBlockReferenceIds(true, false))
                     {
                         var br = brId.GetObject<BlockReference>(OpenMode.ForWrite);
@@ -53,7 +51,7 @@
         }
 
         [NotNull]
-        private static List<AttributeDefinition> GetAttributes([NotNull] this BlockTableRecord target, Transaction tr)
+        private static List<AttributeDefinition> GetAttributes([NotNull] this BlockTableRecord target)
         {
             var attDefs = new List<AttributeDefinition>();
             foreach (var id in target)
