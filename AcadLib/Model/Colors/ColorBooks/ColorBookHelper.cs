@@ -36,6 +36,7 @@ namespace AcadLib.Colors
             IdTextStylePik = db.GetTextStylePIK();
 
             using var t = db.TransactionManager.StartTransaction();
+
             // Форма стартовых настроек
             Options.Show();
 
