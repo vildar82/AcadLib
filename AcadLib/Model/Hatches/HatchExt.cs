@@ -23,7 +23,7 @@
                 if (hatch.Id.IsNull)
                 {
                     using var t = db.TransactionManager.StartTransaction();
-                    var cs     = db.CurrentSpaceId.GetObjectT<BlockTableRecord>(OpenMode.ForWrite);
+                    var cs = db.CurrentSpaceId.GetObjectT<BlockTableRecord>(OpenMode.ForWrite);
                     var hClone = (Hatch) hatch.Clone();
                     hId = cs.AppendEntity(hClone);
                     t.AddNewlyCreatedDBObject(hClone, true);
@@ -266,7 +266,7 @@
             for (var i = 0; i < nloops; i++)
             {
                 var loop = ht.GetLoopAt(i);
-                if (loopType.HasAny(loop.LoopType))
+                if (loopType.HasAny(loop.LoopType) || nloops == 1)
                 {
                     Debug.WriteLine($"GetPolylines2 HasFlag {loop.LoopType}!");
                     var poly = new Polyline();
