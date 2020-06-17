@@ -254,8 +254,6 @@
     <Compile Include="Model\Statistic\CheckUpdates.cs" />
     <Compile Include="Model\Statistic\CivilTest.cs" />
     <Compile Include="Model\Statistic\Db\PluginStatisticDbContext.cs" />
-    <Compile Include="Model\Statistic\Eventer.cs" />
-    <Compile Include="Model\Statistic\EventsStatisticService.cs" />
     <Compile Include="Model\Files\FileDataExt.cs" />
     <Compile Include="Model\Geometry\CurveExt.cs" />
     <Compile Include="Model\Geometry\Polylines\Join\JoinPolyline.cs" />

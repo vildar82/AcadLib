@@ -2,6 +2,6 @@ namespace AcadLib.Properties
 {
     public static class Version
     {
-        public const string Value = "1.2.191.*";
+        public const string Value = "20.6.192.*";
     }
 }
