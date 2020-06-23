@@ -15,11 +15,16 @@
         {
             try
             {
-                using (var adUtils = new NetLib.AD.ADUtils())
+                try
                 {
+                    using var adUtils = new NetLib.AD.ADUtils();
                     UserGroupsAd = adUtils.GetCurrentUserGroups(out var fioAd);
                     IsProductUser = UserGroupsAd.Any(g => g == "000883_Департамент продукта");
                     FioAD = fioAd;
+                }
+                catch (Exception ex)
+                {
+                    Logger.Log.Error(ex, "adUtils");
                 }
 
                 UserData = new MongoDblib.UsersData.DbUserData().GetCurrentUser();
@@ -36,7 +41,7 @@
                     //
                 }
 
-                Logger.Log.Error(ex, "adUtils");
+                Logger.Log.Error(ex, "adUtils and mongo load user info");
             }
         }
 
@@ -63,6 +68,7 @@
                     FioAD = FioAD,
                     UserGroupsAd = UserGroupsAd
                 };
+
                 var file = GetFile();
                 user.Serialize(file);
             }
