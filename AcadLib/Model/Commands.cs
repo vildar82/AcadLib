@@ -125,7 +125,7 @@ namespace AcadLib
                     UserSettingsService.Show();
                 }
 
-                // Восстановление вкладок чертежей
+                // Восстановление вкладок чCheckUpdatesNotifyертежей
                 //Utils.Tabs.RestoreTabs.Init(); // Фаталит у Черновой
                 Logger.Log.Info("AcadLib Initialize end success.");
             }

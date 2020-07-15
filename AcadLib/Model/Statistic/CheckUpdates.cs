@@ -113,7 +113,7 @@
             try
             {
                 CheckUpdatesNotify(true);
-                Logger.Log.Info("CheckUpdates.CheckUpdatesNotify.");
+                Logger.Log.Info("CheckUpdates.CheckUpdatesNotify end.");
             }
             catch (Exception ex)
             {

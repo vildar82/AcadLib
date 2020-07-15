@@ -3,7 +3,7 @@
 <package>
     <metadata>
         <id>AcadLib</id>
-        <version>1.2.191</version>
+        <version>1.2.194</version>
         <authors>Vildar</authors>
         <projectUrl>https://github.com/vildar82/AcadLib</projectUrl>
         <requireLicenseAcceptance>false</requireLicenseAcceptance>

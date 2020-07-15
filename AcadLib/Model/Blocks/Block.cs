@@ -472,6 +472,17 @@ namespace AcadLib.Blocks
         }
 
         /// <summary>
+        /// Получение валидной строки для имени блока. С замоной всех ненужных символов на .
+        /// </summary>
+        /// <param name="name">Имя для блока</param>
+        /// <returns>Валидная строка имени</returns>
+        [NotNull]
+        public static string GetValidNameForBlock([NotNull] string name, string replacement)
+        {
+            return name.GetValidDbSymbolName(replacement);
+        }
+
+        /// <summary>
         /// Проверка дублирования вхождений блоков
         /// </summary>
         /// <param name="blk1"></param>
