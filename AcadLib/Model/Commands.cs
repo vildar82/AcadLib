@@ -188,7 +188,11 @@ namespace AcadLib
         [CommandMethod(Group, "PIK_UserSettings", CommandFlags.Modal)]
         public void PIK_UserSettings()
         {
-            CommandStart.Start(doc => { UserSettingsService.Show(); });
+            CommandStart.Start(doc =>
+            {
+                UserSettingsService.Show();
+                UserInfo.ShowUserProfileRegister();
+            });
         }
 
         [CommandMethod(Group, CommandBlockList, CommandFlags.Modal)]

@@ -93,6 +93,7 @@
             {
                 if (!Directory.Exists(dir))
                     return;
+
                 var dlls = GetDllsForCurVerAcad(Directory.GetFiles(dir, "*.dll", SearchOption.TopDirectoryOnly).ToList());
                 foreach (var dll in dlls)
                 {
@@ -103,6 +104,7 @@
                 var subDeepLevel = deepLevel - 1;
                 if (subDeepLevel < 0)
                     return;
+
                 foreach (var subDir in Directory.EnumerateDirectories(dir))
                 {
                     LoadFromFolder(subDir, subDeepLevel);

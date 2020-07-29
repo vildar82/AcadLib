@@ -28,6 +28,18 @@
                 }
 
                 UserData = new MongoDblib.UsersData.DbUserData().GetCurrentUser();
+                if (UserData == null)
+                {
+                    try
+                    {
+                        ShowUserProfileRegister();
+                    }
+                    catch (Exception ex)
+                    {
+                        Logger.Log.Error(ex, "ShowUserProfileRegister");
+                    }
+                }
+
                 SaveBackup();
             }
             catch (Exception ex)
