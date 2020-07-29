@@ -70,6 +70,16 @@
             MongoDblib.UsersData.UserDataRegUI.ShowUserProfileRegister(FioAD, string.Empty, "AutoCAD");
         }
 
+        public static List<Division> GetDivisions()
+        {
+            return new MongoDblib.UsersData.DbUserData().GetDivisions();
+        }
+
+        public static List<SubDivision> GetSubDivisions()
+        {
+            return new MongoDblib.UsersData.DbUserData().GetSubDivisions();
+        }
+
         private static void SaveBackup()
         {
             try
@@ -111,14 +121,5 @@
         {
             return Path.GetUserPluginFile("UserInfo", "UserInfo");
         }
-    }
-
-    public class UserInfoData
-    {
-        public string FioAD { get; set; }
-
-        public UserData UserData { get; set; }
-
-        public List<string> UserGroupsAd { get; set; }
     }
 }

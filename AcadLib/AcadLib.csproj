@@ -457,6 +457,7 @@
     <Compile Include="Model\Units\UnitsConvertHelper.cs" />
     <Compile Include="Model\Units\UnitsNetExt.cs" />
     <Compile Include="Model\UserInfo.cs" />
+    <Compile Include="Model\UserInfoData.cs" />
     <Compile Include="Model\User\PluginSettings.cs" />
     <Compile Include="Model\User\UI\UserGroup.cs" />
     <Compile Include="Model\User\UI\UserSettingsView.xaml.cs">
