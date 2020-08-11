@@ -409,6 +409,7 @@
         private static void SetValue(DynamicBlockReferenceProperty dynProp, object value)
         {
             // https://adn-cis.org/forum/index.php?topic=9816.msg43581#msg43581
+            object valueObj;
             switch (dynProp.PropertyTypeCode)
             {
                 // kDwgNull
@@ -417,12 +418,17 @@
 
                 // kDwgReal
                 case 1:
-                    dynProp.Value = value.GetValue<double>();
+                    valueObj = value.GetValue<double>();
                     break;
 
                 default:
-                    dynProp.Value = Convert.ChangeType(value, dynProp.Value.GetType());
+                    valueObj = Convert.ChangeType(value, dynProp.Value.GetType());
                     break;
+            }
+
+            if (!Equals(valueObj, dynProp.Value))
+            {
+                dynProp.Value = valueObj;
             }
         }
 
@@ -449,6 +455,7 @@
             {
                 if (value == null)
                     return;
+
                 try
                 {
                     FillDyn(prop, value);
@@ -457,7 +464,7 @@
                 {
                     Inspector.AddError(
                         $"Не удалось установить динамический параметр '{prop.Name}' " +
-                        $"со значением {prop.Value} в блок '{BlName}'.",
+                        $"со значением '{prop.Value}' в блок '{BlName}'.",
                         IdBlRef,
                         System.Drawing.SystemIcons.Error);
                 }
