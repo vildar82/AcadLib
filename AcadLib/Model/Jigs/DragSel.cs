@@ -24,6 +24,21 @@
         /// <returns></returns>
         public static bool Drag(this Editor ed, [CanBeNull] ObjectId[] ids, Point3d pt)
         {
+            return Drag(ed, ids, pt, true);
+        }
+
+        /// <summary>
+        /// Перемещение объектов
+        /// Открытая транзакция не требуется
+        /// При отмене пользователем - объекты удаляются
+        /// </summary>
+        /// <param name="ed"></param>
+        /// <param name="ids"></param>
+        /// <param name="pt"></param>
+        /// /// <param name="escErase">Удалять при нажатии Esc</param>
+        /// <returns></returns>
+        public static bool Drag(this Editor ed, [CanBeNull] ObjectId[] ids, Point3d pt, bool escErase)
+        {
             if (ids == null || !ids.Any())
                 return false;
             var tolerance = new Tolerance(0.1, 0.1);
@@ -59,8 +74,9 @@
                 return true;
             }
 
-            using (var t = ed.Document.TransactionManager.StartTransaction())
+            if (escErase)
             {
+                using var t = ed.Document.TransactionManager.StartTransaction();
                 foreach (var id in ids)
                 {
                     var ent = id.GetObject(OpenMode.ForWrite);
