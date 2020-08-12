@@ -3,12 +3,13 @@
 <package>
     <metadata>
         <id>AcadLib</id>
-        <version>1.2.198</version>
+        <version>1.2.199</version>
         <authors>Vildar</authors>
         <projectUrl>https://github.com/vildar82/AcadLib</projectUrl>
         <requireLicenseAcceptance>false</requireLicenseAcceptance>
         <description>Net4.7.1 c# AutoCAD Library, WPF + ReactiveUI</description>
         <copyright>Copyright 2018</copyright>
+        <releaseNotes>Fix AddAttributes to BlockReference</releaseNotes>
         <tags>C# AutoCAD</tags>
         <license type="expression">MIT</license>
         <dependencies>

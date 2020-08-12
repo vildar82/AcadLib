@@ -87,6 +87,8 @@
             foreach (var attDef in attDefs)
             {
                 var attRef = new AttributeReference();
+                br.AttributeCollection.AppendAttribute(attRef);
+                tr.AddNewlyCreatedDBObject(attRef, true);
                 attRef.SetAttributeFromBlock(attDef, br.BlockTransform);
                 if (attDef.Constant)
                 {
@@ -98,9 +100,6 @@
                 {
                     attRef.TextString = attValues[attRef.Tag];
                 }
-
-                br.AttributeCollection.AppendAttribute(attRef);
-                tr.AddNewlyCreatedDBObject(attRef, true);
             }
         }
     }
