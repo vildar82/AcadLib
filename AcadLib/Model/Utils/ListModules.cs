@@ -1,4 +1,6 @@
-﻿namespace AcadLib.Utils
+﻿using NetLib;
+
+namespace AcadLib.Utils
 {
     using System;
     using System.Diagnostics;
@@ -21,6 +23,9 @@
                 Name = $"{s.FullName}_{GetLocation(s)}",
                 References = s.GetReferencedAssemblies().Select(r => r.FullName).ToList()
             }).OrderBy(o => o.Name).ToList();
+
+            Logger.Log.Info($"ListModules: {modules.JoinToString(m => m.Name, "\r\n")}");
+
             var sb = new StringBuilder($"Список модулей {Environment.UserName}_{Environment.MachineName}_{DateTime.Now}");
             sb.AppendLine();
             var i = 1;

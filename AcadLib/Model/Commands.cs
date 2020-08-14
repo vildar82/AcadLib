@@ -89,7 +89,6 @@ namespace AcadLib
                 if (PikSettings.IsDisabledSettings)
                 {
                     Logger.Log.Info("Настройки отключены (PikSettings.IsDisabledSettings) - загрузка прервана.");
-                    AppDomain.CurrentDomain.AssemblyResolve += CurrentDomain_AssemblyResolve;
                     return;
                 }
 
