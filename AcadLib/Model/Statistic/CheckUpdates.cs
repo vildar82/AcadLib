@@ -10,21 +10,18 @@
     using System.Reactive.Subjects;
     using System.Text;
     using System.Text.RegularExpressions;
-    using System.Threading;
     using System.Windows.Threading;
     using AutoCAD_PIK_Manager;
     using AutoCAD_PIK_Manager.Settings;
-    using Autodesk.AutoCAD.ApplicationServices;
     using JetBrains.Annotations;
     using NetLib;
     using NetLib.Notification;
-    using User;
     using Application = Autodesk.AutoCAD.ApplicationServices.Core.Application;
 
     public static class CheckUpdates
     {
-        [NotNull] private static readonly Dispatcher Dispatcher = Dispatcher.CurrentDispatcher;
-        [NotNull] private static readonly Subject<bool> Changes = new Subject<bool>();
+        private static readonly Dispatcher Dispatcher = Dispatcher.CurrentDispatcher;
+        private static readonly Subject<bool> Changes = new Subject<bool>();
 
         /// <summary>
         /// Отключенные уведомления групп пользователем
@@ -34,30 +31,16 @@
         private static List<FileWatcherRx> watchers;
         private static bool isNotify;
 
-        static CheckUpdates()
-        {
-            UserSettingsService.ChangeSettings += (o, e) =>
-            {
-                var isNotifyNew = GetNotifySettngsValue();
-                if (isNotifyNew != isNotify)
-                {
-                    isNotify = isNotifyNew;
-                    if (isNotify)
-                        Start();
-                    else
-                        Stop();
-                }
-            };
-        }
-
         public static bool NeedNotify([CanBeNull] string updateDesc, out string descResult)
         {
             descResult = updateDesc;
             if (updateDesc.IsNullOrEmpty())
                 return true;
+
             if (updateDesc.StartsWith("no", StringComparison.OrdinalIgnoreCase) ||
                 updateDesc.StartsWith("нет", StringComparison.OrdinalIgnoreCase))
                 return false;
+
             return IsPersonalNotify(updateDesc, out descResult);
         }
 
@@ -81,8 +64,9 @@
                                         NotNotifyGroups[updateVersion.GroupName] = updateVersion.VersionServerDate;
                                     }
                                 }
-                            }
+                            },
                         };
+
                         Notify.ShowOnScreen(msg, NotifyType.Warning, opt);
                         Logger.Log.Info($"CheckUpdatesNotify '{msg}'");
                     }
@@ -100,10 +84,7 @@
 
         internal static void Start()
         {
-            isNotify = GetNotifySettngsValue();
-            if (!isNotify)
-                return;
-            Changes.Throttle(TimeSpan.FromMilliseconds(1000)).Subscribe(s => Application.Idle += Application_Idle);
+            Changes.Throttle(TimeSpan.FromMinutes(10)).Subscribe(s => Application.Idle += Application_Idle);
             Application.Idle += Application_Idle;
         }
 
@@ -130,12 +111,6 @@
                     watcher.Watcher?.Dispose();
                 }
             }
-        }
-
-        private static bool GetNotifySettngsValue()
-        {
-            return UserSettingsService.GetPluginValue<bool>(UserSettingsService.CommonName,
-                UserSettingsService.CommonParamNotify);
         }
 
         /// <summary>

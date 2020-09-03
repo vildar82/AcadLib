@@ -17,8 +17,6 @@
     public static class UserSettingsService
     {
         internal const string CommonName = Commands.GroupCommon;
-        internal const string CommonParamNotify = "NotificationsOn";
-        [NotNull]
         private static LocalFileData<UserSettings> _userData;
         private static HashSet<string> _activePlugins = new HashSet<string>();
 
@@ -26,7 +24,6 @@
         {
             _userData = new LocalFileData<UserSettings>(Path.GetUserPluginFile(string.Empty, "UserSettings.json"), false);
             _userData.TryLoad(() => new UserSettings());
-            RegCommonSettings();
             CommonSettings = GetPluginSettings(CommonName);
         }
 
@@ -203,29 +200,6 @@
             }
 
             incorrectPlugins.ForEach(p => _userData.Data.PluginSettings.Remove(p));
-        }
-
-        private static void RegCommonSettings()
-        {
-            RegPlugin(CommonName, CreateCommonPlugin, CheckCommonPlugin);
-        }
-
-        private static PluginSettings CreateCommonPlugin()
-        {
-            var p = new PluginSettings { Name = CommonName };
-            AddCommonParamNotify(p);
-            return p;
-        }
-
-        private static bool AddCommonParamNotify(PluginSettings plugin)
-        {
-            plugin.Add(CommonParamNotify, "Уведомления", "Включение/отключение всплывающих уведомлений об изменении настроек", true);
-            return true;
-        }
-
-        private static void CheckCommonPlugin(PluginSettings plugin)
-        {
-            plugin.GetPluginValue(CommonParamNotify, () => AddCommonParamNotify(plugin));
         }
     }
 }
