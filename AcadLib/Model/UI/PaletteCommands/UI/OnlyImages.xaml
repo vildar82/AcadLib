@@ -3,31 +3,31 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:properties="clr-namespace:AcadLib.Properties"
         xmlns:paletteCommands="clr-namespace:AcadLib.PaletteCommands"
-        xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls"
         xmlns:acwt="clr-namespace:Autodesk.Windows.Themes;assembly=AdUiPalettes"
+        xmlns:mah="http://metro.pik.com/winfx/xaml/controls"
         Name="userControl"
         d:DataContext="{d:DesignInstance paletteCommands:DesignTimePalette}" mc:Ignorable="d">
     <UserControl.Resources>
         <DataTemplate DataType="{x:Type paletteCommands:SplitCommand}">
-            <controls:SplitButton Name="split" ItemsSource="{Binding Commands}" SelectedItem="{Binding SelectedCommand}"
+            <mah:SplitButton Name="split" ItemsSource="{Binding Commands}" SelectedItem="{Binding SelectedCommand}"
                     Width="{Binding DataContext.ImageSize, ElementName=split}" Command="{Binding SelectedCommand.Command}" BorderThickness="0" VerticalAlignment="Top"
                     VerticalContentAlignment="Top" Margin="1"
                     Background="{Binding CurrentTheme.TabBackgroundBrush, Source={x:Static acwt:ThemeManager.PaletteSettings}}">
-                <controls:SplitButton.ItemTemplate>
+                <mah:SplitButton.ItemTemplate>
                     <DataTemplate>
                         <Image Source="{Binding Image}" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="1"
                                Width="{Binding PaletteImageSize, Source={x:Static properties:Settings.Default}}"
                                Height="{Binding PaletteImageSize, Source={x:Static properties:Settings.Default}}" 
                                ToolTip="{Binding Name}"/>
                     </DataTemplate>
-                </controls:SplitButton.ItemTemplate>
+                </mah:SplitButton.ItemTemplate>
                 <ToolTipService.ToolTip>
                     <StackPanel MaxWidth="500">
                         <TextBlock Margin="1" Text="{Binding SelectedCommand.Name}" TextWrapping="Wrap" />
                         <TextBlock Margin="1" Text="{Binding SelectedCommand.Description}" TextWrapping="Wrap" />
                     </StackPanel>
                 </ToolTipService.ToolTip>
-                <controls:SplitButton.ContextMenu>
+                <mah:SplitButton.ContextMenu>
                     <ContextMenu ItemsSource="{Binding SelectedCommand.ContexMenuItems}">
                         <ContextMenu.ItemContainerStyle>
                             <Style TargetType="{x:Type MenuItem}">
@@ -37,8 +37,8 @@
                             </Style>
                         </ContextMenu.ItemContainerStyle>
                     </ContextMenu>
-                </controls:SplitButton.ContextMenu>
-            </controls:SplitButton>
+                </mah:SplitButton.ContextMenu>
+            </mah:SplitButton>
         </DataTemplate>
         <DataTemplate DataType="{x:Type paletteCommands:PaletteCommand}">
             <Button Command="{Binding Command}" BorderThickness="0" Margin="1" 

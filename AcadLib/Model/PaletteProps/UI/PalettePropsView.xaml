@@ -5,11 +5,10 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:AcadLib.PaletteProps.UI"
-    xmlns:wpf="clr-namespace:NetLib.WPF;assembly=NetLib"
     xmlns:conv="clr-namespace:NetLib.WPF.Converters;assembly=NetLib"
     xmlns:properties="clr-namespace:AcadLib.Properties"
-    xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
     xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+    xmlns:controls="http://metro.pik.com/winfx/xaml/controls"
     d:DataContext="{d:DesignInstance local:PalettePropsVM}"
     Background="{DynamicResource BackBrush}"
     Name="Palette"
@@ -19,7 +18,7 @@
         <ResourceDictionary Source="PalettePropsStyle.xaml" />
     </UserControl.Resources>
     <Grid HorizontalAlignment="Stretch"
-          mah:VisibilityHelper.IsHidden="{Binding Types, Converter={conv:IsNullConverter}}">
+          controls:VisibilityHelper.IsHidden="{Binding Types, Converter={conv:IsNullConverter}}">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition />
@@ -84,7 +83,7 @@
                             </Grid>
                             <!--Список свойств группы-->
                             <ItemsControl Grid.Row="1" ItemsSource="{Binding Properties}" VerticalAlignment="Top"
-                                          mah:VisibilityHelper.IsVisible="{Binding IsExpanded}"
+                                          controls:VisibilityHelper.IsVisible="{Binding IsExpanded}"
                                           PreviewMouseWheel="OnPreviewMouseWheel" Margin="5,0,0,0">
                                 <ItemsControl.ItemTemplate>
                                     <DataTemplate>

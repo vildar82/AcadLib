@@ -131,7 +131,7 @@
             }
             catch (Exception e)
             {
-                AutoCAD_PIK_Manager.Log.Error(e, $"YandexReport");
+                AutoCAD_PIK_Manager.Log.Error(e, "YandexReport");
             }
         }
 

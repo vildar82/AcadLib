@@ -1,19 +1,21 @@
 ﻿<UserControl x:Class="AcadLib.UI.PaletteCommands.UI.ImagesAndText"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:paletteCommands="clr-namespace:AcadLib.PaletteCommands" xmlns:properties="clr-namespace:AcadLib.Properties"
-             xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls"
+        xmlns:paletteCommands="clr-namespace:AcadLib.PaletteCommands"
+        xmlns:properties="clr-namespace:AcadLib.Properties"
         xmlns:acwt="clr-namespace:Autodesk.Windows.Themes;assembly=AdUiPalettes"
+        xmlns:mah="http://metro.pik.com/winfx/xaml/controls"
         Name="userControl"
         d:DataContext="{d:DesignInstance paletteCommands:DesignTimePalette}" mc:Ignorable="d">
     <UserControl.Resources>
         <DataTemplate DataType="{x:Type paletteCommands:SplitCommand}">
-            <controls:SplitButton ItemsSource="{Binding Commands}" SelectedItem="{Binding SelectedCommand}"
+            <mah:SplitButton ItemsSource="{Binding Commands}" SelectedItem="{Binding SelectedCommand}"
                     Command="{Binding SelectedCommand.Command}" BorderThickness="0" VerticalAlignment="Top" VerticalContentAlignment="Top"
                     Width="{Binding DataContext.ButtonWidth, ElementName=userControl}" Margin="1"
                                   Background="{Binding CurrentTheme.TabBackgroundBrush, Source={x:Static acwt:ThemeManager.PaletteSettings}}">
-                <controls:SplitButton.ItemTemplate>
+                <mah:SplitButton.ItemTemplate>
                     <DataTemplate>
                         <StackPanel Margin="1">
                             <Image  Source="{Binding Image}" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="1"
@@ -23,14 +25,14 @@
                                     FontSize="{Binding PaletteFontSize, Source={x:Static properties:Settings.Default}}" Margin="1"/>
                         </StackPanel>
                     </DataTemplate>
-                </controls:SplitButton.ItemTemplate>
+                </mah:SplitButton.ItemTemplate>
                 <ToolTipService.ToolTip>
                     <StackPanel MaxWidth="500">
                         <TextBlock Margin="1" Text="{Binding SelectedCommand.Name}" TextWrapping="Wrap" />
                         <TextBlock Margin="1" Text="{Binding SelectedCommand.Description}" TextWrapping="Wrap" />
                     </StackPanel>
                 </ToolTipService.ToolTip>
-                <controls:SplitButton.ContextMenu>
+                <mah:SplitButton.ContextMenu>
                     <ContextMenu ItemsSource="{Binding SelectedCommand.ContexMenuItems}">
                         <ContextMenu.ItemContainerStyle>
                             <Style TargetType="{x:Type MenuItem}">
@@ -40,8 +42,8 @@
                             </Style>
                         </ContextMenu.ItemContainerStyle>
                     </ContextMenu>
-                </controls:SplitButton.ContextMenu>
-            </controls:SplitButton>
+                </mah:SplitButton.ContextMenu>
+            </mah:SplitButton>
         </DataTemplate>
         <DataTemplate DataType="{x:Type paletteCommands:PaletteCommand}">
             <Button Command="{Binding Command}" BorderThickness="0" VerticalAlignment="Top" VerticalContentAlignment="Top"

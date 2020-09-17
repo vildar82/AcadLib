@@ -5,8 +5,8 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:wpf="clr-namespace:NetLib.WPF;assembly=NetLib"
         xmlns:ui="clr-namespace:AcadLib.Plot.UI"
-        xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
         xmlns:converters="clr-namespace:NetLib.WPF.Converters;assembly=NetLib"
+        xmlns:controls="http://metro.pik.com/winfx/xaml/controls"
         d:DataContext="{d:DesignInstance ui:PlotOptionsVM}"
         mc:Ignorable="d"
         Title="Настройки печати" Height="400" Width="450" >
@@ -18,8 +18,6 @@
                         <Setter Property="FontWeight" Value="Bold"/>
                         <Setter Property="Margin" Value="15,1,1,1"/>
                     </Style.Setters>
-                </Style>
-                <Style TargetType="{x:Type mah:ToggleSwitch}" BasedOn="{StaticResource MahApps.Metro.Styles.ToggleSwitch.Win10}">
                 </Style>
                 <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource {x:Type TextBlock}}">
                     <Setter Property="Margin" Value="1,4,1,4"/>
@@ -68,7 +66,7 @@
                 
                 <!-- С подпапками -->
                 <TextBlock Grid.Row="3" Grid.Column="0" Text="С подпапками" ToolTip="Если выбрана печать всей папки, то включать все файлы в подпапках удовлетворяющие фильтру."/>
-                <mah:ToggleSwitch Grid.Row="3" Grid.Column="1" IsChecked="{Binding IncludeSubdirs}" Content="" 
+                <controls:ToggleSwitch Grid.Row="3" Grid.Column="1" IsChecked="{Binding IncludeSubdirs}" Content=""
                                   ToolTip="Если выбрана печать всей папки, то включать все файлы в подпапках удовлетворяющие фильтру."/>
                 
                 <!-- Сортировка по -->
@@ -94,7 +92,7 @@
                 
                 <!-- Использовать фильтр -->
                 <TextBlock Grid.Row="1" Grid.Column="0" Text="Использовать фильтр" ToolTip="Включение и отключение фильтров."/>
-                <mah:ToggleSwitch Grid.Row="1" Grid.Column="1" IsChecked="{Binding FilterState}" Content=""/>
+                <controls:ToggleSwitch Grid.Row="1" Grid.Column="1" IsChecked="{Binding FilterState}" Content=""/>
                 
                 <!-- Фильтр по названию вкладок -->
                 <TextBlock Grid.Row="2" Grid.Column="0" Text="Фильтр по названию вкладок" ToolTip="Печатать только вкладки соответствующим заданной строке поиска. Через | можно складывать условия ИЛИ."/>
@@ -120,12 +118,12 @@
                 
                 <!-- Добавлять бланк -->
                 <TextBlock Grid.Row="1" Grid.Column="0" Text="Добавлять бланк" ToolTip="Вставлять бланк листа в итоговый pdf?"/>
-                <mah:ToggleSwitch Grid.Row="1" Grid.Column="1" IsChecked="{Binding BlankOn}" Content=""
+                <controls:ToggleSwitch Grid.Row="1" Grid.Column="1" IsChecked="{Binding BlankOn}" Content=""
                                   ToolTip="Вставлять бланк листа в итоговый pdf?"/>
                 
                 <!-- Номер листа для бланка -->
                 <TextBlock Grid.Row="2" Grid.Column="0" Text="Номер листа для бланка"/>
-                <mah:NumericUpDown Grid.Row="2" Grid.Column="1" Value="{Binding BlankPageNumber}" Minimum="1" NumericInputMode="Numbers"
+                <controls:NumericUpDown Grid.Row="2" Grid.Column="1" Value="{Binding BlankPageNumber}" Minimum="1" NumericInputMode="Numbers"
                                    VerticalAlignment="Center" HideUpDownButtons="True" TextAlignment="Left"/>
             </Grid>
         </Grid>

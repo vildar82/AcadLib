@@ -18,7 +18,6 @@ namespace AcadLib
     using Autodesk.AutoCAD.Runtime;
     using Blocks.Visual;
     using Colors;
-    using DbYouTubeTableAdapters;
     using Editors;
     using Errors;
     using Field;
@@ -26,7 +25,6 @@ namespace AcadLib
     using Layers;
     using Layers.AutoLayers;
     using Layers.LayersSelected;
-    using Lisp;
     using NetLib;
     using NetLib.IO;
     using NetLib.Notification;
@@ -65,7 +63,6 @@ namespace AcadLib
         private readonly Timer timer = new Timer();
 
         private List<DllResolve> dllsResolve;
-        private C_PlayStatisticTableAdapter player;
         [NotNull]
         internal static Dispatcher _dispatcher = Dispatcher.CurrentDispatcher;
 
@@ -361,22 +358,21 @@ namespace AcadLib
             {
                 var db = doc.Database;
                 var ed = doc.Editor;
-                using (var t = db.TransactionManager.StartTransaction())
+                using var t = db.TransactionManager.StartTransaction();
+                var allTypes = new Dictionary<string, int>();
+                var ms = db.CurrentSpaceId.GetObjectT<BlockTableRecord>(OpenMode.ForRead);
+                foreach (var id in ms)
                 {
-                    var allTypes = new Dictionary<string, int>();
-                    var ms = db.CurrentSpaceId.GetObjectT<BlockTableRecord>(OpenMode.ForRead);
-                    foreach (var id in ms)
-                    {
-                        if (allTypes.ContainsKey(id.ObjectClass.Name))
-                            allTypes[id.ObjectClass.Name]++;
-                        else
-                            allTypes.Add(id.ObjectClass.Name, 1);
-                    }
-                    var sortedByCount = allTypes.OrderBy(i => i.Value);
-                    foreach (var item in sortedByCount)
-                        ed.WriteMessage($"\n{item.Key} - {item.Value}");
-                    t.Commit();
+                    if (allTypes.ContainsKey(id.ObjectClass.Name))
+                        allTypes[id.ObjectClass.Name]++;
+                    else
+                        allTypes.Add(id.ObjectClass.Name, 1);
                 }
+
+                var sortedByCount = allTypes.OrderBy(i => i.Value);
+                foreach (var item in sortedByCount)
+                    ed.WriteMessage($"\n{item.Key} - {item.Value}");
+                t.Commit();
             });
         }
 
