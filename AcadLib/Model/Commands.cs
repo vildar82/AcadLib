@@ -1,4 +1,6 @@
-﻿using AcadLib.Doc;
+﻿using AcadLib.Blocks;
+using AcadLib.Doc;
+using OfficeOpenXml;
 
 namespace AcadLib
 {
@@ -123,6 +125,7 @@ namespace AcadLib
 
                 // Восстановление вкладок чCheckUpdatesNotifyертежей
                 //Utils.Tabs.RestoreTabs.Init(); // Фаталит у Черновой
+                ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
                 Logger.Log.Info("AcadLib Initialize end success.");
             }
             catch (Exception ex)
