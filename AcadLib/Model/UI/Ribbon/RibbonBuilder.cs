@@ -70,13 +70,6 @@
                 return;
             isInitialized = true;
             ComponentManager.ItemInitialized += ComponentManager_ItemInitialized;
-            Application.SystemVariableChanged += Application_SystemVariableChanged;
-            ComponentManager.Ribbon.BackgroundRenderFinished += RibbonOnBackgroundRenderFinished;
-        }
-
-        private static void RibbonOnBackgroundRenderFinished(object sender, EventArgs e)
-        {
-            CreateRibbon();
         }
 
         private static void ComponentManager_ItemInitialized(object sender, RibbonItemEventArgs e)
@@ -87,12 +80,20 @@
 
             ComponentManager.ItemInitialized -= ComponentManager_ItemInitialized;
             CreateRibbon();
+
+            ComponentManager.Ribbon.BackgroundRenderFinished += RibbonOnBackgroundRenderFinished;
+            Application.SystemVariableChanged += Application_SystemVariableChanged;
         }
 
         private static void Application_SystemVariableChanged(object sender, [NotNull] SystemVariableChangedEventArgs e)
         {
             if (e.Name.Equals("WSCURRENT"))
                 CreateRibbon();
+        }
+
+        private static void RibbonOnBackgroundRenderFinished(object sender, EventArgs e)
+        {
+            CreateRibbon();
         }
 
         internal static void CreateRibbon()
