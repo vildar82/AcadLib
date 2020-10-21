@@ -70,6 +70,29 @@
                 return;
             isInitialized = true;
             ComponentManager.ItemInitialized += ComponentManager_ItemInitialized;
+            Application.SystemVariableChanged += Application_SystemVariableChanged;
+            ComponentManager.Ribbon.BackgroundRenderFinished += RibbonOnBackgroundRenderFinished;
+        }
+
+        private static void RibbonOnBackgroundRenderFinished(object sender, EventArgs e)
+        {
+            CreateRibbon();
+        }
+
+        private static void ComponentManager_ItemInitialized(object sender, RibbonItemEventArgs e)
+        {
+            ribbon = ComponentManager.Ribbon;
+            if (ribbon == null)
+                return;
+
+            ComponentManager.ItemInitialized -= ComponentManager_ItemInitialized;
+            CreateRibbon();
+        }
+
+        private static void Application_SystemVariableChanged(object sender, [NotNull] SystemVariableChangedEventArgs e)
+        {
+            if (e.Name.Equals("WSCURRENT"))
+                CreateRibbon();
         }
 
         internal static void CreateRibbon()
@@ -98,6 +121,9 @@
         {
             try
             {
+                if (tabsData?.Any() != true)
+                    return;
+
                 if (ribbon == null)
                     ribbon = ComponentManager.Ribbon;
                 ribbon.Tabs.CollectionChanged -= Tabs_CollectionChanged;
@@ -305,22 +331,6 @@
             }
 
             items.Insert(index, item);
-        }
-
-        private static void Application_SystemVariableChanged(object sender, [NotNull] SystemVariableChangedEventArgs e)
-        {
-            if (e.Name.Equals("WSCURRENT"))
-                CreateRibbon();
-        }
-
-        private static void ComponentManager_ItemInitialized(object sender, RibbonItemEventArgs e)
-        {
-            ribbon = ComponentManager.Ribbon;
-            if (ribbon == null)
-                return;
-            ComponentManager.ItemInitialized -= ComponentManager_ItemInitialized;
-            CreateRibbon();
-            Application.SystemVariableChanged += Application_SystemVariableChanged;
         }
 
         private static void Tab_PropertyChanged(object sender, [NotNull] PropertyChangedEventArgs e)
