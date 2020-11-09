@@ -27,14 +27,14 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>c:\Autodesk\AutoCAD\Pik\Settings\Dll\</OutputPath>
+    <OutputPath>$(AppData)\Autodesk\ApplicationPlugins\PIK.CAD.bundle\Settings\Dll\</OutputPath>
     <DefineConstants>TRACE;DEBUG;JETBRAINS_ANNOTATIONS</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <UseVSHostingProcess>true</UseVSHostingProcess>
     <Prefer32Bit>false</Prefer32Bit>
     <RunCodeAnalysis>false</RunCodeAnalysis>
-    <DocumentationFile>..\..\..\Autodesk\AutoCAD\Pik\Settings\Dll\AcadLib.xml</DocumentationFile>
+    <DocumentationFile>$(AppData)\Autodesk\ApplicationPlugins\PIK.CAD.bundle\Settings\Dll\</DocumentationFile>
     <NoWarn>CS1591</NoWarn>
     <ShouldCreateLogs>False</ShouldCreateLogs>
   </PropertyGroup>
@@ -814,8 +814,7 @@
   <PropertyGroup>
     <PostBuildEvent>if $(ConfigurationName) == ReleaseLocal (
    c:\dev\nuget pack "$(ProjectPath)" -IncludeReferencedProjects -properties Configuration=ReleaseLocal
-   xcopy "$(TargetDir)*.nupkg" "\\picompany.ru\pikp\Dep\IT\IRA\03_NuGet\AcadLib" /C /Y
-   xcopy "$(ProjectDir)bin\Release" "c:\Autodesk\AutoCAD\Pik\Settings\Dll\" /Y /C /Q
+   xcopy "$(ProjectDir)bin\Release" "$(AppData)\Autodesk\ApplicationPlugins\PIK.CAD.bundle\Settings\Dll\" /Y /C /Q
 )</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
