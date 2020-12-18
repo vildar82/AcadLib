@@ -20,7 +20,6 @@ namespace AcadLib
 
         public static void MoveTop(this ObjectId entId)
         {
-
             using var ent = entId.Open(OpenMode.ForRead, false, true);
             using var btr = (BlockTableRecord)ent.OwnerId.Open(OpenMode.ForRead, false, true);
             using var order = (DrawOrderTable)btr.DrawOrderTableId.Open(OpenMode.ForWrite, false, true);

@@ -34,7 +34,7 @@
     <UseVSHostingProcess>true</UseVSHostingProcess>
     <Prefer32Bit>false</Prefer32Bit>
     <RunCodeAnalysis>false</RunCodeAnalysis>
-    <DocumentationFile>$(AppData)\Autodesk\ApplicationPlugins\PIK.CAD.bundle\Settings\Dll\</DocumentationFile>
+    <DocumentationFile>$(AppData)\Autodesk\ApplicationPlugins\PIK.CAD.bundle\Settings\Dll\AcadLib.xml</DocumentationFile>
     <NoWarn>CS1591</NoWarn>
     <ShouldCreateLogs>False</ShouldCreateLogs>
   </PropertyGroup>

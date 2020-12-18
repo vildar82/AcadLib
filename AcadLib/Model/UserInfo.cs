@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Threading.Tasks;
     using IO;
     using JetBrains.Annotations;
     using MongoDblib.UsersData.Data;
@@ -15,34 +16,42 @@
         {
             try
             {
-                try
-                {
-                    using var adUtils = new NetLib.AD.ADUtils();
-                    UserGroupsAd = adUtils.GetCurrentUserGroups(out var fioAd);
-                    IsProductUser = UserGroupsAd.Any(g => g == "000883_Департамент продукта");
-                    FioAD = fioAd;
-                }
-                catch (Exception ex)
-                {
-                    Logger.Log.Error(ex, "adUtils");
-                }
-
-                UserData = new MongoDblib.UsersData.DbUserData().GetCurrentUser();
-                if (UserData == null)
+                var task = Task.Run(() =>
                 {
                     try
                     {
-                        ShowUserProfileRegister();
+                        using var adUtils = new NetLib.AD.ADUtils();
+                        UserGroupsAd = adUtils.GetCurrentUserGroups(out var fioAd);
+                        IsProductUser = UserGroupsAd.Any(g => g == "000883_Департамент продукта");
+                        FioAD = fioAd;
                     }
                     catch (Exception ex)
                     {
-                        Logger.Log.Error(ex, "ShowUserProfileRegister");
+                        Logger.Log.Error(ex, "adUtils");
                     }
+                });
+                task.Wait(3000);
+                if (!task.IsCompleted)
+                {
+                    Logger.Log.Info("UserInfo Constructor - нет в доступа к ADUtils или прошло более 3000.");
                 }
 
-                SaveBackup();
+                task = Task.Run(() =>
+                {
+                    UserData = new MongoDblib.UsersData.DbUserData().GetCurrentUser();
+                });
+                task.Wait(3000);
+                if (!task.IsCompleted)
+                {
+                    Logger.Log.Info("UserInfo Constructor - нет в доступа к MongoDb или прошло более 3000.");
+                }
             }
             catch (Exception ex)
+            {
+                Logger.Log.Error(ex, "adUtils and mongo load user info");
+            }
+
+            if (UserData == null || UserGroupsAd == null)
             {
                 try
                 {
@@ -52,18 +61,30 @@
                 {
                     //
                 }
-
-                Logger.Log.Error(ex, "adUtils and mongo load user info");
             }
+
+            if (UserData == null)
+            {
+                try
+                {
+                    ShowUserProfileRegister();
+                }
+                catch (Exception ex)
+                {
+                    Logger.Log.Error(ex, "ShowUserProfileRegister");
+                }
+            }
+
+            SaveBackup();
         }
 
-        public static string FioAD { get; set; }
+        public static string? FioAD { get; set; }
 
-        public static UserData UserData { get; set; }
+        public static UserData? UserData { get; set; }
 
-        public static List<string> UserGroupsAd { get; set; }
+        public static List<string>? UserGroupsAd { get; set; }
 
-        public static bool IsProductUser { get; }
+        public static bool IsProductUser { get; set; }
 
         public static void ShowUserProfileRegister()
         {
@@ -88,7 +109,7 @@
                 {
                     UserData = UserData,
                     FioAD = FioAD,
-                    UserGroupsAd = UserGroupsAd
+                    UserGroupsAd = UserGroupsAd,
                 };
 
                 var file = GetFile();
@@ -106,9 +127,9 @@
             {
                 var file = GetFile();
                 var user = file.Deserialize<UserInfoData>();
-                FioAD = user.FioAD;
-                UserData = user.UserData;
-                UserGroupsAd = user.UserGroupsAd;
+                FioAD ??= user.FioAD;
+                UserData ??= user.UserData;
+                UserGroupsAd ??= user.UserGroupsAd;
             }
             catch (Exception ex)
             {
