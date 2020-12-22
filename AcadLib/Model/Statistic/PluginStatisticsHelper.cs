@@ -11,7 +11,6 @@
     using Db;
     using JetBrains.Annotations;
     using NetLib;
-    using Yandex.Metrica;
     using General = General;
 
     [PublicAPI]
@@ -31,7 +30,7 @@
 
         public static void AddStatistic()
         {
-            /*try
+            try
             {
                 var caller = new StackTrace().GetFrame(1).GetMethod();
                 PluginStart(CommandStart.GetCallerCommand(caller));
@@ -39,18 +38,18 @@
             catch (Exception ex)
             {
                 Logger.Log.Error(ex, "PluginStatisticsHelper.AddStatistic");
-            }*/
+            }
         }
 
         public static void PluginStart(string command)
         {
-            /*var com = new CommandStart(command, Assembly.GetCallingAssembly());
-            PluginStart(com);*/
+            var com = new CommandStart(command, Assembly.GetCallingAssembly());
+            PluginStart(com);
         }
 
         public static void PluginStart(CommandStart command)
         {
-            /*if (!IsUserStatistic())
+            if (!IsUserStatistic())
                 return;
             try
             {
@@ -66,12 +65,12 @@
             catch (Exception ex)
             {
                 Logger.Log.Error(ex, "PluginStart.");
-            }*/
+            }
         }
 
         public static void StartAutoCAD()
         {
-            /*try
+            try
             {
                 InsertStatistic($"{App} {AcadYear} Run", "AcadLib", $"{App} Run", Commands.AcadLibVersion.ToString(), string.Empty);
 
@@ -81,7 +80,7 @@
             catch (Exception ex)
             {
                 Logger.Log.Error(ex, "StartAutoCAD.");
-            }*/
+            }
         }
 
         /// <summary>
@@ -89,7 +88,7 @@
         /// </summary>
         private static void UpdateSettings()
         {
-            /*try
+            try
             {
                 if (PikSettings.IsUpdatedSettings)
                 {
@@ -101,7 +100,7 @@
             catch (Exception ex)
             {
                 Logger.Log.Error(ex, "PluginStatisticsHelper.UpdateSettings");
-            }*/
+            }
         }
 
         private static bool IsUserStatistic()
@@ -109,9 +108,9 @@
             return !General.IsCadManager() && !General.IsBimUser;
         }
 
-        public static void InsertStatistic(string appName, string plugin, string command, string version, string doc)
+        public static void InsertStatistic(string appName, string? plugin, string? command, string? version, string? doc)
         {
-            /*Task.Run(() =>
+            Task.Run(() =>
             {
                 try
                 {
@@ -124,11 +123,11 @@
                         Application = appName,
                         Plugin = plugin ?? string.Empty,
                         Command = command ?? string.Empty,
-                        Build = version.Truncate(40) ?? string.Empty,
-                        Doc = doc.Truncate(500) ?? string.Empty,
+                        Build = version?.Truncate(40) ?? string.Empty,
+                        Doc = doc?.Truncate(500) ?? string.Empty,
                         UserName = Environment.UserName,
                         DateStart = DateTime.Now,
-                        DocName = Path.GetFileName(doc)
+                        DocName = Path.GetFileName(doc),
                     });
 
                     db.SaveChanges();
@@ -137,10 +136,7 @@
                 {
                     Logger.Log.Error(ex, $"PluginStatisticsHelper Insert. appName={appName}, plugin={plugin}, command={command}, version={version}, doc={doc}, docName={Path.GetFileName(doc)}");
                 }
-
-                if (!appName.EndsWith(" Run") && !appName.EndsWith(" Update"))
-                    YandexMetrica.ReportEvent($"{plugin} {command}");
-            });*/
+            });
         }
 
         private static bool GetIsCivil()
