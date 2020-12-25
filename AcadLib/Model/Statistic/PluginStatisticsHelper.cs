@@ -19,6 +19,7 @@
         private static string _app;
         private static string _acadLibVer;
         private static bool? _isCivil = GetIsCivil();
+        private static bool _isInsertStatisticError;
 
         [NotNull]
         public static string AcadYear => HostApplicationServices.Current.releaseMarketVersion;
@@ -110,6 +111,9 @@
 
         public static void InsertStatistic(string appName, string? plugin, string? command, string? version, string? doc)
         {
+            if (_isInsertStatisticError || Environment.UserName.EqualsIgnoreCase("chuchkalovaav"))
+                return;
+
             Task.Run(() =>
             {
                 try
@@ -134,6 +138,7 @@
                 }
                 catch (Exception ex)
                 {
+                    _isInsertStatisticError = true;
                     Logger.Log.Error(ex, $"PluginStatisticsHelper Insert. appName={appName}, plugin={plugin}, command={command}, version={version}, doc={doc}, docName={Path.GetFileName(doc)}");
                 }
             });

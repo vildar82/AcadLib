@@ -1,18 +1,18 @@
-﻿<?xml version='1.0' encoding='utf-8'?>
+﻿<?xml version="1.0" encoding="UTF-8"?>
 <SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="AcadLib.Properties" GeneratedClassName="Settings">
   <Profiles />
   <Settings>
     <Setting Name="SAPRConnectionString" Type="(Connection string)" Scope="Application">
-      <DesignTimeValue Profile="(Default)">&lt;?xml version="1.0" encoding="utf-16"?&gt;
-&lt;SerializableConnectionString xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"&gt;
+      <DesignTimeValue Profile="(Default)">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-16&quot;?&gt;
+&lt;SerializableConnectionString xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xmlns:xsd=&quot;http://www.w3.org/2001/XMLSchema&quot;&gt;
   &lt;ConnectionString&gt;Data Source=VPP-SQL04;Initial Catalog=CAD_REVIT_STATISTICS;User ID=CAD_AllUsers;Password=qwerty!2345&lt;/ConnectionString&gt;
   &lt;ProviderName&gt;System.Data.SqlClient&lt;/ProviderName&gt;
 &lt;/SerializableConnectionString&gt;</DesignTimeValue>
       <Value Profile="(Default)">Data Source=VPP-SQL04;Initial Catalog=CAD_REVIT_STATISTICS;User ID=CAD_AllUsers;Password=qwerty!2345</Value>
     </Setting>
     <Setting Name="SR_IRA_AR_DECORConnectionString" Type="(Connection string)" Scope="Application">
-      <DesignTimeValue Profile="(Default)">&lt;?xml version="1.0" encoding="utf-16"?&gt;
-&lt;SerializableConnectionString xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"&gt;
+      <DesignTimeValue Profile="(Default)">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-16&quot;?&gt;
+&lt;SerializableConnectionString xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xmlns:xsd=&quot;http://www.w3.org/2001/XMLSchema&quot;&gt;
   &lt;ConnectionString&gt;Data Source=VPP-SQLTEST02;Initial Catalog=SR_IRA_AR_DECOR;Persist Security Info=True;User ID=sa;Password=VPP-SQLTEST02&lt;/ConnectionString&gt;
   &lt;ProviderName&gt;System.Data.SqlClient&lt;/ProviderName&gt;
 &lt;/SerializableConnectionString&gt;</DesignTimeValue>
@@ -34,7 +34,7 @@
       <Value Profile="(Default)">100</Value>
     </Setting>
     <Setting Name="EFAutocadUsersConStr" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">metadata=res://*/Model.User.DB.Users.csdl|res://*/Model.User.DB.Users.ssdl|res://*/Model.User.DB.Users.msl;provider=System.Data.SqlClient;provider connection string=&amp;quot;data source=vpp-sql04;initial catalog=CAD_AutoCAD;persist security info=True;user id=CAD_AllUsers;password=qwerty!2345;MultipleActiveResultSets=True;App=EntityFramework&amp;quot;" providerName="System.Data.EntityClient</Value>
+      <Value Profile="(Default)">metadata=res://*/Model.User.DB.Users.csdl|res://*/Model.User.DB.Users.ssdl|res://*/Model.User.DB.Users.msl;provider=System.Data.SqlClient;provider connection string=&amp;quot;data source=vpp-sql04;initial catalog=CAD_AutoCAD;persist security info=True;user id=CAD_AllUsers;password=qwerty!2345;MultipleActiveResultSets=True;App=EntityFramework&amp;quot;&quot; providerName=&quot;System.Data.EntityClient</Value>
     </Setting>
     <Setting Name="UserSettingsPropsWidth" Type="System.Double" Scope="User">
       <Value Profile="(Default)">150</Value>
@@ -53,3 +53,4 @@
     </Setting>
   </Settings>
 </SettingsFile>
+
