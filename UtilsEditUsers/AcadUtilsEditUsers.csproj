@@ -162,7 +162,7 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="NetLib">
-      <Version>1.2.3</Version>
+      <Version>1.2.6</Version>
     </PackageReference>
     <PackageReference Update="Fody">
       <Version>6.2.6</Version>
