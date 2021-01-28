@@ -49,7 +49,8 @@ namespace AcadLib.PaletteCommands
 
         public static void Init()
         {
-            SetTrayPalette();
+            // Дмитрий Орешко просил убрать - идут заявки из разных отделов - у них пустая палитра открывается.
+            // SetTrayPalette();
         }
 
         public static double GetButtonWidth()
