@@ -1,4 +1,5 @@
-﻿using NetLib;
+﻿using AutoCAD_PIK_Manager;
+using NetLib;
 
 namespace AcadLib.PaletteCommands
 {
@@ -49,8 +50,7 @@ namespace AcadLib.PaletteCommands
 
         public static void Init()
         {
-            // Дмитрий Орешко просил убрать - идут заявки из разных отделов - у них пустая палитра открывается.
-            // SetTrayPalette();
+            SetTrayPalette();
         }
 
         public static double GetButtonWidth()
@@ -228,7 +228,22 @@ namespace AcadLib.PaletteCommands
 
         private static void PikTray_MouseDown()
         {
-            Start();
+            // Дмитрий Орешко просил убрать - идут заявки из разных отделов - у них пустая палитра открывается.
+            if (General.UserGroup.Contains("1ГП") || General.UserGroup.Contains("1НС"))
+            {
+                Start();
+            }
+            else
+            {
+                try
+                {
+                    AcadHelper.Doc.SendStringToExecute("_toolpalettes ", true, true, true);
+                }
+                catch (Exception ex)
+                {
+                    ex.LogError("PikTray_MouseDown");
+                }
+            }
         }
 
         private static void SetTrayPalette()
