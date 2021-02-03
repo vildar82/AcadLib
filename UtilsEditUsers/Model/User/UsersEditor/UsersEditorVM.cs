@@ -20,7 +20,6 @@ namespace UtilsEditUsers.Model.User.UsersEditor
     using NetLib.Locks;
     using NetLib.Monad;
     using NetLib.WPF;
-    using NetLib.WPF.Data;
     using ReactiveUI;
 
     public class UsersEditorVM : BaseViewModel
@@ -30,8 +29,7 @@ namespace UtilsEditUsers.Model.User.UsersEditor
         private static Brush colorOk = new SolidColorBrush(Colors.MediumSeaGreen);
         private static Brush colorErr = new SolidColorBrush(Colors.IndianRed);
         private readonly BitmapImage imageNo;
-        private ConcurrentDictionary<string, (string dep, string pos, BitmapImage img)> dictUsersEx =
-            new ConcurrentDictionary<string, (string dep, string pos, BitmapImage img)>();
+        private ConcurrentDictionary<string, (string dep, string pos, BitmapImage img)> dictUsersEx = new ();
         private List<EditAutocadUsers> users;
         private DbUsers dbUsers;
         private FileLock fileLock;
@@ -40,10 +38,15 @@ namespace UtilsEditUsers.Model.User.UsersEditor
         public UsersEditorVM()
         {
             imageNo = new BitmapImage(new Uri("pack://application:,,,/Resources/no-user.png"));
-            var groups = ADUtils.GetCurrentUserADGroups(out _);
-            IsBimUser = groups.Any(g => g.EqualsIgnoreCase("Отдел разработки и автоматизации") ||
-                                        g.EqualsIgnoreCase("010596_Отдел внедрения ВIM") ||
-                                        g.EqualsIgnoreCase("010576_УИТ"));
+
+            IsBimUser = Environment.UserName.EqualsAnyIgnoreCase(
+                "PrudnikovVS",
+                "vrublevskiyba",
+                "khisyametdinovvt",
+                "arslanovti",
+                "karadzhayanra",
+                "kagramanianag");
+
             dbUsers = new DbUsers();
             this.WhenAnyValue(v => v.EditMode).Subscribe(ChangeMode);
             this.WhenAnyValue(v => v.SelectedUsers).Subscribe(s => OnSelected());
