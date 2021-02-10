@@ -132,7 +132,7 @@ namespace AcadLib.Statistic
                            $"\"Doc\": \"{doc}\"" +
                            "}";
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
-                client.PostAsync("https://bim.pik.ru/robotlogs/cad/", content).ConfigureAwait(false);
+                client.PostAsync("https://bim.pik.ru/robotlogs/cad", content).ConfigureAwait(false);
             }
             catch (Exception ex)
             {
