@@ -1,4 +1,7 @@
-﻿namespace AcadLib.Statistic
+﻿using System.Net.Http;
+using System.Text;
+
+namespace AcadLib.Statistic
 {
     using System;
     using System.Diagnostics;
@@ -113,6 +116,28 @@
         {
             if (_isInsertStatisticError || Environment.UserName.EqualsIgnoreCase("chuchkalovaav"))
                 return;
+
+            try
+            {
+                var client = new HttpClient();
+                var json = "{" +
+                           "\"source\": \"cad\"," +
+                           $"\"UserName\": \"{Environment.UserName}\"," +
+                           $"\"MachineName\": \"{Environment.MachineName}\"," +
+                           $"\"Message\": \"{command}\"," +
+                           $"\"Group\": \"{General.UserGroup}\"," +
+                           $"\"Application\": \"{appName}\"," +
+                           $"\"Plugin\": \"{plugin}\"," +
+                           $"\"Build\": \"{version}\"," +
+                           $"\"Doc\": \"{doc}\"" +
+                           "}";
+                var content = new StringContent(json, Encoding.UTF8, "application/json");
+                client.PostAsync("https://bim.pik.ru/robotlogs/cad/", content).ConfigureAwait(false);
+            }
+            catch (Exception ex)
+            {
+                ex.LogError();
+            }
 
             Task.Run(() =>
             {

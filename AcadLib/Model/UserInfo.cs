@@ -30,7 +30,10 @@
                         Logger.Log.Error(ex, "adUtils");
                     }
                 });
-                task.Wait(3000);
+                task.Wait(100);
+                if (!task.IsCompleted)
+                    task.Wait(3000);
+
                 if (!task.IsCompleted)
                 {
                     Logger.Log.Info("UserInfo Constructor - нет в доступа к ADUtils или прошло более 3000.");
@@ -40,7 +43,10 @@
                 {
                     UserData = new MongoDblib.UsersData.DbUserData().GetCurrentUser();
                 });
-                task.Wait(3000);
+                task.Wait(100);
+                if (!task.IsCompleted)
+                    task.Wait(3000);
+
                 if (!task.IsCompleted)
                 {
                     Logger.Log.Info("UserInfo Constructor - нет в доступа к MongoDb или прошло более 3000.");
