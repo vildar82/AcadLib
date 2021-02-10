@@ -10,7 +10,7 @@ namespace AcadLib.Statistic.Db
     public class PluginStatisticDbContext : DbContext
     {
         public PluginStatisticDbContext()
-            : base (@"data source=vpp-sql04;initial catalog=CAD_REVIT_STATISTICS;persist security info=True;user id=CAD_AllUsers;password=qwerty!2345;MultipleActiveResultSets=True;App=EntityFramework")
+            : base (@"data source=vpp-sql04.main.picompany.ru;initial catalog=CAD_REVIT_STATISTICS;persist security info=True;user id=CAD_AllUsers;password=qwerty!2345;MultipleActiveResultSets=True;App=EntityFramework")
         {
         }
 
