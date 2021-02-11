@@ -14,6 +14,7 @@
     {
         static UserInfo()
         {
+            var noConnectMongoDb = false;
             try
             {
                 var task = Task.Run(() =>
@@ -36,7 +37,7 @@
 
                 if (!task.IsCompleted)
                 {
-                    Logger.Log.Info("UserInfo Constructor - нет в доступа к ADUtils или прошло более 3000.");
+                    Logger.Log.Error("UserInfo Constructor - нет в доступа к ADUtils или прошло более 3000.");
                 }
 
                 task = Task.Run(() =>
@@ -49,7 +50,8 @@
 
                 if (!task.IsCompleted)
                 {
-                    Logger.Log.Info("UserInfo Constructor - нет в доступа к MongoDb или прошло более 3000.");
+                    noConnectMongoDb = true;
+                    Logger.Log.Error("UserInfo Constructor - нет в доступа к MongoDb или прошло более 3000.");
                 }
             }
             catch (Exception ex)
@@ -69,7 +71,7 @@
                 }
             }
 
-            if (UserData == null)
+            if (UserData == null && !noConnectMongoDb)
             {
                 try
                 {
