@@ -129,7 +129,7 @@ namespace AcadLib.Statistic
                            $"\"Application\": \"{appName}\"," +
                            $"\"Plugin\": \"{plugin}\"," +
                            $"\"Build\": \"{version}\"," +
-                           $"\"Doc\": \"{doc}\"" +
+                           $"\"Doc\": \"{GetPath(doc)}\"" +
                            "}";
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
                 client.PostAsync("https://bim.pik.ru/robotlogs/cad", content).ConfigureAwait(false);
@@ -167,6 +167,11 @@ namespace AcadLib.Statistic
                     Logger.Log.Error(ex, $"PluginStatisticsHelper Insert. appName={appName}, plugin={plugin}, command={command}, version={version}, doc={doc}, docName={Path.GetFileName(doc)}");
                 }
             });
+        }
+
+        private static string GetPath(string? doc)
+        {
+            return doc?.Replace(@"\", @"\\");
         }
 
         private static bool GetIsCivil()
