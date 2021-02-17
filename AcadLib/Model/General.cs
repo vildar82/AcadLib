@@ -38,18 +38,28 @@
         public static readonly RXClass ClassRegion;
         public static readonly RXClass ClassVport;
 
-        private static readonly List<string> bimUsers = new List<string>
+        private static readonly List<string> _bimUsers = new List<string>
         {
             "PrudnikovVS",
             "vrublevskiyba",
             "khisyametdinovvt",
             "arslanovti",
             "karadzhayanra",
-            "kagramanianag"
+            "kagramanianag",
         };
 
         static General()
         {
+            List<string> bimUsers;
+            try
+            {
+                bimUsers = GetBimUsers();
+            }
+            catch
+            {
+                bimUsers = _bimUsers;
+            }
+
             try
             {
                 IsBimUser = bimUsers.Any(u => u.EqualsIgnoreCase(Environment.UserName)) || IsBimUserByUserData();
@@ -70,6 +80,11 @@
             {
                 //
             }
+        }
+
+        private static List<string> GetBimUsers()
+        {
+            return PikSettings.PikFileSettings.BimUsers;
         }
 
         public static string UserGroup => PikSettings.UserGroup;
