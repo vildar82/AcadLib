@@ -2,24 +2,20 @@ namespace AcadLib.Reactive
 {
     using Autodesk.AutoCAD.ApplicationServices;
     using Autodesk.AutoCAD.DatabaseServices;
-    using JetBrains.Annotations;
 
     public static class EventsMixin
     {
-        [NotNull]
-        public static DboEvents Events([NotNull] this DBObject dbo)
+        public static DboEvents Events(this DBObject dbo)
         {
             return new DboEvents(dbo);
         }
 
-        [NotNull]
-        public static DbEvents Events([NotNull] this Database db)
+        public static DbEvents Events(this Database db)
         {
             return new DbEvents(db);
         }
 
-        [NotNull]
-        public static DocumentsEvents Events([NotNull] this DocumentCollection docMan)
+        public static DocumentsEvents Events(this DocumentCollection docMan)
         {
             return new DocumentsEvents(docMan);
         }

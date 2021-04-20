@@ -5,13 +5,12 @@
     using System.Diagnostics;
     using System.IO;
     using Autodesk.AutoCAD.DatabaseServices;
-    using JetBrains.Annotations;
     using OfficeOpenXml;
     using Path = NetLib.IO.Path;
 
     public static class BlockList
     {
-        public static void List([NotNull] this Database db)
+        public static void List(this Database db)
         {
             var list = new List<string>();
             using (var t = db.TransactionManager.StartTransaction())

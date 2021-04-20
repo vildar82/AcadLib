@@ -2,12 +2,10 @@
 {
     using System;
     using Autodesk.AutoCAD.Geometry;
-    using JetBrains.Annotations;
 
     /// <summary>
     /// Represents a Polyline segment.
     /// </summary>
-    [PublicAPI]
     public class PolylineSegment
     {
         private Point2d _endPoint;
@@ -79,7 +77,7 @@
         /// Creates a new instance of PolylineSegment from a LineSegment2d
         /// </summary>
         /// <param name="line">A LineSegment2d instance.</param>
-        public PolylineSegment([NotNull] LineSegment2d line)
+        public PolylineSegment(LineSegment2d line)
         {
             _startPoint = line.StartPoint;
             _endPoint = line.EndPoint;
@@ -92,7 +90,7 @@
         /// Creates a new instance of PolylineSegment from a CircularArc2d
         /// </summary>
         /// <param name="arc">A CircularArc2d instance.</param>
-        public PolylineSegment([NotNull] CircularArc2d arc)
+        public PolylineSegment(CircularArc2d arc)
         {
             _startPoint = arc.StartPoint;
             _endPoint = arc.EndPoint;
@@ -145,7 +143,6 @@
         /// Returns a copy of the PolylineSegment
         /// </summary>
         /// <returns>A new PolylineSegment instance which is a copy of the instance this method applies to.</returns>
-        [NotNull]
         public PolylineSegment Clone()
         {
             return new PolylineSegment(StartPoint, EndPoint, Bulge, StartWidth, EndWidth);
@@ -242,7 +239,6 @@
         /// Converts the PolylineSegment into a Curve2d.
         /// </summary>
         /// <returns>A new Curve2d instance.</returns>
-        [NotNull]
         public Curve2d ToCurve2d()
         {
             return IsLinear

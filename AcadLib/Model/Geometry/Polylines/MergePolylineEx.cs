@@ -5,15 +5,13 @@
     using Autodesk.AutoCAD.DatabaseServices;
     using Autodesk.AutoCAD.Geometry;
     using Comparers;
-    using JetBrains.Annotations;
 
     public class MergePolylineEx
     {
-        [NotNull]
         public List<Polyline> Merge(
-            [NotNull] List<Polyline> pls,
+            List<Polyline> pls,
             Point2dEqualityComparer pointComparer,
-            [CanBeNull] IEqualityComparer<Polyline> comparer = null)
+            IEqualityComparer<Polyline> comparer = null)
         {
             var joinedPls = new List<Polyline>();
             var plsCopy = pls.ToList();
@@ -29,7 +27,7 @@
             return joinedPls;
         }
 
-        private static Polyline? GetFirstPolyline([NotNull] List<Polyline> pls)
+        private static Polyline? GetFirstPolyline(List<Polyline> pls)
         {
             if (pls.Any())
             {

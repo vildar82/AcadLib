@@ -10,9 +10,7 @@
     using Autodesk.AutoCAD.Geometry;
     using Autodesk.AutoCAD.GraphicsInterface;
     using Geometry;
-    using JetBrains.Annotations;
 
-    [PublicAPI]
     public class PolylineJig : DrawJig
     {
         private Point2d basePt;
@@ -22,10 +20,9 @@
         private Color hatchColor;
         private Transparency hatchTransp;
 
-        [NotNull]
         public List<Point2d> Pts { get; set; } = new List<Point2d>();
 
-        [NotNull] public Point3dCollection PtsCol => new Point3dCollection(Pts.Select(s => s.Convert3d()).ToArray());
+        public Point3dCollection PtsCol => new Point3dCollection(Pts.Select(s => s.Convert3d()).ToArray());
 
         public PromptStatus DrawPolyline(Editor ed)
         {

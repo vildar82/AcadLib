@@ -22,7 +22,6 @@ namespace AcadLib.RTree.SpatialIndex
     using System;
     using System.Text;
     using Autodesk.AutoCAD.DatabaseServices;
-    using JetBrains.Annotations;
 
     /**
      * Currently hardcoded to 2 dimensions, but could be extended.
@@ -30,10 +29,7 @@ namespace AcadLib.RTree.SpatialIndex
      * @author  aled@sourceforge.net
      * @version 1.0b2p1
      */
-    [PublicAPI]
-#pragma warning disable CS0659 // Type overrides Object.Equals(object o) but does not override Object.GetHashCode()
     public class Rectangle
-#pragma warning restore CS0659 // Type overrides Object.Equals(object o) but does not override Object.GetHashCode()
     {
         /**
          * Number of dimensions in a rectangle. In theory this
@@ -70,7 +66,7 @@ namespace AcadLib.RTree.SpatialIndex
          * @param min array containing the minimum value for each dimension; ie { min(x), min(y) }
          * @param max array containing the maximum value for each dimension; ie { max(x), max(y) }
          */
-        public Rectangle([NotNull] double[] min, [NotNull] double[] max)
+        public Rectangle(double[] min, double[] max)
         {
             if (min.Length != DIMENSIONS || max.Length != DIMENSIONS)
             {
@@ -101,10 +97,8 @@ namespace AcadLib.RTree.SpatialIndex
           * @param x2 coordinate of the opposite corner
           * @param y2 (see x2)
           */
-#pragma warning disable 659
 
         public override bool Equals(object obj)
-#pragma warning restore 659
         {
             var equals = false;
             if (obj?.GetType() == typeof(Rectangle))
@@ -201,7 +195,6 @@ namespace AcadLib.RTree.SpatialIndex
             return true;
         }
 
-        [NotNull]
         internal Rectangle Copy()
         {
             return new Rectangle(_min, _max);
@@ -270,7 +263,7 @@ namespace AcadLib.RTree.SpatialIndex
             return false;
         }
 
-        internal double Enlargement([NotNull] Rectangle r)
+        internal double Enlargement(Rectangle r)
         {
             var enlargedArea = (Math.Max(_max[0], r._max[0]) - Math.Min(_min[0], r._min[0])) *
                                (Math.Max(_max[1], r._max[1]) - Math.Min(_min[1], r._min[1]));
@@ -324,13 +317,12 @@ namespace AcadLib.RTree.SpatialIndex
             _max[2] = Math.Max(z1, z2);
         }
 
-        internal void Set([NotNull] double[] min, [NotNull] double[] max)
+        internal void Set(double[] min, double[] max)
         {
             Array.Copy(min, 0, _min, 0, DIMENSIONS);
             Array.Copy(max, 0, _max, 0, DIMENSIONS);
         }
 
-        [NotNull]
         internal Rectangle Union(Rectangle r)
         {
             var union = Copy();
@@ -338,7 +330,7 @@ namespace AcadLib.RTree.SpatialIndex
             return union;
         }
 
-        private static bool CompareArrays([CanBeNull] double[] a1, [CanBeNull] double[] a2)
+        private static bool CompareArrays(double[]? a1, double[]? a2)
         {
             if (a1 == null || a2 == null)
                 return false;
@@ -346,8 +338,11 @@ namespace AcadLib.RTree.SpatialIndex
                 return false;
 
             for (var i = 0; i < a1.Length; i++)
+            {
                 if (Math.Abs(a1[i] - a2[i]) > 0.0001)
                     return false;
+            }
+
             return true;
         }
     }

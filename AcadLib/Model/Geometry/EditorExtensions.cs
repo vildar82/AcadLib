@@ -1,9 +1,7 @@
-﻿// ReSharper disable once CheckNamespace
-namespace Autodesk.AutoCAD.EditorInput
+﻿namespace Autodesk.AutoCAD.EditorInput
 {
     using DatabaseServices;
     using Geometry;
-    using JetBrains.Annotations;
     using AcRx = Autodesk.AutoCAD.Runtime;
 
     /// <summary>
@@ -21,7 +19,7 @@ namespace Autodesk.AutoCAD.EditorInput
         /// eNotInPaperSpace is thrown if this method is called form Model Space.</exception>
         /// <exception cref=" Runtime.Exception">
         /// eCannotChangeActiveViewport is thrown if there is none floating viewport in the current layout.</exception>
-        public static Matrix3d DCS2PSDCS([NotNull] this Editor ed)
+        public static Matrix3d DCS2PSDCS(this Editor ed)
         {
             var db = ed.Document.Database;
             if (db.TileMode)
@@ -52,7 +50,7 @@ namespace Autodesk.AutoCAD.EditorInput
         /// </summary>
         /// <param name="ed">The instance to which this method applies.</param>
         /// <returns>The DCS to WCS transformation matrix.</returns>
-        public static Matrix3d DCS2WCS([NotNull] this Editor ed)
+        public static Matrix3d DCS2WCS(this Editor ed)
         {
             Matrix3d retVal;
             var tileMode = ed.Document.Database.TileMode;
@@ -81,7 +79,7 @@ namespace Autodesk.AutoCAD.EditorInput
         /// eNotInPaperSpace is thrown if this method is called form Model Space.</exception>
         /// <exception cref=" Autodesk.AutoCAD.Runtime.Exception">
         /// eCannotChangeActiveViewport is thrown if there is none floating viewport in the current layout.</exception>
-        public static Matrix3d PSDCS2DCS([NotNull] this Editor ed)
+        public static Matrix3d PSDCS2DCS(this Editor ed)
         {
             return ed.DCS2PSDCS().Inverse();
         }
@@ -92,7 +90,7 @@ namespace Autodesk.AutoCAD.EditorInput
         /// </summary>
         /// <param name="ed">The instance to which this method applies.</param>
         /// <returns>The UCS to WCS transformation matrix.</returns>
-        public static Matrix3d UCS2WCS([NotNull] this Editor ed)
+        public static Matrix3d UCS2WCS(this Editor ed)
         {
             return ed.CurrentUserCoordinateSystem;
         }
@@ -103,7 +101,7 @@ namespace Autodesk.AutoCAD.EditorInput
         /// </summary>
         /// <param name="ed">The instance to which this method applies.</param>
         /// <returns>The WCS to DCS transformation matrix.</returns>
-        public static Matrix3d WCS2DCS([NotNull] this Editor ed)
+        public static Matrix3d WCS2DCS(this Editor ed)
         {
             return ed.DCS2WCS().Inverse();
         }
@@ -114,7 +112,7 @@ namespace Autodesk.AutoCAD.EditorInput
         /// </summary>
         /// <param name="ed">The instance to which this method applies.</param>
         /// <returns>The WCS to UCS transformation matrix.</returns>
-        public static Matrix3d WCS2UCS([NotNull] this Editor ed)
+        public static Matrix3d WCS2UCS(this Editor ed)
         {
             return ed.CurrentUserCoordinateSystem.Inverse();
         }

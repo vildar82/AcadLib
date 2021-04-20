@@ -4,7 +4,6 @@ namespace AcadLib.Template
     using System.Collections.Generic;
     using System.Linq;
     using Autodesk.AutoCAD.DatabaseServices;
-    using JetBrains.Annotations;
     using Layers.Filter;
     using Layers.LayerState;
 
@@ -20,7 +19,6 @@ namespace AcadLib.Template
         TableStyles = 64
     }
 
-    [PublicAPI]
     public class CopyFromTemplate
     {
         public void Copy(Database dbDest, string sourceFile, TemplateItemEnum copyItems)

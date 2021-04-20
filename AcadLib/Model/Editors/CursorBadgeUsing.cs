@@ -3,17 +3,13 @@ namespace AcadLib.Editors
     using System;
     using Autodesk.AutoCAD.EditorInput;
     using Autodesk.AutoCAD.GraphicsInterface;
-    using JetBrains.Annotations;
 
     /// <summary>
     /// Повесить значек на курсор
     /// </summary>
-    [PublicAPI]
     public class CursorBadgeUsing : IDisposable
     {
-        [NotNull]
         private CursorBadgeUtilities cbu;
-        [NotNull]
         private ImageBGRA32 image;
 
         /// <summary>
@@ -25,7 +21,7 @@ namespace AcadLib.Editors
         /// </summary>
         /// <param name="image">Иконка</param>
         /// <param name="priority">Приоритет</param>
-        public CursorBadgeUsing([NotNull] ImageBGRA32 image, int priority = 1)
+        public CursorBadgeUsing(ImageBGRA32 image, int priority = 1)
         {
             this.image = image;
             cbu = new CursorBadgeUtilities();

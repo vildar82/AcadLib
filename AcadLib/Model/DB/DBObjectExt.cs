@@ -2,13 +2,10 @@
 {
     using System.Linq;
     using Autodesk.AutoCAD.DatabaseServices;
-    using JetBrains.Annotations;
 
-    [PublicAPI]
     public static class DBObjectExt
     {
-        [NotNull]
-        public static T UpgradeOpenTr<T>([NotNull] this T dbo)
+        public static T UpgradeOpenTr<T>(this T dbo)
             where T : DBObject
         {
             return dbo.IsWriteEnabled ? dbo : dbo.Id.GetObjectT<T>(OpenMode.ForWrite);
@@ -18,7 +15,7 @@
         /// Удаление словаря из объекта.
         /// </summary>
         /// <param name="dbo"></param>
-        public static void RemoveAllExtensionDictionary([NotNull] this DBObject dbo)
+        public static void RemoveAllExtensionDictionary(this DBObject dbo)
         {
             if (dbo.ExtensionDictionary.IsNull)
                 return;

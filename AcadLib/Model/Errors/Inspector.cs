@@ -8,10 +8,8 @@
     using Autodesk.AutoCAD.DatabaseServices;
     using Autodesk.AutoCAD.EditorInput;
     using Autodesk.AutoCAD.Geometry;
-    using JetBrains.Annotations;
     using Application = Autodesk.AutoCAD.ApplicationServices.Core.Application;
 
-    [PublicAPI]
     public static class Inspector
     {
         private static Database _db;
@@ -60,13 +58,13 @@
             AddErrorInternal(err);
         }
 
-        public static void AddError(string msg, [CanBeNull] Icon icon = null)
+        public static void AddError(string msg, Icon? icon = null)
         {
             var err = new Error(msg, icon);
             AddErrorInternal(err);
         }
 
-        public static void AddError(string group, string msg, [CanBeNull] Icon icon = null)
+        public static void AddError(string group, string msg, Icon? icon = null)
         {
             var err = new Error(msg, icon) { Group = group };
             AddErrorInternal(err);
@@ -84,85 +82,85 @@
             AddErrorInternal(err);
         }
 
-        public static void AddError(string msg, [NotNull] Entity ent, [CanBeNull] Icon icon = null)
+        public static void AddError(string msg, Entity ent, Icon? icon = null)
         {
             var err = new Error(msg, ent, icon);
             AddErrorInternal(err);
         }
 
-        public static void AddError(string group, string msg, [NotNull] Entity ent, [CanBeNull] Icon icon = null)
+        public static void AddError(string group, string msg, Entity ent, Icon? icon = null)
         {
             var err = new Error(msg, ent, icon) { Group = group };
             AddErrorInternal(err);
         }
 
-        public static void AddError(string msg, [NotNull] Entity ent)
+        public static void AddError(string msg, Entity ent)
         {
             var err = new Error(msg, ent);
             AddErrorInternal(err);
         }
 
-        public static void AddError(string group, string msg, [NotNull] Entity ent)
+        public static void AddError(string group, string msg, Entity ent)
         {
             var err = new Error(msg, ent) { Group = group };
             AddErrorInternal(err);
         }
 
-        public static void AddError(string msg, [NotNull] Entity ent, Matrix3d trans, [CanBeNull] Icon icon = null)
+        public static void AddError(string msg, Entity ent, Matrix3d trans, Icon? icon = null)
         {
             var err = new Error(msg, ent, trans, icon);
             AddErrorInternal(err);
         }
 
-        public static void AddError(string group, string msg, [NotNull] Entity ent, Matrix3d trans, [CanBeNull] Icon icon = null)
+        public static void AddError(string group, string msg, Entity ent, Matrix3d trans, Icon? icon = null)
         {
             var err = new Error(msg, ent, trans, icon) { Group = group };
             AddErrorInternal(err);
         }
 
-        public static void AddError(string msg, [NotNull] Entity ent, Extents3d ext, [CanBeNull] Icon icon = null)
+        public static void AddError(string msg, Entity ent, Extents3d ext, Icon? icon = null)
         {
             var err = new Error(msg, ext, ent, icon);
             AddErrorInternal(err);
         }
 
-        public static void AddError(string group, string msg, [NotNull] Entity ent, Extents3d ext, [CanBeNull] Icon icon = null)
+        public static void AddError(string group, string msg, Entity ent, Extents3d ext, Icon? icon = null)
         {
             var err = new Error(msg, ext, ent, icon) { Group = group };
             AddErrorInternal(err);
         }
 
-        public static void AddError(string msg, [NotNull] Entity ent, Extents3d ext)
+        public static void AddError(string msg, Entity ent, Extents3d ext)
         {
             var err = new Error(msg, ext, ent);
             AddErrorInternal(err);
         }
 
-        public static void AddError(string group, string msg, [NotNull] Entity ent, Extents3d ext)
+        public static void AddError(string group, string msg, Entity ent, Extents3d ext)
         {
             var err = new Error(msg, ext, ent) { Group = group };
             AddErrorInternal(err);
         }
 
-        public static void AddError(string msg, Extents3d ext, ObjectId idEnt, [CanBeNull] Icon icon = null)
+        public static void AddError(string msg, Extents3d ext, ObjectId idEnt, Icon? icon = null)
         {
             var err = new Error(msg, ext, idEnt, icon);
             AddErrorInternal(err);
         }
 
-        public static void AddError(string group, string msg, Extents3d ext, ObjectId idEnt, [CanBeNull] Icon icon = null)
+        public static void AddError(string group, string msg, Extents3d ext, ObjectId idEnt, Icon? icon = null)
         {
             var err = new Error(msg, ext, idEnt, icon) { Group = group };
             AddErrorInternal(err);
         }
 
-        public static void AddError(string msg, Extents3d ext, Matrix3d trans, [CanBeNull] Icon icon = null)
+        public static void AddError(string msg, Extents3d ext, Matrix3d trans, Icon? icon = null)
         {
             var err = new Error(msg, ext, trans, icon);
             AddErrorInternal(err);
         }
 
-        public static void AddError(string group, string msg, Extents3d ext, Matrix3d trans, [CanBeNull] Icon icon = null)
+        public static void AddError(string group, string msg, Extents3d ext, Matrix3d trans, Icon? icon = null)
         {
             var err = new Error(msg, ext, trans, icon) { Group = group };
             AddErrorInternal(err);
@@ -180,13 +178,13 @@
             AddErrorInternal(err);
         }
 
-        public static void AddError(string msg, ObjectId idEnt, [CanBeNull] Icon icon = null)
+        public static void AddError(string msg, ObjectId idEnt, Icon? icon = null)
         {
             var err = new Error(msg, idEnt, icon);
             AddErrorInternal(err);
         }
 
-        public static void AddError(string group, string msg, ObjectId idEnt, [CanBeNull] Icon icon = null)
+        public static void AddError(string group, string msg, ObjectId idEnt, Icon? icon = null)
         {
             var err = new Error(msg, idEnt, icon) { Group = group };
             AddErrorInternal(err);
@@ -204,13 +202,13 @@
             AddErrorInternal(err);
         }
 
-        public static void AddError(string msg, ObjectId idEnt, Matrix3d trans, [CanBeNull] Icon icon = null)
+        public static void AddError(string msg, ObjectId idEnt, Matrix3d trans, Icon? icon = null)
         {
             var err = new Error(msg, idEnt, trans, icon);
             AddErrorInternal(err);
         }
 
-        public static void AddError(string group, string msg, ObjectId idEnt, Matrix3d trans, [CanBeNull] Icon icon = null)
+        public static void AddError(string group, string msg, ObjectId idEnt, Matrix3d trans, Icon? icon = null)
         {
             var err = new Error(msg, idEnt, trans, icon) { Group = group };
             AddErrorInternal(err);
@@ -236,7 +234,7 @@
             }
         }
 
-        public static void Show([NotNull] List<IError> errors)
+        public static void Show(List<IError> errors)
         {
             try
             {
@@ -274,7 +272,7 @@
             return System.Windows.Forms.DialogResult.OK;
         }
 
-        public static bool? ShowDialog([NotNull] List<IError> errors)
+        public static bool? ShowDialog(List<IError> errors)
         {
             var errVM = new ErrorsVM(errors) { IsDialog = true };
             var errView = new ErrorsView(errVM);
@@ -296,8 +294,7 @@
             Errors.Add(err);
         }
 
-        [NotNull]
-        private static List<IError> SortErrors([NotNull] List<IError> errors)
+        private static List<IError> SortErrors(List<IError> errors)
         {
             var comparer = NetLib.Comparers.AlphanumComparator.New;
             return errors.OrderBy(o => o.Message, comparer).ToList();

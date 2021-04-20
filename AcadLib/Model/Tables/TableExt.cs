@@ -6,27 +6,23 @@
     using Autodesk.AutoCAD.Geometry;
     using Geometry;
     using Hatches;
-    using JetBrains.Annotations;
     using NetLib;
 
-    [PublicAPI]
     public static class TableExt
     {
         public static LineWeight LwDataRow = LineWeight.LineWeight018;
 
-        public static void SetTextString([NotNull] this Cell cell, string text, double widthFactor = 1)
+        public static void SetTextString(this Cell cell, string text, double widthFactor = 1)
         {
             cell.TextString = Math.Abs(widthFactor - 1) < 0.0001 ? text : $@"{{\W{widthFactor}{text}}}";
         }
 
-        [NotNull]
-        public static Cell SetValue([NotNull] this Cell cell, object? value)
+        public static Cell SetValue(this Cell cell, object? value)
         {
             return SetValue(cell, value, null);
         }
 
-        [NotNull]
-        public static Cell SetValue([NotNull] this Cell cell, object? value, object? defaultValue)
+        public static Cell SetValue(this Cell cell, object? value, object? defaultValue)
         {
             if (value == null)
             {
@@ -39,7 +35,6 @@
             return cell;
         }
 
-        [NotNull]
         public static Cell SetValue(this Cell cell, ObjectId btrId, bool isAutoScale, double scale = 1, double rotation = 0)
         {
             if (btrId.IsNull) return cell;
@@ -57,17 +52,17 @@
             return cell;
         }
 
-        public static Cell MoveDown([NotNull] this Cell cell)
+        public static Cell MoveDown(this Cell cell)
         {
             return cell.ParentTable.Cells[cell.Row + 1, cell.Column];
         }
 
-        public static Cell MoveRight([NotNull] this Cell cell)
+        public static Cell MoveRight(this Cell cell)
         {
             return cell.ParentTable.Cells[cell.Row, cell.Column + 1];
         }
 
-        public static void SetBorders([NotNull] this Table table, LineWeight lw)
+        public static void SetBorders(this Table table, LineWeight lw)
         {
             if (table.Rows.Count < 2) return;
 
@@ -89,9 +84,8 @@
         /// Таблица должна быть в базе чертежа.
         /// Штриховка добавляется в базу.
         /// </summary>
-        [NotNull]
         public static Hatch SetCellHatch(
-            [NotNull] this Cell cell,
+            this Cell cell,
             int colorIndex = 0,
             LineWeight lineWeight = LineWeight.LineWeight015,
             double patternScale = 1,
@@ -117,20 +111,20 @@
             return h;
         }
 
-        private static Extents3d OffsetExtToMarginCell(Extents3d ext, [NotNull] Cell cell)
+        private static Extents3d OffsetExtToMarginCell(Extents3d ext, Cell cell)
         {
             return new Extents3d(
                 new Point3d(ext.MinPoint.X - cell.Borders.Horizontal.Margin ?? 0, ext.MinPoint.Y - cell.Borders.Top.Margin ?? 0, 0),
                 new Point3d(ext.MaxPoint.X + cell.Borders.Horizontal.Margin ?? 0, ext.MaxPoint.Y + cell.Borders.Top.Margin ?? 0, 0));
         }
 
-        private static void SetCell([NotNull] CellBorder cell, LineWeight lw, bool visible)
+        private static void SetCell(CellBorder cell, LineWeight lw, bool visible)
         {
             cell.LineWeight = lw;
             cell.IsVisible = visible;
         }
 
-        private static void SetRowData([NotNull] Row row, LineWeight lw)
+        private static void SetRowData(Row row, LineWeight lw)
         {
             SetCell(row.Borders.Bottom, LwDataRow, true);
             SetCell(row.Borders.Horizontal, LwDataRow, true);
@@ -140,7 +134,7 @@
             SetCell(row.Borders.Vertical, lw, true);
         }
 
-        private static void SetRowHeader([NotNull] Row row, LineWeight lw)
+        private static void SetRowHeader(Row row, LineWeight lw)
         {
             SetCell(row.Borders.Bottom, lw, true);
             SetCell(row.Borders.Horizontal, lw, true);
@@ -150,7 +144,7 @@
             SetCell(row.Borders.Vertical, lw, true);
         }
 
-        private static void SetRowTitle([NotNull] Row row)
+        private static void SetRowTitle(Row row)
         {
             SetCell(row.Borders.Bottom, LineWeight.LineWeight000, false);
             SetCell(row.Borders.Horizontal, LineWeight.LineWeight000, false);

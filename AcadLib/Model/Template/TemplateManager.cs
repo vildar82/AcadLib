@@ -5,34 +5,29 @@
     using System.Linq;
     using AutoCAD_PIK_Manager.Settings;
     using Autodesk.AutoCAD.DatabaseServices;
-    using JetBrains.Annotations;
     using Layers;
     using NetLib;
 
     /// <summary>
     ///     Управление шаблонами
     /// </summary>
-    [PublicAPI]
     public static class TemplateManager
     {
-        public static void ExportToJson(this TemplateData tData, [NotNull] string file)
+        public static void ExportToJson(this TemplateData tData, string file)
         {
             tData.Serialize(file);
         }
 
-        [NotNull]
-        public static TemplateData LoadFromDb([NotNull] Database db)
+        public static TemplateData LoadFromDb(Database db)
         {
             return new TemplateData { Layers = db.Layers().ToDictionary(k => k.Name) };
         }
 
-        [NotNull]
         public static TemplateData LoadFromJson(string file)
         {
             return LoadFromJson(file, false);
         }
 
-        [NotNull]
         public static TemplateData LoadFromJson(string file, bool logErr)
         {
             if (!File.Exists(file))
@@ -59,8 +54,6 @@
         ///     Полный путь к шаблону (из папки Template настроек)
         /// </summary>
         /// <param name="templateFileName">Имя файла шаблона с расширением</param>
-        /// <returns></returns>
-        [NotNull]
         public static string GetTemplateFile(string templateFileName)
         {
             return Path.Combine(PikSettings.LocalSettingsFolder, $@"Template\{PikSettings.UserGroup}\{templateFileName}");

@@ -4,7 +4,6 @@
     using JetBrains.Annotations;
     using Microsoft.Win32;
 
-    [PublicAPI]
     public class RegExt : IDisposable
     {
         public const string REGAPPPATH = @"Software\Vildar\AutoCAD\";
@@ -31,7 +30,7 @@
             return Convert.ToBoolean(value);
         }
 
-        public void Save(string subkey, [NotNull] string value)
+        public void Save(string subkey, string value)
         {
             regKey.SetValue(subkey, value, RegistryValueKind.String);
         }

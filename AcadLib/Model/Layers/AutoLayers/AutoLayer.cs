@@ -2,7 +2,6 @@
 {
     using System.Collections.Generic;
     using Autodesk.AutoCAD.DatabaseServices;
-    using JetBrains.Annotations;
 
     public abstract class AutoLayer
     {
@@ -10,7 +9,6 @@
 
         protected List<string> Commands { get; set; }
 
-        [NotNull]
         public string GetInfo()
         {
             return $"{Layer.Name} - {string.Join(",", Commands)}";

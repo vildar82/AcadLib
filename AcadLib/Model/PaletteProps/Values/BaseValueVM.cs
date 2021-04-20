@@ -8,7 +8,6 @@
     using System.Windows.Controls;
     using Autodesk.AutoCAD.ApplicationServices;
     using Autodesk.AutoCAD.DatabaseServices;
-    using JetBrains.Annotations;
     using NetLib.WPF;
     using ReactiveUI;
 
@@ -26,7 +25,7 @@
         public List<ObjectId> Elements { get; set; }
 
         public static TView CreateS<TView, TVm>(
-            [NotNull] IEnumerable<object> values,
+            IEnumerable<object> values,
             Action<object, BaseValueVM> update = null,
             Action<TVm> configure = null,
             bool isReadOnly = false)

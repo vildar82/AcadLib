@@ -3,13 +3,12 @@
     using Autodesk.AutoCAD.DatabaseServices;
     using Autodesk.AutoCAD.EditorInput;
     using Autodesk.AutoCAD.Geometry;
-    using JetBrains.Annotations;
 
     public class BlockInsertJig : EntityJig
     {
         private Point3d mCenterPt, mActualPoint;
 
-        public BlockInsertJig([NotNull] BlockReference br) : base(br)
+        public BlockInsertJig(BlockReference br) : base(br)
         {
             var ed = AcadHelper.Doc.Editor;
             br.TransformBy(ed.CurrentUserCoordinateSystem);
@@ -21,7 +20,7 @@
             return Entity;
         }
 
-        protected override SamplerStatus Sampler([NotNull] JigPrompts prompts)
+        protected override SamplerStatus Sampler(JigPrompts prompts)
         {
             var jigOpts = new JigPromptPointOptions
             {

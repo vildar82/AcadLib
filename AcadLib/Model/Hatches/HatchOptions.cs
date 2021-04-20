@@ -1,20 +1,17 @@
-﻿using System;
-using NetLib;
-
-namespace AcadLib.Hatches
+﻿namespace AcadLib.Hatches
 {
+    using System;
     using Autodesk.AutoCAD.Colors;
     using Autodesk.AutoCAD.DatabaseServices;
-    using JetBrains.Annotations;
+    using NetLib;
 
-    [PublicAPI]
     public class HatchOptions : EntityOptions
     {
         public HatchOptions()
         {
         }
 
-        public HatchOptions([NotNull] Hatch h) : base (h)
+        public HatchOptions(Hatch h) : base (h)
         {
             PatternName = h.PatternName;
             PatternType = h.PatternType;

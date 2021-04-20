@@ -1,16 +1,12 @@
-﻿using System.Collections.Generic;
-#pragma warning disable 618
-
-namespace AcadLib
+﻿namespace AcadLib
 {
+    using System.Collections.Generic;
     using Autodesk.AutoCAD.DatabaseServices;
-    using JetBrains.Annotations;
 
-    [PublicAPI]
     public static class DrawOrderExt
     {
-        public static void DrawOrder([NotNull] this BlockTableRecord btr, ObjectId top, ObjectId bot)
-        {             
+        public static void DrawOrder(this BlockTableRecord btr, ObjectId top, ObjectId bot)
+        {
             var drawOrder = btr.DrawOrderTableId.GetObject(OpenMode.ForWrite) as DrawOrderTable;
             if (drawOrder == null)
                 return;
@@ -25,7 +21,7 @@ namespace AcadLib
             using var order = (DrawOrderTable)btr.DrawOrderTableId.Open(OpenMode.ForWrite, false, true);
             order.MoveToTop(new ObjectIdCollection(new[] {entId}));
         }
-        
+
         public static void MoveTop(this List<ObjectId> ids)
         {
             using var ent = ids[0].Open(OpenMode.ForRead, false, true);

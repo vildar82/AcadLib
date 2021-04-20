@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Collections.ObjectModel;
     using System.Diagnostics;
     using System.IO;
     using System.Linq;
@@ -9,16 +10,14 @@
     using System.Text;
     using System.Windows;
     using Autodesk.AutoCAD.DatabaseServices;
-    using JetBrains.Annotations;
+    using DynamicData;
     using NetLib;
     using NetLib.WPF;
     using OfficeOpenXml;
     using ReactiveUI;
     using UI;
-    using Unit = System.Reactive.Unit;
-    using System.Collections.ObjectModel;
     using Visual;
-    using DynamicData;
+    using Unit = System.Reactive.Unit;
 
     public class ErrorsVM : BaseViewModel
     {
@@ -29,7 +28,7 @@
         {
         }
 
-        public ErrorsVM([NotNull] List<IError> errors)
+        public ErrorsVM(List<IError> errors)
         {
             ErrorsOrig = errors;
 
@@ -138,7 +137,7 @@
             }
         }
 
-        private void DeleteErrorExec([NotNull] ErrorModelBase errorBase)
+        private void DeleteErrorExec(ErrorModelBase errorBase)
         {
             if (errorBase is ErrorModelOne errOne && errOne.Parent != null)
             {
@@ -264,8 +263,7 @@
             Process.Start(fileTxt);
         }
 
-        [NotNull]
-        private List<ErrorModelBase> GetSelectedErrors([NotNull] out List<IError> errors)
+        private List<ErrorModelBase> GetSelectedErrors(out List<IError> errors)
         {
             errors = new List<IError>();
             var selectedErrors = new List<ErrorModelBase>();
@@ -345,7 +343,7 @@
             }
         }
 
-        private void RemoveErrors([NotNull] List<ErrorModelBase> selectedErrors)
+        private void RemoveErrors(List<ErrorModelBase> selectedErrors)
         {
             var countIsSelectedErr = 0;
             foreach (var item in selectedErrors)

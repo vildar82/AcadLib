@@ -8,7 +8,6 @@
     using Autodesk.AutoCAD.DatabaseServices;
     using Autodesk.AutoCAD.Geometry;
     using Errors;
-    using JetBrains.Annotations;
     using Tree;
 
     /// <summary>
@@ -139,7 +138,7 @@
             }
         }
 
-        private static void GetDuplicateBlocks([NotNull] IEnumerable ids, Matrix3d transToModel, double rotate)
+        private static void GetDuplicateBlocks(IEnumerable ids, Matrix3d transToModel, double rotate)
         {
             var idsBtrNext = new List<Tuple<ObjectId, Matrix3d, double>>();
 

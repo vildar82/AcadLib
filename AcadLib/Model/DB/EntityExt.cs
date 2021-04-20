@@ -5,10 +5,8 @@
     using System.Linq;
     using Autodesk.AutoCAD.DatabaseServices;
     using Autodesk.AutoCAD.Geometry;
-    using JetBrains.Annotations;
     using Scale;
 
-    [PublicAPI]
     public static class EntityExt
     {
         /// <summary>
@@ -16,7 +14,7 @@
         /// </summary>
         /// <param name="ent">Примитив</param>
         /// <param name="btr">Блок</param>
-        public static ObjectId Append([NotNull] this Entity ent, [NotNull] BlockTableRecord btr)
+        public static ObjectId Append(this Entity ent, BlockTableRecord btr)
         {
             if (!btr.IsWriteEnabled)
                 btr = btr.Id.GetObject<BlockTableRecord>(OpenMode.ForWrite);
@@ -31,15 +29,14 @@
         /// <param name="ent"></param>
         /// <param name="entOther"></param>
         /// <returns>Точки пересечения</returns>
-        [NotNull]
-        public static List<Point2d> IntersectWithOnPlane([NotNull] this Entity ent, [NotNull] Entity entOther)
+        public static List<Point2d> IntersectWithOnPlane(this Entity ent, Entity entOther)
         {
             var ptsCol = new Point3dCollection();
             ent.IntersectWith(entOther, Intersect.OnBothOperands, new Plane(), ptsCol, IntPtr.Zero, IntPtr.Zero);
             return ptsCol.Cast<Point3d>().Select(s => s.Convert2d()).ToList();
         }
 
-        public static List<Point2d> IntersectWithOnPlane([NotNull] this Entity ent, [NotNull] Entity entOther, Intersect extent)
+        public static List<Point2d> IntersectWithOnPlane(this Entity ent, Entity entOther, Intersect extent)
         {
             var ptsCol = new Point3dCollection();
             ent.IntersectWith(entOther, extent, new Plane(), ptsCol, IntPtr.Zero, IntPtr.Zero);
@@ -51,7 +48,7 @@
         /// </summary>
         /// <param name="ent">Объект чертежа</param>
         /// <returns>Да - видим, Нет - не видим, слой выключен или заморожен</returns>
-        public static bool IsVisibleLayerOnAndUnfrozen([NotNull] this Entity ent)
+        public static bool IsVisibleLayerOnAndUnfrozen(this Entity ent)
         {
             if (!ent.Visible) return false;
             using var lay = ent.LayerId.GetObject<LayerTableRecord>();
@@ -65,7 +62,7 @@
         /// </summary>
         /// <param name="ent">Объект поддерживающий аннотативность (текст, размер и т.п.)</param>
         /// <param name="scale">Масштаб в виде 100, 25 и т.п.</param>
-        public static void SetAnnotativeScale([NotNull] this Entity ent, int scale)
+        public static void SetAnnotativeScale(this Entity ent, int scale)
         {
             // Проверка, есть ли нужный масштаб в чертеже
             var nameScale = $"1:{scale}";
@@ -75,7 +72,7 @@
             ent.RemoveContext(ent.Database.Cannoscale);
         }
 
-        public static void SetAnnoScaleAndRemoveAllOther([NotNull] this Entity ent, AnnotationScale scale)
+        public static void SetAnnoScaleAndRemoveAllOther(this Entity ent, AnnotationScale scale)
         {
             if (ent.Annotative != AnnotativeStates.True)
                 return;
@@ -97,7 +94,8 @@
         private static void AddScaleAndRemoveOther(Entity ent, ObjectContext addScale, ObjectContextCollection occ)
         {
             ent.AddContext(addScale);
-            foreach (var scale in occ) {
+            foreach (var scale in occ)
+            {
                 if (addScale.Name != scale.Name && ent.HasContext(scale))
                     ent.RemoveContext(scale);
             }

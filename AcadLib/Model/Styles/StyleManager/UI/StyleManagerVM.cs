@@ -7,10 +7,7 @@ namespace AcadLib.Styles.StyleManager.UI
     using System.Linq;
     using AcadLib.Styles.StyleManager.Model;
     using Autodesk.AutoCAD.DatabaseServices;
-    using JetBrains.Annotations;
     using NetLib.WPF;
-    using ReactiveUI;
-    using ReactiveUI.Legacy;
 
     public class StyleManagerVM : BaseViewModel
     {
@@ -39,7 +36,6 @@ namespace AcadLib.Styles.StyleManager.UI
             }
         }
 
-        [NotNull]
         private StyleTableVM GetStyleTableFromDict(ObjectId styleDictId, string name)
         {
             var dict = styleDictId.GetObjectT<DBDictionary>();
@@ -55,7 +51,6 @@ namespace AcadLib.Styles.StyleManager.UI
             };
         }
 
-        [NotNull]
         private StyleTableVM GetStyleTable(ObjectId symbolTableId, string name)
         {
             var table = symbolTableId.GetObjectT<SymbolTable>();

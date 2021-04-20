@@ -1,12 +1,11 @@
-﻿namespace Autodesk.AutoCAD.DatabaseServices
+﻿namespace AcadLib.Blocks
 {
     using System.Linq;
-    using Geometry;
-    using JetBrains.Annotations;
+    using Autodesk.AutoCAD.DatabaseServices;
+    using Autodesk.AutoCAD.Geometry;
     using NetLib;
     using General = AcadLib.General;
 
-    [PublicAPI]
     public static class BlockExtents
     {
         private static readonly Scale3d scale1 = new Scale3d(1);
@@ -26,12 +25,12 @@
             }
         }
 
-        public static bool IsScaleEquals1([NotNull] this BlockReference blref)
+        public static bool IsScaleEquals1(this BlockReference blref)
         {
             return blref.ScaleFactors.IsEqualTo(scale1, tolerance);
         }
 
-        public static bool IsScaleEquals([NotNull] this BlockReference blref, int scale)
+        public static bool IsScaleEquals(this BlockReference blref, int scale)
         {
             return blref.ScaleFactors.IsEqualTo(new Scale3d(scale), tolerance);
         }
@@ -40,7 +39,7 @@
         /// Обновление графики во вхождениях блока для данного определения блока
         /// Должна быть запущена транзакция!!!
         /// </summary>
-        public static void SetBlRefsRecordGraphicsModified([NotNull] this BlockTableRecord btr)
+        public static void SetBlRefsRecordGraphicsModified(this BlockTableRecord btr)
         {
             var idsBlRef = btr.GetBlockReferenceIds(true, false);
             foreach (ObjectId idBlRefApart in idsBlRef)
@@ -54,7 +53,6 @@
         /// Определение границы блока чистых (без динамики, без атрибутов)
         /// </summary>
         /// <param name="blRef"></param>
-        /// <returns></returns>
         public static Extents3d GeometricExtentsСlean(this BlockReference blRef)
         {
             var mat = Matrix3d.Identity;
@@ -62,9 +60,8 @@
             return blockExt;
         }
 
-        public static Extents3d GeometricExtentsVisible([NotNull] this BlockReference blRef)
+        public static Extents3d GeometricExtentsVisible(this BlockReference blRef)
         {
-#pragma warning disable 618
             using var btr = (BlockTableRecord)blRef.BlockTableRecord.Open(OpenMode.ForRead);
             var ext = new Extents3d();
             foreach (var extents3D in btr.GetObjects<Entity>().Where(w => w.Visible && w.Bounds.HasValue)
@@ -80,7 +77,6 @@
         /// Определят не пустой ли габаритный контейнер.
         /// </summary>
         /// <param name="ext">Габаритный контейнер.</param>
-        /// <returns></returns>
         public static bool IsEmptyExt(ref Extents3d ext)
         {
             return ext.MinPoint.DistanceTo(ext.MaxPoint) < Tolerance.Global.EqualPoint;
@@ -97,36 +93,29 @@
             if (en is BlockReference bref)
             {
                 var matIns = mat * bref.BlockTransform;
-#pragma warning disable 618
-                using (var btr = (BlockTableRecord)bref.BlockTableRecord.Open(OpenMode.ForRead))
-#pragma warning restore 618
+                using var btr = (BlockTableRecord)bref.BlockTableRecord.Open(OpenMode.ForRead);
+                foreach (var id in btr)
                 {
-                    foreach (var id in btr)
+                    // Пропускаем все тексты.
+                    if (id.ObjectClass.IsDerivedFrom(General.ClassDbTextRX) ||
+                        id.ObjectClass.IsDerivedFrom(General.ClassMTextRX) ||
+                        id.ObjectClass.IsDerivedFrom(General.ClassMLeaderRX) ||
+                        id.ObjectClass.IsDerivedFrom(General.ClassDimension))
                     {
-                        // Пропускаем все тексты.
-                        if (id.ObjectClass.IsDerivedFrom(General.ClassDbTextRX) ||
-                            id.ObjectClass.IsDerivedFrom(General.ClassMTextRX) ||
-                            id.ObjectClass.IsDerivedFrom(General.ClassMLeaderRX) ||
-                            id.ObjectClass.IsDerivedFrom(General.ClassDimension))
-                        {
-                            continue;
-                        }
-#pragma warning disable 618
-                        using (var obj = id.Open(OpenMode.ForRead, false, true))
-#pragma warning restore 618
-                        {
-                            var enCur = obj as Entity;
-                            if (enCur == null || enCur.Visible != true)
-                                continue;
-                            if (IsEmptyExt(ref ext))
-                            {
-                                ext.AddExtents(GetBlockExtents(enCur, ref matIns, ext));
-                            }
-                            else
-                            {
-                                ext = GetBlockExtents(enCur, ref matIns, ext);
-                            }
-                        }
+                        continue;
+                    }
+
+                    using var obj = id.Open(OpenMode.ForRead, false, true);
+                    var enCur = obj as Entity;
+                    if (enCur == null || enCur.Visible != true)
+                        continue;
+                    if (IsEmptyExt(ref ext))
+                    {
+                        ext.AddExtents(GetBlockExtents(enCur, ref matIns, ext));
+                    }
+                    else
+                    {
+                        ext = GetBlockExtents(enCur, ref matIns, ext);
                     }
                 }
             }
@@ -134,43 +123,41 @@
             {
                 if (mat.IsUniscaledOrtho())
                 {
-                    using (var enTr = en.GetTransformedCopy(mat))
+                    using var enTr = en.GetTransformedCopy(mat);
+                    switch (enTr)
                     {
-                        switch (enTr)
-                        {
-                            case Dimension dim:
-                                dim.RecomputeDimensionBlock(true);
-                                break;
-                            case Table table:
-                                table.RecomputeTableBlock(true);
-                                break;
-                        }
-
-                        if (IsEmptyExt(ref ext))
-                        {
-                            try
-                            {
-                                ext = enTr.GeometricExtents;
-                            }
-                            catch
-                            {
-                                // ignored
-                            }
-                        }
-                        else
-                        {
-                            try
-                            {
-                                ext.AddExtents(enTr.GeometricExtents);
-                            }
-                            catch
-                            {
-                                // ignored
-                            }
-                        }
-
-                        return ext;
+                        case Dimension dim:
+                            dim.RecomputeDimensionBlock(true);
+                            break;
+                        case Table table:
+                            table.RecomputeTableBlock(true);
+                            break;
                     }
+
+                    if (IsEmptyExt(ref ext))
+                    {
+                        try
+                        {
+                            ext = enTr.GeometricExtents;
+                        }
+                        catch
+                        {
+                            // ignored
+                        }
+                    }
+                    else
+                    {
+                        try
+                        {
+                            ext.AddExtents(enTr.GeometricExtents);
+                        }
+                        catch
+                        {
+                            // ignored
+                        }
+                    }
+
+                    return ext;
                 }
 
                 try

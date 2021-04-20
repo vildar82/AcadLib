@@ -2,12 +2,11 @@
 {
     using System.Collections.Generic;
     using Data;
-    using JetBrains.Annotations;
     using NetLib.WPF;
 
     public class LockViewModel : BaseViewModel
     {
-        public LockViewModel([NotNull] CommandLockInfo command)
+        public LockViewModel(CommandLockInfo command)
         {
             Command = command;
             Message = command.Message;

@@ -1,14 +1,10 @@
 ﻿namespace AcadLib.Errors
 {
     using System.Diagnostics;
-    using System.Linq;
     using System.Windows;
     using System.Windows.Controls;
     using System.Windows.Input;
     using Autodesk.AutoCAD.ApplicationServices;
-    using JetBrains.Annotations;
-    using NetLib;
-    using Visual;
 
     /// <summary>
     /// Логика взаимодействия для WindowErrors.xaml
@@ -17,7 +13,7 @@
     {
         private readonly Document doc;
 
-        public ErrorsView([NotNull] ErrorsVM errVM)
+        public ErrorsView(ErrorsVM errVM)
             : base(errVM)
         {
             doc = AcadHelper.Doc;
@@ -37,7 +33,7 @@
             Process.Start($"mailto:khisyametdinovvt@pik.ru?subject={subject}");
         }
 
-        private void ErrorsView_KeyDown(object sender, [NotNull] KeyEventArgs e)
+        private void ErrorsView_KeyDown(object sender, KeyEventArgs e)
         {
             switch (e.Key)
             {

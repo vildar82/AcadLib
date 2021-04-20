@@ -3,16 +3,14 @@
     using Autodesk.AutoCAD.ApplicationServices.Core;
     using Autodesk.AutoCAD.Colors;
     using Autodesk.AutoCAD.DatabaseServices;
-    using JetBrains.Annotations;
 
-    [PublicAPI]
     public static class Draw
     {
         public static void Polyline(
-            [CanBeNull] Layers.LayerInfo layer = null,
-            [CanBeNull] Color color = null,
+            Layers.LayerInfo? layer = null,
+            Color? color = null,
             LineWeight? lineWeight = null,
-            [CanBeNull] string lineType = null,
+            string? lineType = null,
             double? lineTypeScale = null)
         {
             // Обертка запуска команды рисования полилинии с заданными свойствами.

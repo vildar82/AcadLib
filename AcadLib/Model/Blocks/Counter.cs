@@ -2,7 +2,6 @@
 {
     using System.Collections.Generic;
     using System.Text;
-    using JetBrains.Annotations;
 
     public static class Counter
     {
@@ -18,7 +17,7 @@
             _counter = new Dictionary<string, int>();
         }
 
-        public static void AddCount([NotNull] string key)
+        public static void AddCount(string key)
         {
             if (_counter.ContainsKey(key))
             {
@@ -30,13 +29,12 @@
             }
         }
 
-        public static int GetCount([NotNull] string key)
+        public static int GetCount(string key)
         {
             _counter.TryGetValue(key, out var count);
             return count;
         }
 
-        [NotNull]
         public static string Report()
         {
             var report = new StringBuilder("Обработано блоков:");

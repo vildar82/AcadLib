@@ -11,10 +11,8 @@
     using Errors;
     using Geometry;
     using Hatches;
-    using JetBrains.Annotations;
     using Surface = Autodesk.AutoCAD.DatabaseServices.Surface;
 
-    [PublicAPI]
     public static class BrepExtensions
     {
         private static List<ObjectId> hatchEditAppendIds;
@@ -23,7 +21,7 @@
         /// Определение контура для набора полилиний - объекдинением в регион и извлечением внешнего его контура.
         /// Должна быть запущена транзакция
         /// </summary>
-        public static Polyline3d? GetExteriorContour([NotNull] this List<Polyline> idsPl)
+        public static Polyline3d? GetExteriorContour(this List<Polyline> idsPl)
         {
             var colReg = new List<Region>();
             foreach (var pl in idsPl)
@@ -98,7 +96,6 @@
         /// <summary>
         /// Без дуговых сегментов!!!
         /// </summary>
-        [NotNull]
         public static List<KeyValuePair<Polyline, BrepLoopType>> GetPolylines(this Region reg)
         {
             var resVal = new List<KeyValuePair<Polyline, BrepLoopType>>();
@@ -119,7 +116,6 @@
             return resVal;
         }
 
-        [NotNull]
         public static List<KeyValuePair<Point2dCollection, BrepLoopType>> GetPoints2dByLoopType(this Region reg)
         {
             var resVal = new List<KeyValuePair<Point2dCollection, BrepLoopType>>();
@@ -138,7 +134,6 @@
             return resVal;
         }
 
-        [NotNull]
         public static List<Point3d> GetVertices(this Region reg)
         {
             var ptsVertex = new List<Point3d>();
@@ -256,7 +251,7 @@
             return CreateRegion((Curve)pl);
         }
 
-        public static Region? CreateRegion([CanBeNull] this Curve curve)
+        public static Region? CreateRegion(this Curve? curve)
         {
             if (curve == null)
                 return null;
@@ -276,7 +271,7 @@
         }
 
         [Obsolete("Используй CreateRegionFromHatch")]
-        public static Region? CreateRegion([NotNull] this Hatch hatch)
+        public static Region? CreateRegion(this Hatch hatch)
         {
             using var loops = hatch.GetPolylines2(Block.Tolerance01, HatchLoopTypes.External | HatchLoopTypes.Outermost);
             var validLoops = loops.Where(w => w.Loop.Area > 0).ToList();
@@ -321,7 +316,6 @@
             return region;
         }
 
-        [NotNull]
         public static Region CreateRegionFromHatch(this ObjectId hatchId)
         {
             var doc = AcadHelper.Doc;
@@ -347,14 +341,12 @@
             return res;
         }
 
-        [NotNull]
-        public static List<Region> CreateRegion([NotNull] this IEnumerable<Polyline> pls)
+        public static List<Region> CreateRegion(this IEnumerable<Polyline> pls)
         {
             return CreateRegion(pls.Cast<Curve>());
         }
 
-        [NotNull]
-        public static List<Region> CreateRegion([NotNull] this IEnumerable<Curve> curves)
+        public static List<Region> CreateRegion(this IEnumerable<Curve> curves)
         {
             var res = new List<Region>();
             foreach (var curve in curves)
@@ -380,7 +372,7 @@
             return res;
         }
 
-        public static Region? UnionRegions([CanBeNull] this List<Region> regions)
+        public static Region? UnionRegions(this List<Region> regions)
         {
             if (regions?.Any() != true)
                 return null;
@@ -396,7 +388,7 @@
             return union;
         }
 
-        private static void CommandWillStartHatchEdit(object sender, [NotNull] CommandEventArgs e)
+        private static void CommandWillStartHatchEdit(object sender, CommandEventArgs e)
         {
             if (e.GlobalCommandName == "-HATCHEDIT")
             {
@@ -406,12 +398,12 @@
             }
         }
 
-        private static void ObjectAppendedHatchEdit(object sender, [NotNull] ObjectEventArgs e)
+        private static void ObjectAppendedHatchEdit(object sender, ObjectEventArgs e)
         {
             hatchEditAppendIds.Add(e.DBObject.Id);
         }
 
-        private static Region? GetRegion([NotNull] IEnumerable<Curve> pls)
+        private static Region? GetRegion(IEnumerable<Curve> pls)
         {
             using var regions = new DisposableSet<Region>(pls.CreateRegion());
             var reg = regions.Skip(1).Any() ? regions.ToList().UnionRegions() : regions.First();

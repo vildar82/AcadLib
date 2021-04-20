@@ -3,15 +3,12 @@
     using System;
     using System.Collections.Generic;
     using Autodesk.AutoCAD.DatabaseServices;
-    using JetBrains.Annotations;
 
-    [PublicAPI]
     public class DictBlockName : IDisposable
     {
         private Dictionary<ObjectId, string> dict = new Dictionary<ObjectId, string>();
 
-        [NotNull]
-        public string GetName([NotNull] BlockReference blRef)
+        public string GetName(BlockReference blRef)
         {
             if (!dict.TryGetValue(blRef.DynamicBlockTableRecord, out var blName))
             {

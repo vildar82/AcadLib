@@ -1,12 +1,8 @@
-﻿// ReSharper disable once CheckNamespace
-
-namespace Autodesk.AutoCAD.DatabaseServices
+﻿namespace Autodesk.AutoCAD.DatabaseServices
 {
     using System.Collections.Generic;
     using Geometry;
-    using JetBrains.Annotations;
 
-    [PublicAPI]
     public static class ExtentsExtension
     {
         /// <summary>
@@ -42,8 +38,7 @@ namespace Autodesk.AutoCAD.DatabaseServices
         /// Общая граница
         /// </summary>
         /// <param name="exts"></param>
-        /// <returns></returns>
-        public static Extents3d Union([NotNull] this IEnumerable<Extents3d> exts)
+        public static Extents3d Union(this IEnumerable<Extents3d> exts)
         {
             var ext = new Extents3d();
             foreach (var extents3D in exts)
@@ -58,7 +53,6 @@ namespace Autodesk.AutoCAD.DatabaseServices
         /// Определение точки центра границы Extents3d
         /// </summary>
         /// <param name="ext"></param>
-        /// <returns></returns>
         public static Point3d Center(this Extents3d ext)
         {
             return new Point3d((ext.MaxPoint.X + ext.MinPoint.X) * 0.5,
@@ -79,7 +73,6 @@ namespace Autodesk.AutoCAD.DatabaseServices
         /// Длина диагонали границ (расстояние между точками MaxPoint и MinPoint)
         /// </summary>
         /// <param name="ext"></param>
-        /// <returns></returns>
         public static double Diagonal(this Extents3d ext)
         {
             return (ext.MaxPoint - ext.MinPoint).Length;
@@ -104,7 +97,6 @@ namespace Autodesk.AutoCAD.DatabaseServices
         /// Расстояние по Y
         /// </summary>
         /// <param name="ext"></param>
-        /// <returns></returns>
         public static double GetHeight(this Extents3d ext)
         {
             return ext.MaxPoint.Y - ext.MinPoint.Y;
@@ -114,19 +106,16 @@ namespace Autodesk.AutoCAD.DatabaseServices
         /// Расстояние по X
         /// </summary>
         /// <param name="ext"></param>
-        /// <returns></returns>
         public static double GetLength(this Extents3d ext)
         {
             return ext.MaxPoint.X - ext.MinPoint.X;
         }
 
-        [NotNull]
         public static Polyline GetPolyline(this Extents2d ext)
         {
             return ext.Convert3d().GetPolyline();
         }
 
-        [NotNull]
         public static Polyline GetPolyline(this Extents3d ext)
         {
             var pl = new Polyline();
@@ -138,7 +127,6 @@ namespace Autodesk.AutoCAD.DatabaseServices
             return pl;
         }
 
-        [NotNull]
         public static List<Point3d> GetRegularGridPoints(this Extents3d ext, double len)
         {
             var ptsGrid = new List<Point3d>();

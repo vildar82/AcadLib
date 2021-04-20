@@ -5,16 +5,14 @@
     using Autodesk.AutoCAD.DatabaseServices;
     using Autodesk.AutoCAD.LayerManager;
     using Errors;
-    using JetBrains.Annotations;
     using LayerState;
 
     /// <summary>
     ///     Импорт фильтрами слоев
     /// </summary>
-    [PublicAPI]
     public static class ImportLayerFilter
     {
-        public static void ImportLayerFilterAndState([NotNull] this Database dbDest, string sourceFile)
+        public static void ImportLayerFilterAndState(this Database dbDest, string sourceFile)
         {
             try
             {
@@ -42,19 +40,17 @@
         /// </summary>
         /// <param name="sourceFile">Файл источник из которого копируются фильтры слоев</param>
         /// <param name="dbDest">Чертеж назначения - в который копируются фильтры слоев</param>
-        public static void ImportLayerFilterTree([NotNull] this Database dbDest, string sourceFile)
+        public static void ImportLayerFilterTree(this Database dbDest, string sourceFile)
         {
             try
             {
-                using (var dbSrc = new Database(false, false))
+                using var dbSrc = new Database(false, false);
+                dbSrc.ReadDwgFile(sourceFile, FileOpenMode.OpenForReadAndAllShare, false, string.Empty);
+                dbSrc.CloseInput(true);
+                using (var t = dbSrc.TransactionManager.StartTransaction())
                 {
-                    dbSrc.ReadDwgFile(sourceFile, FileOpenMode.OpenForReadAndAllShare, false, string.Empty);
-                    dbSrc.CloseInput(true);
-                    using (var t = dbSrc.TransactionManager.StartTransaction())
-                    {
-                        ImportLayerFilterTree(dbSrc, dbDest);
-                        t.Commit();
-                    }
+                    ImportLayerFilterTree(dbSrc, dbDest);
+                    t.Commit();
                 }
             }
             catch (Exception ex)
@@ -63,8 +59,7 @@
             }
         }
 
-        [NotNull]
-        public static IdMapping CopyLayers([NotNull] Database dbSrc, Database dbDest)
+        public static IdMapping CopyLayers(Database dbSrc, Database dbDest)
         {
             var lt = dbSrc.LayerTableId.GetObjectT<LayerTable>();
             var layerIds = new ObjectIdCollection(lt.GetObjects<LayerTableRecord>().Select(s => s.Id).ToArray());
@@ -85,7 +80,7 @@
             dbDest.LayerFilters = lft;
         }
 
-        private static void ImportNestedFilters([NotNull] LayerFilter srcFilter, LayerFilter destFilter, IdMapping idmap)
+        private static void ImportNestedFilters(LayerFilter srcFilter, LayerFilter destFilter, IdMapping idmap)
         {
             foreach (LayerFilter sf in srcFilter.NestedFilters)
             {
@@ -118,7 +113,7 @@
                         df = new LayerFilter
                         {
                             Name = sf.Name,
-                            FilterExpression = sf.FilterExpression
+                            FilterExpression = sf.FilterExpression,
                         };
                         destFilter.NestedFilters.Add(df);
                     }

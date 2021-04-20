@@ -4,13 +4,11 @@
     using Autodesk.AutoCAD.Colors;
     using Autodesk.AutoCAD.DatabaseServices;
     using Autodesk.AutoCAD.Geometry;
-    using JetBrains.Annotations;
     using NetLib.Monad;
 
     /// <summary>
     /// Настройки для объекта на чертеже
     /// </summary>
-    [PublicAPI]
     public class EntityOptions
     {
         private LineWeight lineWeight;
@@ -22,7 +20,7 @@
         {
         }
 
-        public EntityOptions([NotNull] Entity ent)
+        public EntityOptions(Entity ent)
         {
             AcadColor = ent.Color;
             Color = System.Drawing.Color.FromArgb(ent.Color.Red, ent.Color.Green, ent.Color.Blue);
@@ -83,7 +81,7 @@
         /// </summary>
         public bool CheckCreateValues { get; set; }
 
-        public virtual void SetOptions([NotNull] Entity ent)
+        public virtual void SetOptions(Entity ent)
         {
             if (!ent.IsWriteEnabled)
                 ent = ent.UpgradeOpenTr();
@@ -181,13 +179,12 @@
 
     public static class EntityOptionsExt
     {
-        public static void SetOptions(this Entity ent, [CanBeNull] EntityOptions opt)
+        public static void SetOptions(this Entity ent, EntityOptions? opt)
         {
             opt?.SetOptions(ent);
         }
 
-        [NotNull]
-        public static EntityOptions GetEntityOptions([NotNull] this Entity ent)
+        public static EntityOptions GetEntityOptions(this Entity ent)
         {
             return new EntityOptions(ent);
         }

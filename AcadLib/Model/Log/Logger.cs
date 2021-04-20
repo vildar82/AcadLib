@@ -3,14 +3,12 @@
     using System;
     using System.IO;
     using Autodesk.AutoCAD.ApplicationServices.Core;
-    using JetBrains.Annotations;
     using Yandex.Metrica;
 
     public static class Logger
     {
-        [NotNull] public static readonly LoggAddinExt Log;
+        public static readonly LoggAddinExt Log;
 
-        [PublicAPI]
         public static readonly string UserGroup = AutoCAD_PIK_Manager.Settings.PikSettings.UserGroup;
 
         static Logger()
@@ -34,7 +32,6 @@
         }
     }
 
-    [PublicAPI]
     public class LoggAddinExt : AutoCAD_PIK_Manager.LogAddin
     {
         public override void Debug(string msg)
@@ -43,7 +40,6 @@
             base.Debug(newMsg);
         }
 
-        [PublicAPI]
         public void Debug(Exception ex, string msg)
         {
             var newMsg = GetMessage(msg);
@@ -63,7 +59,7 @@
             YandexReport(msg, ex);
         }
 
-        public void Error([NotNull] Exception ex)
+        public void Error(Exception ex)
         {
             var newMsg = GetMessage(ex.Message);
             base.Error(ex, newMsg);
@@ -76,7 +72,6 @@
             base.Fatal(newMsg);
         }
 
-        [PublicAPI]
         public void Fatal(Exception ex, string msg)
         {
             var newMsg = GetMessage(msg);
@@ -90,7 +85,6 @@
             base.Info(newMsg);
         }
 
-        [PublicAPI]
         public void Info(Exception ex, string msg)
         {
             var newMsg = GetMessage(msg);
@@ -117,7 +111,6 @@
         /// <summary>
         /// Отзыв
         /// </summary>
-        [PublicAPI]
         public void Report(string msg)
         {
             Error("#Report: " + msg);
@@ -135,7 +128,7 @@
             }
         }
 
-        public void StartCommand([CanBeNull] CommandStart command)
+        public void StartCommand(CommandStart? command)
         {
             base.Info($"Start command: {command?.CommandName}; Сборка: {command?.Assembly?.FullName}; ");
         }
@@ -157,7 +150,6 @@
             base.Warn(ex, newMsg);
         }
 
-        [NotNull]
         private static string GetMessage(string? msg)
         {
             return $"{msg};Doc={Application.DocumentManager?.MdiActiveDocument?.Name}";

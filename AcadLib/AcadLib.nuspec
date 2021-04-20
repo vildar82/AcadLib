@@ -13,12 +13,12 @@
         <tags>C# AutoCAD</tags>
         <license type="expression">MIT</license>
         <dependencies>
-            <dependency id="NetLib" version="1.2.*"/>
-            <dependency id="AutoMapper" version="10.0.*"/>
-            <dependency id="CsvHelper" version="15.0.*"/>
-            <dependency id="UnitsNet" version="4.70.*"/>
-            <dependency id="Google.Apis.Drive.v3" version="1.49.*"/>
-            <dependency id="Google.Apis.Sheets.v4" version="1.49.*"/>
+            <dependency id="NetLib" version="21.1.*"/>
+            <dependency id="AutoMapper" version="10.1.1"/>
+            <dependency id="CsvHelper" version="26.1.0"/>
+            <dependency id="UnitsNet" version="4.89.0"/>
+            <dependency id="Google.Apis.Drive.v3" version="1.51.0.*"/>
+            <dependency id="Google.Apis.Sheets.v4" version="1.51.0.*"/>
             <dependency id="Google.GData.Client" version="2.2.0"/>
         </dependencies>
     </metadata>

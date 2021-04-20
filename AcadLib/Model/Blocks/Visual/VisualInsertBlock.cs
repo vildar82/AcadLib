@@ -5,12 +5,10 @@
     using System.Reflection;
     using Autodesk.AutoCAD.ApplicationServices.Core;
     using Autodesk.AutoCAD.DatabaseServices;
-    using JetBrains.Annotations;
     using Layers;
     using Statistic;
     using UI;
 
-    [PublicAPI]
     public static class VisualInsertBlock
     {
         private static readonly Dictionary<Predicate<string>, List<IVisualBlock>> dictFiles =
@@ -24,7 +22,7 @@
 
         public static void InsertBlockGroups(
             string fileBlocks,
-            [NotNull] Func<string, string> filterGroup,
+            Func<string, string> filterGroup,
             LayerInfo? layer = null)
         {
             _layer = layer;
@@ -39,8 +37,8 @@
 
         public static void InsertBlock(
             string fileBlocks,
-            [NotNull] Predicate<string> filter,
-            [CanBeNull] LayerInfo layer = null,
+            Predicate<string> filter,
+            LayerInfo? layer = null,
             bool explode = false)
         {
             _layer = layer;
@@ -53,7 +51,6 @@
             ShowVisuals(visuals, explode);
         }
 
-        [NotNull]
         public static List<IVisualBlock> LoadVisuals(string file, Func<string, string> filter)
         {
             var visualBlocks = new List<IVisualBlock>();
@@ -85,7 +82,7 @@
         /// <summary>
         /// Переопределенеи блока
         /// </summary>
-        public static void Redefine([CanBeNull] IVisualBlock block)
+        public static void Redefine(IVisualBlock? block)
         {
             if (block == null)
                 return;
@@ -98,7 +95,7 @@
             }
         }
 
-        public static void Insert([CanBeNull] IVisualBlock block, bool explode = false)
+        public static void Insert(IVisualBlock? block, bool explode = false)
         {
             if (block == null)
                 return;
@@ -109,7 +106,7 @@
             PluginStatisticsHelper.PluginStart(new CommandStart($"Вставка блока {block.Name}", Assembly.GetCallingAssembly()));
         }
 
-        private static void ShowVisuals([NotNull] List<IVisualBlock> blocks, bool explode = false)
+        private static void ShowVisuals(List<IVisualBlock> blocks, bool explode = false)
         {
             var vm = new VisualBlocksViewModel(blocks) { Explode = explode };
             if (winVisual == null)
@@ -125,7 +122,7 @@
             winVisual.Show();
         }
 
-        private static void GetInsertBtr(string name, string fileBlocks, [NotNull] Database dbdest)
+        private static void GetInsertBtr(string name, string fileBlocks, Database dbdest)
         {
             // Есть ли уже блок в текущем файле
             using (var bt = (BlockTable)dbdest.BlockTableId.Open(OpenMode.ForRead))

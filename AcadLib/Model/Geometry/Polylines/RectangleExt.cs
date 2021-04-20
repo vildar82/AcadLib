@@ -1,12 +1,8 @@
-using OfficeOpenXml.FormulaParsing.Excel.Functions.Logical;
-
 namespace AcadLib.Geometry.Polylines
 {
     using Autodesk.AutoCAD.DatabaseServices;
     using Autodesk.AutoCAD.Geometry;
-    using JetBrains.Annotations;
 
-    [PublicAPI]
     public static class RectangleExt
     {
         public static Polyline? CreateRectangle(this Point3d pt, double length, double width, CellAlignment alignment,

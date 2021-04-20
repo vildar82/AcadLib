@@ -9,7 +9,6 @@
     using Autodesk.AutoCAD.DatabaseServices;
     using Autodesk.AutoCAD.EditorInput;
     using Errors;
-    using JetBrains.Annotations;
     using Reactive;
     using UI;
     using Application = Autodesk.AutoCAD.ApplicationServices.Core.Application;
@@ -17,13 +16,10 @@
     /// <summary>
     /// Палитра свойств
     /// </summary>
-    [PublicAPI]
     public static class PalettePropsService
     {
         public static string Various { get; } = "*Различные*";
-        [NotNull]
         public static readonly PalettePropsVM propsVM = new PalettePropsVM();
-        [NotNull]
         private static readonly List<PalettePropsProvider> providers = new List<PalettePropsProvider>();
         private static IDisposable entModifiedObs;
         private static HashSet<ObjectId> idsHash;
@@ -58,7 +54,7 @@
             DocumentSelectionChangeSubscribe(e.Document);
         }
 
-        private static void DocumentSelectionChangeSubscribe([CanBeNull] Document doc)
+        private static void DocumentSelectionChangeSubscribe(Document doc)
         {
             if (doc == null) return;
             doc.ImpliedSelectionChanged += Document_ImpliedSelectionChanged;

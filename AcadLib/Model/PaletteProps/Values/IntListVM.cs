@@ -1,10 +1,8 @@
-﻿using System.Linq;
-using JetBrains.Annotations;
-
-namespace AcadLib.PaletteProps
+﻿namespace AcadLib.PaletteProps
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
 
     public class IntListVM : IntVM
     {
@@ -12,9 +10,9 @@ namespace AcadLib.PaletteProps
 
         public List<object> Values { get; set; }
 
-        public static IntListView Create([NotNull] IEnumerable<int> values,
-            Action<object> update = null,
-            Action<IntListVM> config = null,
+        public static IntListView Create(IEnumerable<int> values,
+            Action<object>? update = null,
+            Action<IntListVM>? config = null,
             bool isReadOnly = false)
         {
             if (update == null)
@@ -24,8 +22,8 @@ namespace AcadLib.PaletteProps
 
         public static IntListView Create(
             object value,
-            Action<object> update = null,
-            Action<IntListVM> config = null,
+            Action<object>? update = null,
+            Action<IntListVM>? config = null,
             bool isReadOnly = false)
         {
             if (update == null)

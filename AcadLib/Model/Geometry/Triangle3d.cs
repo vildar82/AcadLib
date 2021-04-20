@@ -2,12 +2,10 @@
 {
     using System;
     using Autodesk.AutoCAD.Geometry;
-    using JetBrains.Annotations;
 
     /// <summary>
     /// Represents a triangle in the 3d space. It can be viewed as a structure consisting of three Point3d.
     /// </summary>
-    [PublicAPI]
     public class Triangle3d : Triangle<Point3d>
     {
         /// <summary>
@@ -21,7 +19,7 @@
         /// Initializes a new instance of Triangle3d that contains elements copied from the specified array.
         /// </summary>
         /// <param name="pts">The Point3d array whose elements are copied to the new Triangle3d.</param>
-        public Triangle3d([NotNull] Point3d[] pts) : base(pts)
+        public Triangle3d(Point3d[] pts) : base(pts)
         {
         }
 
@@ -179,7 +177,6 @@
         /// Converts a Triangle3d into a Triangle2d according to the Triangle3d plane.
         /// </summary>
         /// <returns>The resulting Triangle2d.</returns>
-        [NotNull]
         public Triangle2d Convert2d()
         {
             var plane = GetPlane();
@@ -191,7 +188,6 @@
         /// Projects a Triangle3d on the WCS XY plane.
         /// </summary>
         /// <returns>The resulting Triangle2d.</returns>
-        [NotNull]
         public Triangle2d Flatten()
         {
             return new Triangle2d(
@@ -215,7 +211,6 @@
         /// Gets the bounded plane defined by the triangle.
         /// </summary>
         /// <returns>The bouned plane.</returns>
-        [NotNull]
         public BoundedPlane GetBoundedPlane()
         {
             return new BoundedPlane(this[0], this[1], this[2]);
@@ -225,7 +220,6 @@
         /// Gets the unbounded plane defined by the triangle.
         /// </summary>
         /// <returns>The unbouned plane.</returns>
-        [NotNull]
         public Plane GetPlane()
         {
             var normal = Normal;
@@ -241,7 +235,6 @@
         /// <returns>The segment 3d</returns>
         /// <exception cref="IndexOutOfRangeException">
         /// IndexOutOfRangeException is throw if index is less than 0 or more than 2.</exception>
-        [NotNull]
         public LineSegment3d GetSegmentAt(int index)
         {
             if (index > 2)
@@ -254,7 +247,7 @@
         /// </summary>
         /// <param name="t3d">The triangle3d to compare.</param>
         /// <returns>true if the condition is met; otherwise, false.</returns>
-        public bool IsEqualTo([NotNull] Triangle3d t3d)
+        public bool IsEqualTo(Triangle3d t3d)
         {
             return IsEqualTo(t3d, Tolerance.Global);
         }
@@ -265,7 +258,7 @@
         /// <param name="t3d">The triangle3d to compare.</param>
         /// <param name="tol">The tolerance used in points comparisons.</param>
         /// <returns>true if the condition is met; otherwise, false.</returns>
-        public bool IsEqualTo([NotNull] Triangle3d t3d, Tolerance tol)
+        public bool IsEqualTo(Triangle3d t3d, Tolerance tol)
         {
             return t3d[0].IsEqualTo(_pt0, tol) && t3d[1].IsEqualTo(_pt1, tol) && t3d[2].IsEqualTo(_pt2, tol);
         }
@@ -318,7 +311,6 @@
         /// </summary>
         /// <param name="mat">The 3d transformation matrix.</param>
         /// <returns>The new Triangle3d.</returns>
-        [NotNull]
         public Triangle3d Transformby(Matrix3d mat)
         {
             return new Triangle3d(Array.ConvertAll(

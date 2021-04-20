@@ -1,15 +1,13 @@
-﻿using NetLib.WPF.Data;
-
-namespace AcadLib.Blocks.Visual
+﻿namespace AcadLib.Blocks.Visual
 {
     using System.Windows.Input;
     using System.Windows.Media;
     using Autodesk.AutoCAD.DatabaseServices;
-    using JetBrains.Annotations;
+    using NetLib.WPF.Data;
 
     public class VisualBlock : IVisualBlock
     {
-        public VisualBlock([NotNull] BlockTableRecord btr)
+        public VisualBlock(BlockTableRecord btr)
         {
             Name = btr.Name;
             Image = BlockPreviewHelper.GetPreview(btr);

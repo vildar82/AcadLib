@@ -15,7 +15,7 @@
         private static FileData<CommandLocks> data;
         private static bool isInit;
 
-        public static bool CanStartCommand([NotNull] string commandName)
+        public static bool CanStartCommand(string commandName)
         {
             if (!isInit && !Init())
                 return true;
@@ -28,7 +28,6 @@
             return true;
         }
 
-        [NotNull]
         private static CommandLocks DefaultData()
         {
             return new CommandLocks
@@ -40,10 +39,10 @@
                         {
                             IsActive = true,
                             CanContinue = true,
-                            Message = "Ведутся технические работы."
+                            Message = "Ведутся технические работы.",
                         }
-                    }
-                }
+                    },
+                },
             };
         }
 

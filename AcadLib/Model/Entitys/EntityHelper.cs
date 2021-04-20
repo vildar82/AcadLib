@@ -5,15 +5,13 @@
     using Autodesk.AutoCAD.ApplicationServices.Core;
     using Autodesk.AutoCAD.DatabaseServices;
     using Autodesk.AutoCAD.Geometry;
-    using JetBrains.Annotations;
     using NetLib;
 
-    [PublicAPI]
     public static class EntityHelper
     {
         public static void AddEntityToCurrentSpace(
-            [CanBeNull] this IEnumerable<Entity> ents,
-            [CanBeNull] EntityOptions entityOptions = null)
+            this IEnumerable<Entity>? ents,
+            EntityOptions? entityOptions = null)
         {
             if (ents?.Any() != true)
                 return;
@@ -41,34 +39,33 @@
             }
         }
 
-        public static void AddEntityToCurrentSpace([CanBeNull] this Entity ent)
+        public static void AddEntityToCurrentSpace(this Entity? ent)
         {
             AddEntityToCurrentSpace(ent?.Yield());
         }
 
-        public static void AddEntityToCurrentSpace([CanBeNull] this Entity ent, EntityOptions entityOptions)
+        public static void AddEntityToCurrentSpace(this Entity? ent, EntityOptions entityOptions)
         {
             AddEntityToCurrentSpace(ent?.Yield(), entityOptions);
         }
 
-        public static void AddPointToCurrentSpace(this Point3d pt, [CanBeNull] EntityOptions opt = null)
+        public static void AddPointToCurrentSpace(this Point3d pt, EntityOptions? opt = null)
         {
             var ptDb = new DBPoint(pt);
             AddEntityToCurrentSpace(ptDb, opt);
         }
 
-        public static void AddPointToCurrentSpace(this Point2d pt, [CanBeNull] EntityOptions opt = null)
+        public static void AddPointToCurrentSpace(this Point2d pt, EntityOptions? opt = null)
         {
             AddPointToCurrentSpace(pt.Convert3d(), opt);
         }
 
-        [NotNull]
-        public static DBText CreateText(string text, Point3d pos, [CanBeNull] EntityOptions entityOptions = null)
+        public static DBText CreateText(string text, Point3d pos, EntityOptions? entityOptions = null)
         {
             var dbText = new DBText
             {
                 TextString = text,
-                Position = pos
+                Position = pos,
             };
             dbText.SetOptions(entityOptions);
             return dbText;

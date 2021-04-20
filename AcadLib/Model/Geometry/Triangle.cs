@@ -3,13 +3,11 @@
     using System;
     using System.Collections;
     using System.Collections.Generic;
-    using JetBrains.Annotations;
 
     /// <summary>
     /// Provides methods for the derived classes.
     /// </summary>
     /// <typeparam name="T">The type of elements in the triangle.</typeparam>
-    [PublicAPI]
     public abstract class Triangle<T> : IEnumerable<T>
     {
         /// <summary>
@@ -45,7 +43,7 @@
         /// <param name="pts">The array whose elements are copied to the new Triangle.</param>
         /// <exception cref="ArgumentOutOfRangeException">
         /// ArgumentOutOfRangeException is thrown if the array do not contains three items.</exception>
-        protected internal Triangle([NotNull] T[] pts)
+        protected internal Triangle(T[] pts)
         {
             if (pts.Length != 3)
                 throw new ArgumentOutOfRangeException(nameof(pts));
@@ -139,7 +137,7 @@
         /// <param name="pts">The array whose elements are copied to the Triangle.</param>
         /// <exception cref="ArgumentOutOfRangeException">
         /// ArgumentOutOfRangeException is thrown if the array do not contains three items.</exception>
-        public void Set([NotNull] T[] pts)
+        public void Set(T[] pts)
         {
             if (pts.Length != 3)
                 throw new IndexOutOfRangeException("The array must contain 3 items");

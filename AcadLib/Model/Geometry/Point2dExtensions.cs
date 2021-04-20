@@ -5,12 +5,10 @@
     using System.Globalization;
     using System.Linq;
     using DatabaseServices;
-    using JetBrains.Annotations;
 
     /// <summary>
     /// Provides extension methods for the Point2d type.
     /// </summary>
-    [PublicAPI]
     public static class Point2dExtensions
     {
         public static Point2d Move(this Point2d pt, double x, double y)
@@ -63,8 +61,7 @@
         /// Отсеивание одинаковых точек
         /// </summary>
         /// <param name="points"></param>
-        [NotNull]
-        public static List<Point2d> DistinctPoints([NotNull] this List<Point2d> points)
+        public static List<Point2d> DistinctPoints(this List<Point2d> points)
         {
             // Отсеивание одинаковых точек
             return points.Distinct(new AcadLib.Comparers.Point2dEqualityComparer()).ToList();
@@ -137,7 +134,6 @@
                 org.Y + distance * Math.Sin(angle));
         }
 
-        [NotNull]
         public static string ToStringEx(this Point2d pt)
         {
             return pt.ToString("0.00", CultureInfo.CurrentCulture);

@@ -5,12 +5,10 @@
     using Autodesk.AutoCAD.ApplicationServices.Core;
     using Autodesk.AutoCAD.DatabaseServices;
     using Autodesk.AutoCAD.EditorInput;
-    using JetBrains.Annotations;
 
     /// <summary>
     /// PInvoke acdbEvaluateFields - обновление полей - с 2013 - 2017
     /// </summary>
-    [PublicAPI]
     public static class UpdateField
     {
         /// <summary>

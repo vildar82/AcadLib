@@ -4,12 +4,11 @@
     using System.Collections.Generic;
     using System.Linq;
     using Autodesk.AutoCAD.DatabaseServices;
-    using JetBrains.Annotations;
 
     public class BlockAttribute
     {
         // Constructors
-        public BlockAttribute([NotNull] BlockReference br)
+        public BlockAttribute(BlockReference br)
         {
             SetProperties(br);
         }
@@ -28,7 +27,7 @@
 
         public Dictionary<string, string> Attributes { get; private set; }
 
-        public string this[[NotNull] string key] => Attributes[key.ToUpper()];
+        public string this[string key] => Attributes[key.ToUpper()];
 
         // Public method
         public new string ToString()
@@ -39,11 +38,9 @@
         }
 
         // Private method
-        private void SetProperties([NotNull] BlockReference br)
+        private void SetProperties(BlockReference br)
         {
-#pragma warning disable 618
             Name = br.GetEffectiveName();
-#pragma warning restore 618
             Attributes = new Dictionary<string, string>();
             br.AttributeCollection
                 .GetObjects<AttributeReference>()

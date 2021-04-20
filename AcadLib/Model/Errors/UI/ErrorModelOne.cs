@@ -6,14 +6,13 @@
     using System.Reactive.Linq;
     using System.Windows;
     using Autodesk.AutoCAD.DatabaseServices;
-    using JetBrains.Annotations;
     using Layers;
     using NetLib;
     using Visibility = System.Windows.Visibility;
 
     public class ErrorModelOne : ErrorModelBase
     {
-        public ErrorModelOne([NotNull] IError err, ErrorModelList? parent)
+        public ErrorModelOne(IError err, ErrorModelList? parent)
             : base(err)
         {
             VisibilityCount = Visibility.Collapsed;
@@ -69,7 +68,7 @@
             {
                 Name = "Отрисовка",
                 Tooltip = "Добавить визуализацию ошибки в чертеж.",
-                Click = visCommand
+                Click = visCommand,
             };
             AddButtons.Add(visButton);
         }

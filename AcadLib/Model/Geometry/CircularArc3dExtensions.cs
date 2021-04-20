@@ -3,16 +3,13 @@
     using System;
     using Autodesk.AutoCAD.DatabaseServices;
     using Autodesk.AutoCAD.Geometry;
-    using JetBrains.Annotations;
 
     /// <summary>
     /// Provides extension methods for the CircularArc2dType
     /// </summary>
-    [PublicAPI]
     public static class CircularArc3dExtensions
     {
-        [NotNull]
-        public static Polyline ConvertToPolyline([NotNull] this CircularArc3d arc)
+        public static Polyline ConvertToPolyline(this CircularArc3d arc)
         {
             var poly = new Polyline();
             poly.AddVertexAt(0, new Point2d(arc.StartPoint.X, arc.StartPoint.Y), GetBulge(arc), 0, 0);
@@ -20,8 +17,7 @@
             return poly;
         }
 
-        [NotNull]
-        public static Polyline ConvertToPolyline([NotNull] this CircularArc2d arc)
+        public static Polyline ConvertToPolyline(this CircularArc2d arc)
         {
             var poly = new Polyline();
             poly.AddVertexAt(0, new Point2d(arc.StartPoint.X, arc.StartPoint.Y), GetBulge(arc, arc.IsClockWise), 0, 0);
@@ -32,7 +28,7 @@
         /// <summary>
         /// Функция возвращает кривизну дуги (bulge) или 0.0
         /// </summary>
-        public static double GetBulge([NotNull] this CircularArc2d arc, bool clockWise = false)
+        public static double GetBulge(this CircularArc2d arc, bool clockWise = false)
         {
             var bulge = Math.Tan(Math.Abs(arc.StartAngle - arc.EndAngle) * 0.25);
             return clockWise ? -bulge : bulge;
@@ -41,7 +37,7 @@
         /// <summary>
         /// Функция возвращает кривизну дуги (bulge) или 0.0
         /// </summary>
-        public static double GetBulge([NotNull] this CircularArc3d arc, bool clockWise = false)
+        public static double GetBulge(this CircularArc3d arc, bool clockWise = false)
         {
             var bulge = Math.Tan(Math.Abs(arc.StartAngle - arc.EndAngle) * 0.25);
             return clockWise ? -bulge : bulge;
@@ -60,7 +56,7 @@
         /// <returns>An array of LineSegement3d representing the tangents (2) or null if there is none.</returns>
         /// <exception cref="Autodesk.AutoCAD.Runtime.Exception">
         /// eNonCoplanarGeometry is thrown if the objects do not lies on the same plane.</exception>
-        public static LineSegment3d[]? GetTangentsTo([NotNull] this CircularArc3d arc, Point3d pt)
+        public static LineSegment3d[]? GetTangentsTo(this CircularArc3d arc, Point3d pt)
         {
             // check if arc and point lies on the plane
             var normal = arc.Normal;
@@ -103,8 +99,8 @@
         /// <exception cref="Autodesk.AutoCAD.Runtime.Exception">
         /// eNonCoplanarGeometry is thrown if the objects do not lies on the same plane.</exception>
         public static LineSegment3d[]? GetTangentsTo(
-            [NotNull] this CircularArc3d arc,
-            [NotNull] CircularArc3d other,
+            this CircularArc3d arc,
+            CircularArc3d other,
             TangentType flags)
         {
             // check if circles lies on the same plane

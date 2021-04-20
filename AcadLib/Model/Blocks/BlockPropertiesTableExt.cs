@@ -4,18 +4,16 @@
     using System.Linq;
     using Autodesk.AutoCAD.DatabaseServices;
     using Autodesk.AutoCAD.Internal.DatabaseServices;
-    using JetBrains.Annotations;
 
     /// <summary>
     /// Таблица свойств блока
     /// </summary>
-    [PublicAPI]
     public static class BlockPropertiesTableExt
     {
         /// <summary>
         /// Таблица свойств блока. Должна быть запущена транзакция!
         /// </summary>
-        public static System.Data.DataTable? GetBlockPropertiesTable([NotNull] this BlockTableRecord dynBtr)
+        public static System.Data.DataTable? GetBlockPropertiesTable(this BlockTableRecord dynBtr)
         {
             var t = dynBtr.Database.TransactionManager.TopTransaction;
             using var bpt = GetBpt(dynBtr, t);
@@ -44,7 +42,7 @@
             return dTable;
         }
 
-        private static BlockPropertiesTable? GetBpt([NotNull] BlockTableRecord dynBtr, Transaction t)
+        private static BlockPropertiesTable? GetBpt(BlockTableRecord dynBtr, Transaction t)
         {
             var extDic = dynBtr.ExtensionDictionary.GetObject<DBDictionary>();
             if (extDic == null)
@@ -66,8 +64,7 @@
             return null;
         }
 
-        [NotNull]
-        private static List<System.Data.DataColumn> GetColumns([NotNull] BlockPropertiesTable bpt)
+        private static List<System.Data.DataColumn> GetColumns(BlockPropertiesTable bpt)
         {
             var columns = new List<System.Data.DataColumn>();
             foreach (BlockPropertiesTableColumn bptColumn in bpt.Columns)

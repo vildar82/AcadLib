@@ -2,14 +2,12 @@
 namespace System.Collections.Generic
 {
     using AcadLib.Blocks;
-    using JetBrains.Annotations;
     using Linq;
 
-    [PublicAPI]
     public static class GenericExtensions
     {
         // Applies the given Action to each element of the collection (mimics the F# Seq.iter function).
-        public static void Iterate<T>([NotNull] this IEnumerable<T> collection, Action<T> action)
+        public static void Iterate<T>(this IEnumerable<T> collection, Action<T> action)
         {
             foreach (var item in collection)
                 action(item);
@@ -17,7 +15,7 @@ namespace System.Collections.Generic
 
         // Applies the given Action to each element of the collection (mimics the F# Seq.iteri function).
         // The integer passed to the Action indicates the index of element.
-        public static void Iterate<T>([NotNull] this IEnumerable<T> collection, Action<T, int> action)
+        public static void Iterate<T>(this IEnumerable<T> collection, Action<T, int> action)
         {
             var i = 0;
             foreach (var item in collection)
@@ -25,8 +23,7 @@ namespace System.Collections.Generic
         }
 
         // Creates a System.Data.DataTable from a BlockAttribute collection.
-        [NotNull]
-        public static Data.DataTable ToDataTable([NotNull] this IEnumerable<BlockAttribute> blockAtts, string name)
+        public static Data.DataTable ToDataTable(this IEnumerable<BlockAttribute> blockAtts, string name)
         {
             var dTable = new Data.DataTable(name);
             dTable.Columns.Add("Name", typeof(string));

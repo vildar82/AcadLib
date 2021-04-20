@@ -3,12 +3,10 @@
     using System;
     using System.Collections.Generic;
     using Autodesk.AutoCAD.Geometry;
-    using JetBrains.Annotations;
 
     /// <summary>
     /// Represents a triangle in a 2d plane. It can be viewed as a structure consisting of three Point2d.
     /// </summary>
-    [PublicAPI]
     public class Triangle2d : Triangle<Point2d>
     {
         /// <summary>
@@ -22,7 +20,7 @@
         /// Initializes a new instance of Triangle2d that contains elements copied from the specified array.
         /// </summary>
         /// <param name="pts">The Point2d array whose elements are copied to the new Triangle2d.</param>
-        public Triangle2d([NotNull] Point2d[] pts) : base(pts)
+        public Triangle2d(Point2d[] pts) : base(pts)
         {
         }
 
@@ -103,7 +101,6 @@
         /// </summary>
         /// <param name="plane">Plane of the Triangle3d.</param>
         /// <returns>The new Triangle3d.</returns>
-        [NotNull]
         public Triangle3d Convert3d(Plane plane)
         {
             return new Triangle3d(Array.ConvertAll(_pts, x => x.Convert3d(plane)));
@@ -115,7 +112,6 @@
         /// <param name="normal">The normal vector of the plane.</param>
         /// <param name="elevation">The elevation of the plane.</param>
         /// <returns>The new Triangle3d.</returns>
-        [NotNull]
         public Triangle3d Convert3d(Vector3d normal, double elevation)
         {
             return new Triangle3d(Array.ConvertAll(_pts, x => x.Convert3d(normal, elevation)));
@@ -144,7 +140,6 @@
         /// <returns>The segment 3d.</returns>
         /// <exception cref="IndexOutOfRangeException">
         /// IndexOutOfRangeException is thrown if index is less than 0 or more than 2.</exception>
-        [NotNull]
         public LineSegment2d GetSegmentAt(int index)
         {
             if (index > 2)
@@ -157,7 +152,6 @@
         /// </summary>
         /// <param name="le2d">The line with which intersections are searched.</param>
         /// <returns>The intersection points list (an empty list if none).</returns>
-        [NotNull]
         public List<Point2d> IntersectWith(LinearEntity2d le2d)
         {
             var result = new List<Point2d>();
@@ -177,7 +171,6 @@
         /// <param name="le2d">The line with which intersections are searched.</param>
         /// <param name="tol">The tolerance used in comparisons.</param>
         /// <returns>The intersection points list (an empty list if none).</returns>
-        [NotNull]
         public List<Point2d> IntersectWith(LinearEntity2d le2d, Tolerance tol)
         {
             var result = new List<Point2d>();
@@ -196,7 +189,7 @@
         /// </summary>
         /// <param name="t2d">The triangle2d to compare.</param>
         /// <returns>true if the condition is met; otherwise, false.</returns>
-        public bool IsEqualTo([NotNull] Triangle2d t2d)
+        public bool IsEqualTo(Triangle2d t2d)
         {
             return IsEqualTo(t2d, Tolerance.Global);
         }
@@ -207,7 +200,7 @@
         /// <param name="t2d">The triangle2d to compare.</param>
         /// <param name="tol">The tolerance used in points comparisons.</param>
         /// <returns>true if the condition is met; otherwise, false.</returns>
-        public bool IsEqualTo([NotNull] Triangle2d t2d, Tolerance tol)
+        public bool IsEqualTo(Triangle2d t2d, Tolerance tol)
         {
             return t2d[0].IsEqualTo(_pt0, tol) && t2d[1].IsEqualTo(_pt1, tol) && t2d[2].IsEqualTo(_pt2, tol);
         }
@@ -262,7 +255,6 @@
         /// </summary>
         /// <param name="mat">The 2d transformation matrix.</param>
         /// <returns>The new Triangle2d.</returns>
-        [NotNull]
         public Triangle2d TransformBy(Matrix2d mat)
         {
             return new Triangle2d(Array.ConvertAll(

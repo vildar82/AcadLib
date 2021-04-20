@@ -4,12 +4,11 @@
     using System.Collections.ObjectModel;
     using System.Linq;
     using System.Windows;
-    using JetBrains.Annotations;
     using NetLib;
 
     public class ErrorModelList : ErrorModelBase
     {
-        public ErrorModelList([NotNull] List<IError> sameErrors)
+        public ErrorModelList(List<IError> sameErrors)
             : base(sameErrors.First())
         {
             VisibilityCount = Visibility.Visible;
@@ -21,7 +20,7 @@
                 MarginHeader = new Thickness(1),
                 Parent = this,
                 ShowCount = true,
-                Message = firstErr.Group
+                Message = firstErr.Group,
             };
             SameErrors = new ObservableCollection<ErrorModelBase>(
                 sameErrors.Select(s => new ErrorModelOne(s, this)));

@@ -6,10 +6,8 @@ namespace AcadLib.Colors
     using System.ComponentModel;
     using System.IO;
     using Autodesk.AutoCAD.ApplicationServices;
-    using JetBrains.Annotations;
     using NetLib;
 
-    [PublicAPI]
     [Serializable]
     public class Options
     {
@@ -23,7 +21,6 @@ namespace AcadLib.Colors
         {
         }
 
-        [NotNull]
         public static Options Instance
         {
             get
@@ -82,7 +79,6 @@ namespace AcadLib.Colors
         [DefaultValue(210)]
         public int Width { get; set; } = 210;
 
-        [NotNull]
         public static Options Load()
         {
             Options options;

@@ -1,9 +1,7 @@
 ﻿namespace AcadLib.Blocks.Dublicate.Tree
 {
     using System;
-    using JetBrains.Annotations;
 
-    [PublicAPI]
     public struct PointTree : IEquatable<PointTree>
     {
         public static double tolerance = CheckDublicateBlocks.Tolerance.EqualPoint;

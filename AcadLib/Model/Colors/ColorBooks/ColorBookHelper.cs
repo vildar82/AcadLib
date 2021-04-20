@@ -7,10 +7,8 @@ namespace AcadLib.Colors
     using Autodesk.AutoCAD.EditorInput;
     using Autodesk.AutoCAD.Geometry;
     using Autodesk.AutoCAD.Runtime;
-    using JetBrains.Annotations;
     using Application = Autodesk.AutoCAD.ApplicationServices.Core.Application;
 
-    [PublicAPI]
     public static class ColorBookHelper
     {
         private static Database db;
@@ -58,8 +56,8 @@ namespace AcadLib.Colors
             int layout,
             double width,
             double height,
-            [NotNull] BlockTableRecord cs,
-            [NotNull] Transaction t)
+            BlockTableRecord cs,
+            Transaction t)
         {
             // Полилиния контура листа
             var pl = new Polyline(4);
@@ -89,11 +87,11 @@ namespace AcadLib.Colors
         }
 
         private static void CreateLayout(
-            [NotNull] Polyline pl,
+            Polyline pl,
             int layout,
             double widthLay,
             double heightLay,
-            [NotNull] Transaction t)
+            Transaction t)
         {
             var lm = LayoutManager.Current;
             var idLay = lm.CreateLayout(layout.ToString());
@@ -130,7 +128,7 @@ namespace AcadLib.Colors
             view.CustomScale = 1;
         }
 
-        private static void PlacementColors(BlockTableRecord cs, [NotNull] ColorBook colorBookNcs, Point3d ptStart)
+        private static void PlacementColors(BlockTableRecord cs, ColorBook colorBookNcs, Point3d ptStart)
         {
             var t = db.TransactionManager.TopTransaction;
 

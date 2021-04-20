@@ -3,9 +3,7 @@
     using System;
     using Autodesk.AutoCAD.ApplicationServices.Core;
     using Autodesk.AutoCAD.DatabaseServices;
-    using JetBrains.Annotations;
 
-    [PublicAPI]
     public static class DimensionExt
     {
         public static void SetDimBlk(string dimSysVar, DimBlkEnum type)
@@ -13,7 +11,7 @@
             Application.SetSystemVariable(dimSysVar, GetDimBlkName(type));
         }
 
-        public static ObjectId GetDimBlkObjectId([NotNull] this Database db, DimBlkEnum dimBlk)
+        public static ObjectId GetDimBlkObjectId(this Database db, DimBlkEnum dimBlk)
         {
             var blkName = GetDimBlkName(dimBlk);
             using var bt = db.BlockTableId.GetObjectT<BlockTable>();
@@ -25,7 +23,6 @@
             return bt[blkName];
         }
 
-        [NotNull]
         private static string GetDimBlkName(DimBlkEnum dimBlk)
         {
             switch (dimBlk)

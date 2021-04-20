@@ -5,9 +5,7 @@
     using System.Linq;
     using Autodesk.AutoCAD.DatabaseServices;
     using Autodesk.AutoCAD.Geometry;
-    using JetBrains.Annotations;
 
-    [PublicAPI]
     public class LineEqualityComparer : IEqualityComparer<Line>
     {
         private readonly double maxInterval;
@@ -54,7 +52,7 @@
             return 0;
         }
 
-        private static double MaxLens([NotNull] Line l1, [NotNull] Line l2)
+        private static double MaxLens(Line l1, Line l2)
         {
             return new[]
             {
@@ -65,7 +63,7 @@
             }.Max();
         }
 
-        private static double WidthBetweenLines([NotNull] Line l1, [NotNull] Line l2, Vector3d vec)
+        private static double WidthBetweenLines(Line l1, Line l2, Vector3d vec)
         {
             return (l1.StartPoint - l2.StartPoint).OrthoProjectTo(vec).Length;
         }

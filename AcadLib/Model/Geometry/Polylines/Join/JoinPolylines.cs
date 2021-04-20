@@ -4,9 +4,7 @@
     using System.Linq;
     using Autodesk.AutoCAD.DatabaseServices;
     using Autodesk.AutoCAD.Geometry;
-    using JetBrains.Annotations;
 
-    [PublicAPI]
     public static class JoinPolylines
     {
         /// <summary>
@@ -18,7 +16,7 @@
         /// <param name="wedding">Прополка</param>
         /// <param name="tolerance"></param>
         public static void Join(
-            [NotNull] this List<Polyline> lines,
+            this List<Polyline> lines,
             ref List<Polyline> joined,
             bool disposePls = true,
             bool wedding = true,

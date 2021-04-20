@@ -6,14 +6,12 @@ namespace AcadLib.Geometry
     using System.Linq;
     using Autodesk.AutoCAD.DatabaseServices;
     using Autodesk.AutoCAD.Geometry;
-    using JetBrains.Annotations;
 
     /// <summary>
     /// Усреднение вершин соседних полилиний.
     /// Только для полилиний с линейными сегментами.
     /// Усредняются вершины на обоих полилиниях
     /// </summary>
-    [PublicAPI]
     public static class AverageVertexPolylines
     {
         /// <summary>
@@ -23,7 +21,7 @@ namespace AcadLib.Geometry
         /// <param name="plOther">Вторая полилиния</param>
         /// <param name="tolerance">Определение совпадения вершин для их усреднения</param>
         [Obsolete("Используй вариант с приклеиванием вершин к сегментам.", true)]
-        public static void AverageVertexes([NotNull] this Polyline pl, [NotNull] ref Polyline plOther, Tolerance tolerance)
+        public static void AverageVertexes(this Polyline pl, ref Polyline plOther, Tolerance tolerance)
         {
             var ptsOther = plOther.GetPoints();
             for (var i = 0; i < pl.NumberOfVertices; i++)
@@ -58,8 +56,8 @@ namespace AcadLib.Geometry
         /// <param name="tolerance">Допуск - поиск совпадающих вершин и ближайших сегментов</param>
         /// <param name="stickToSegment">Делать ли "прилипание" вершин к сегментам соседней полилинии (для обеих полилиний)</param>
         public static void AverageVertexes(
-            [NotNull] this Polyline pl,
-            [NotNull] ref Polyline plOther,
+            this Polyline pl,
+            ref Polyline plOther,
             Tolerance tolerance,
             bool stickToSegment)
         {
@@ -113,7 +111,7 @@ namespace AcadLib.Geometry
         /// <param name="pl">Полилиния</param>
         /// <param name="indexVertex">Номер вершины</param>
         /// <param name="newPlacePt">Новая точка</param>
-        public static void MoveVertex([NotNull] this Polyline pl, int indexVertex, Point2d newPlacePt)
+        public static void MoveVertex(this Polyline pl, int indexVertex, Point2d newPlacePt)
         {
             pl.RemoveVertexAt(indexVertex);
             pl.AddVertexAt(indexVertex, newPlacePt, 0, 0, 0);
@@ -123,7 +121,7 @@ namespace AcadLib.Geometry
             this Polyline plModify,
             int indexVertex,
             Point3d ptVertex,
-            [NotNull] Polyline plOther,
+            Polyline plOther,
             Tolerance tolerance)
         {
             var ptStick = plOther.GetClosestPointTo(ptVertex, Vector3d.ZAxis, false);

@@ -19,8 +19,6 @@
 
 namespace AcadLib.RTree.SpatialIndex
 {
-    using JetBrains.Annotations;
-
     // import com.infomatiq.jsi.Rectangle;
 
     /**
@@ -29,7 +27,6 @@ namespace AcadLib.RTree.SpatialIndex
      * @author aled@sourceforge.net
      * @version 1.0b2p1
      */
-    [PublicAPI]
     public class Node<T>
     {
         internal readonly Rectangle[] entries;
@@ -82,7 +79,7 @@ namespace AcadLib.RTree.SpatialIndex
             return mbr;
         }
 
-        internal void addEntry([NotNull] Rectangle r, int id)
+        internal void addEntry(Rectangle r, int id)
         {
             ids[entryCount] = id;
             entries[entryCount] = r.Copy();
@@ -173,7 +170,7 @@ namespace AcadLib.RTree.SpatialIndex
         /**
          * eliminate null entries, move all entries to the start of the source node
          */
-        internal void reorganize([NotNull] RTree<T> rtree)
+        internal void reorganize(RTree<T> rtree)
         {
             var countdownIndex = rtree.maxNodeEntries - 1;
             for (var index = 0; index < entryCount; index++)

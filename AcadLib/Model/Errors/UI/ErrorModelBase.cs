@@ -7,12 +7,10 @@
     using System.Reactive;
     using System.Windows;
     using System.Windows.Media.Imaging;
-    using JetBrains.Annotations;
     using NetLib.WPF;
     using ReactiveUI;
     using UI;
 
-    [PublicAPI]
     public abstract class ErrorModelBase : BaseModel
     {
         protected IError firstErr;

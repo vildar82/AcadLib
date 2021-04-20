@@ -1,14 +1,11 @@
-﻿using System;
-using System.Linq;
-
-namespace AcadLib.Jigs
+﻿namespace AcadLib.Jigs
 {
+    using System;
+    using System.Linq;
     using Autodesk.AutoCAD.DatabaseServices;
     using Autodesk.AutoCAD.EditorInput;
     using Autodesk.AutoCAD.Geometry;
-    using JetBrains.Annotations;
 
-    [PublicAPI]
     public class TableJig : EntityJig
     {
         private readonly string _msg;
@@ -16,15 +13,15 @@ namespace AcadLib.Jigs
         private readonly string[] _keywords;
         private Point3d _position;
 
-        public TableJig([NotNull] Table table, double scale, string msg)
+        public TableJig(Table table, double scale, string msg)
             : this(table, scale, msg, null)
         {
         }
 
-        public TableJig([NotNull] Table table, double scale, string msg, Action<string> keywordInput, params string[] keywords)
+        public TableJig(Table table, double scale, string msg, Action<string> keywordInput, params string[] keywords)
             : base(table)
         {
-            _msg      = msg;
+            _msg = msg;
             _keywordInput = keywordInput;
             _keywords = keywords;
             _position = table.Position;
@@ -37,11 +34,11 @@ namespace AcadLib.Jigs
             return Entity;
         }
 
-        protected override SamplerStatus Sampler([NotNull] JigPrompts prompts)
+        protected override SamplerStatus Sampler(JigPrompts prompts)
         {
             var jigOpts = new JigPromptPointOptions
             {
-                Message = "\n" + _msg
+                Message = "\n" + _msg,
             };
             if (_keywords?.Any() == true) foreach (var keyword in _keywords) jigOpts.Keywords.Add(keyword);
             var res = prompts.AcquirePoint(jigOpts);

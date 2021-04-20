@@ -4,13 +4,11 @@
     using System.Collections.Generic;
     using AutoCAD_PIK_Manager.Settings;
     using Autodesk.AutoCAD.ApplicationServices;
-    using JetBrains.Annotations;
     using Application = Autodesk.AutoCAD.ApplicationServices.Core.Application;
 
     /// <summary>
     /// Установки системных переменных для чертежа
     /// </summary>
-    [PublicAPI]
     public static class DocSysVarAuto
     {
         /// <summary>
@@ -36,7 +34,7 @@
             }
         }
 
-        public static void SetSysVars([NotNull] Document doc)
+        public static void SetSysVars(Document doc)
         {
             Logger.Log.Info($"SetSysVars start doc={doc.Name}, ActiveDoc={Application.DocumentManager.MdiActiveDocument?.Name}.");
             foreach (var item in SysVars)

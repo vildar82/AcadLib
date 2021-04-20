@@ -2,13 +2,12 @@
 {
     using System;
     using System.Collections.Generic;
-    using JetBrains.Annotations;
 
     public class StringVM : BaseValueVM
     {
-        public static StringView Create([NotNull] IEnumerable<string> values,
-            Action<object> update = null,
-            Action<StringVM> config = null,
+        public static StringView Create(IEnumerable<string> values,
+            Action<object>? update = null,
+            Action<StringVM>? config = null,
             bool isReadOnly = false)
         {
             if (update == null)
@@ -18,8 +17,8 @@
 
         public static StringView Create(
             object value,
-            Action<object> update = null,
-            Action<StringVM> config = null,
+            Action<object>? update = null,
+            Action<StringVM>? config = null,
             bool isReadOnly = false)
         {
             if (update == null)

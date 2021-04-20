@@ -6,9 +6,7 @@
     using AcadLib;
     using ApplicationServices.Core;
     using AutoCAD_PIK_Manager.Settings;
-    using JetBrains.Annotations;
 
-    [PublicAPI]
     public static class DbExtensions
     {
         public const string PIK = General.Company;
@@ -18,7 +16,6 @@
         /// <summary>
         /// Текущее пространство - Model (не лист, и не редактор блоков)
         /// </summary>
-        /// <returns></returns>
         public static bool IsModel(this Database db)
         {
             return db.TileMode && "BLOCKEDITOR".GetSystemVariable<int>() != 1;
@@ -29,13 +26,11 @@
             return SymbolUtilityServices.GetBlockModelSpaceId(db);
         }
 
-        [NotNull]
         public static BlockTable BT(this Database db, OpenMode mode = OpenMode.ForRead)
         {
             return db.BlockTableId.GetObjectT<BlockTable>(mode);
         }
 
-        [NotNull]
         public static BlockTableRecord MS(this Database db, OpenMode mode = OpenMode.ForRead)
         {
             return MsId(db).GetObjectT<BlockTableRecord>(mode);
@@ -43,9 +38,7 @@
 
         public static ObjectId MsId(this Database db)
         {
-#pragma warning disable 618
             using var bt = (BlockTable)db.BlockTableId.Open(OpenMode.ForRead);
-#pragma warning restore 618
             return bt[BlockTableRecord.ModelSpace];
         }
 
@@ -95,12 +88,10 @@
             return GetDimStyle(db, PIK, UserGroup);
         }
 
-        public static ObjectId GetLineTypeIdByName([NotNull] this Database db, string name)
+        public static ObjectId GetLineTypeIdByName(this Database db, string name)
         {
             var resVal = ObjectId.Null;
-#pragma warning disable 618
             using var ltTable = (LinetypeTable)db.LinetypeTableId.Open(OpenMode.ForRead);
-#pragma warning restore 618
             if (ltTable.Has(name))
             {
                 resVal = ltTable[name];
@@ -113,7 +104,7 @@
             return resVal;
         }
 
-        public static ObjectId GetLineTypeIdContinuous([NotNull] this Database db)
+        public static ObjectId GetLineTypeIdContinuous(this Database db)
         {
             return db.GetLineTypeIdByName(SymbolUtilityServices.LinetypeContinuousName);
         }
@@ -180,7 +171,7 @@
             return GetTableStylePIK(db, styleName, UserGroup, update);
         }
 
-        public static ObjectId GetTableStylePIK(this Database db, string styleName, [CanBeNull] string templateName)
+        public static ObjectId GetTableStylePIK(this Database db, string styleName, string templateName)
         {
             return GetTableStylePIK(db, styleName, templateName ?? UserGroup, false);
         }
@@ -240,7 +231,6 @@
         /// <param name="db">Чертеж</param>
         /// <param name="styleName">Имя стиля</param>
         /// <param name="templateFile">Имя шаблона, без разрешения</param>
-        /// <returns></returns>
         public static ObjectId GetTextStylePIK(this Database db, string styleName, string templateFile)
         {
             var idStyle = GetTextStylePik(db, styleName);
@@ -265,7 +255,7 @@
             return idStyle;
         }
 
-        public static IEnumerable<T> IterateDB<T>([NotNull] this Database db) where T : DBObject
+        public static IEnumerable<T> IterateDB<T>(this Database db) where T : DBObject
         {
             for (var i = db.BlockTableId.Handle.Value; i < db.Handseed.Value; i++)
             {
@@ -319,12 +309,10 @@
             return idStyleDest;
         }
 
-        private static ObjectId GetDictStyleId(Database db, string styleName, [NotNull] Func<Database, ObjectId> idDictTable)
+        private static ObjectId GetDictStyleId(Database db, string styleName, Func<Database, ObjectId> idDictTable)
         {
             var idStyle = ObjectId.Null;
-#pragma warning disable 618
             using var dictTableStyle = (DBDictionary)idDictTable(db).Open(OpenMode.ForRead);
-#pragma warning restore 618
             if (dictTableStyle.Contains(styleName))
             {
                 idStyle = dictTableStyle.GetAt(styleName);
@@ -343,12 +331,10 @@
             return GetDictStyleId(db, styleName, d => d.MLeaderStyleDictionaryId);
         }
 
-        private static ObjectId GetStyleId(Database db, string styleName, [NotNull] Func<Database, ObjectId> idSymbolTable)
+        private static ObjectId GetStyleId(Database db, string styleName, Func<Database, ObjectId> idSymbolTable)
         {
             var idStyle = ObjectId.Null;
-#pragma warning disable 618
             using var symbolTable = (SymbolTable)idSymbolTable(db).Open(OpenMode.ForRead);
-#pragma warning restore 618
             if (symbolTable.Has(styleName))
             {
                 idStyle = symbolTable[styleName];

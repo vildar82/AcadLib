@@ -20,14 +20,12 @@
 
 namespace RTreeLib
 {
-    using JetBrains.Annotations;
 
     /// <summary>
     /// Currently hardcoded to 3 dimensions, but could be extended.
     /// author  aled@sourceforge.net
     /// version 1.0b2p1
     /// </summary>
-    [PublicAPI]
     public class Point
     {
         /// <summary>

@@ -4,9 +4,7 @@
     using System.Collections.Generic;
     using System.Linq;
     using Autodesk.AutoCAD.DatabaseServices;
-    using JetBrains.Annotations;
 
-    [PublicAPI]
     public static class LineWeightExt
     {
         private static readonly List<double> lws100 = new List<double>

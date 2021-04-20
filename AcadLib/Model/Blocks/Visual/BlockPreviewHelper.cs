@@ -6,9 +6,7 @@
     using System.Windows.Media.Imaging;
     using Autodesk.AutoCAD.DatabaseServices;
     using Autodesk.AutoCAD.Windows.Data;
-    using JetBrains.Annotations;
 
-    [PublicAPI]
     public static class BlockPreviewHelper
     {
         public static ImageSource GetPreview(BlockTableRecord btr)
@@ -16,7 +14,6 @@
             return CMLContentSearchPreviews.GetBlockTRThumbnail(btr);
         }
 
-        [NotNull]
         public static Icon GetPreviewIcon(BlockTableRecord btr)
         {
             var imgsrc = CMLContentSearchPreviews.GetBlockTRThumbnail(btr);
@@ -25,15 +22,13 @@
             return Icon.FromHandle(iconPtr);
         }
 
-        [NotNull]
         public static System.Drawing.Image GetPreviewImage(BlockTableRecord btr)
         {
             var imgsrc = CMLContentSearchPreviews.GetBlockTRThumbnail(btr);
             return ImageSourceToGDI((BitmapSource)imgsrc);
         }
 
-        [NotNull]
-        private static System.Drawing.Image ImageSourceToGDI([NotNull] BitmapSource src)
+        private static System.Drawing.Image ImageSourceToGDI(BitmapSource src)
         {
             using var ms = new MemoryStream();
             var encoder = new BmpBitmapEncoder();

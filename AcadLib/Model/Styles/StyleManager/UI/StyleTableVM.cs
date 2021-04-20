@@ -3,7 +3,6 @@
     using System;
     using Model;
     using Errors;
-    using JetBrains.Annotations;
     using NetLib.WPF;
     using ReactiveUI;
     using Unit = System.Reactive.Unit;
@@ -25,10 +24,9 @@
 
         public ReactiveCommand<IStyleItem, Unit> Delete { get; set; }
 
-        [CanBeNull]
         public ObservableCollectionExtended<IStyleItem> Styles { get; set; }
 
-        private void DeleteExec([NotNull] IStyleItem styleItem)
+        private void DeleteExec(IStyleItem styleItem)
         {
             var doc = AcadHelper.Doc;
             var db = doc.Database;

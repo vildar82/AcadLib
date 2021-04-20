@@ -3,9 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using JetBrains.Annotations;
 
-    [PublicAPI]
     public interface IDisposableCollection<T> : ICollection<T>, IDisposable
         where T : IDisposable
     {
@@ -26,7 +24,7 @@
             AddRange(items);
         }
 
-        public void AddRange([CanBeNull] IEnumerable<T> items)
+        public void AddRange(IEnumerable<T> items)
         {
             if (items == null)
                 return;
@@ -60,8 +58,7 @@
             }
         }
 
-        [CanBeNull]
-        public IEnumerable<T> RemoveRange([CanBeNull] IEnumerable<T> items)
+        public IEnumerable<T> RemoveRange(IEnumerable<T> items)
         {
             if (items == null)
                 return null;

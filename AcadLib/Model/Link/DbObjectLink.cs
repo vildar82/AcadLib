@@ -4,7 +4,6 @@
     using System.Collections.Generic;
     using System.Linq;
     using Autodesk.AutoCAD.DatabaseServices;
-    using JetBrains.Annotations;
 
     public enum LinkCode
     {
@@ -12,7 +11,6 @@
         HardPointer
     }
 
-    [PublicAPI]
     public static class DbObjectLink
     {
         private const string HardPointerRecordName = "HardPointer";
@@ -36,31 +34,26 @@
             var existLinks = ReadLinks(objId, code);
             var addLinkIds = linkIds?.Where(w => !w.IsNull).Except(existLinks).ToList() ?? new List<ObjectId>();
             var dxfCode = GetDxfCode(code);
-            using (var dict = dictId.Open(OpenMode.ForWrite) as DBDictionary)
+            using var dict = dictId.Open(OpenMode.ForWrite) as DBDictionary;
+            var entryName = GetLinkRecordName(code);
+            if (dict.Contains(entryName) && replace)
             {
-                var entryName = GetLinkRecordName(code);
-                if (dict.Contains(entryName) && replace)
-                {
-                    dict.Remove(entryName);
-                }
-
-                if (!addLinkIds.Any())
-                    return;
-                using (var xrec = new Xrecord())
-                using (var resBuff = new ResultBuffer())
-                {
-                    foreach (var addLinkId in addLinkIds)
-                    {
-                        resBuff.Add(new TypedValue((int) dxfCode, addLinkId));
-                    }
-
-                    xrec.Data = resBuff;
-                    dict.SetAt(entryName, xrec);
-                }
+                dict.Remove(entryName);
             }
+
+            if (!addLinkIds.Any())
+                return;
+            using var xrec = new Xrecord();
+            using var resBuff = new ResultBuffer();
+            foreach (var addLinkId in addLinkIds)
+            {
+                resBuff.Add(new TypedValue((int) dxfCode, addLinkId));
+            }
+
+            xrec.Data = resBuff;
+            dict.SetAt(entryName, xrec);
         }
 
-        [NotNull]
         public static List<ObjectId> ReadLinks(this ObjectId objId, LinkCode code)
         {
             var dictId = ObjectId.Null;
@@ -128,18 +121,16 @@
 
         private static ObjectId GetExtDict(ObjectId objId)
         {
-            using (var obj = objId.Open(OpenMode.ForRead))
+            using var obj = objId.Open(OpenMode.ForRead);
+            var dictId = obj.ExtensionDictionary;
+            if (!dictId.IsValid)
             {
-                var dictId = obj.ExtensionDictionary;
-                if (!dictId.IsValid)
-                {
-                    obj.UpgradeOpen();
-                    obj.CreateExtensionDictionary();
-                    dictId = obj.ExtensionDictionary;
-                }
-
-                return dictId;
+                obj.UpgradeOpen();
+                obj.CreateExtensionDictionary();
+                dictId = obj.ExtensionDictionary;
             }
+
+            return dictId;
         }
     }
 }

@@ -4,15 +4,12 @@
     using System.Collections.Generic;
     using System.Diagnostics;
     using System.Linq;
-    using Autodesk.AutoCAD.Colors;
     using Autodesk.AutoCAD.DatabaseServices;
     using Autodesk.AutoCAD.Geometry;
     using Errors;
     using Geometry;
-    using JetBrains.Annotations;
     using NetLib;
 
-    [PublicAPI]
     public static class HatchExt
     {
         public static bool IsPointOnHatchByRay(this Hatch hatch, Point3d pt, Tolerance tolerance, Database db)
@@ -40,9 +37,7 @@
             {
                 if (!hId.IsNull)
                 {
-#pragma warning disable 618
                     using var h = hId.Open(OpenMode.ForWrite, false, true) as Hatch;
-#pragma warning restore 618
                     h?.Erase();
                 }
             }
@@ -52,13 +47,12 @@
         /// Создание ассоциативной штриховки по полилинии
         /// Полилиния должна быть в базе чертежа
         /// </summary>
-        [CanBeNull]
-        public static Hatch CreateAssociativeHatch(
-            [NotNull] Curve loop,
-            [NotNull] BlockTableRecord cs,
-            [NotNull] Transaction t,
+        public static Hatch? CreateAssociativeHatch(
+            Curve loop,
+            BlockTableRecord cs,
+            Transaction t,
             string pattern = "SOLID",
-            [CanBeNull] string layer = null,
+            string? layer = null,
             LineWeight lw = LineWeight.LineWeight015)
         {
             return CreateAssociativeHatch(loop, cs, t, 1, pattern, layer, lw);
@@ -69,12 +63,12 @@
         /// Полилиния должна быть в базе чертежа
         /// </summary>
         public static Hatch? CreateAssociativeHatch(
-            [NotNull] Curve loop,
-            [NotNull] BlockTableRecord cs,
-            [NotNull] Transaction t,
+            Curve loop,
+            BlockTableRecord cs,
+            Transaction t,
             double scale,
             string pattern = "SOLID",
-            [CanBeNull] string layer = null,
+            string? layer = null,
             LineWeight lw = LineWeight.LineWeight015)
         {
             var h = new Hatch();
@@ -112,7 +106,6 @@
             return h;
         }
 
-        [NotNull]
         public static Hatch CreateHatch(this List<Point2d> pts)
         {
             pts = pts.DistinctPoints();
@@ -125,7 +118,7 @@
             return h;
         }
 
-        public static Hatch? CreateHatch([CanBeNull] this List<PolylineVertex> pts)
+        public static Hatch? CreateHatch(this List<PolylineVertex>? pts)
         {
             if (pts?.Any() != true)
                 return null;
@@ -143,8 +136,7 @@
             return h;
         }
 
-        [NotNull]
-        public static Hatch CreateHatch([NotNull] this List<Point3d> pts)
+        public static Hatch CreateHatch(this List<Point3d> pts)
         {
             return CreateHatch(pts.ConvertAll(Point3dExtensions.Convert2d));
         }
@@ -160,7 +152,7 @@
             return CreateHatch(vertexes);
         }
 
-        public static double GetHatchArea([NotNull] this Hatch hatch)
+        public static double GetHatchArea(this Hatch hatch)
         {
             double area = 0;
             try
@@ -233,7 +225,7 @@
             return Math.Abs(area);
         }
 
-        public static HatchOptions? GetHatchOptions([CanBeNull] this Hatch h)
+        public static HatchOptions? GetHatchOptions(this Hatch? h)
         {
             return h == null ? null : new HatchOptions(h);
         }
@@ -243,9 +235,8 @@
         /// </summary>
         /// <param name="ht">Штриховка</param>
         /// <param name="loopType">Из каких типов островков</param>
-        [NotNull]
         public static DisposableSet<Polyline> GetPolylines(
-            [NotNull] this Hatch ht,
+            this Hatch ht,
             HatchLoopTypes loopType = HatchLoopTypes.External)
         {
             var loops = GetPolylines2(ht, Tolerance.Global, loopType);
@@ -254,9 +245,8 @@
             return res;
         }
 
-        [NotNull]
         public static DisposableSet<HatchLoopPl> GetPolylines2(
-            [NotNull] this Hatch ht,
+            this Hatch ht,
             Tolerance weddingTolerance,
             HatchLoopTypes loopType = (HatchLoopTypes)119,
             bool wedding = false)
@@ -335,7 +325,7 @@
             return loops;
         }
 
-        public static void SetHatchOptions([CanBeNull] this Hatch h, [CanBeNull] HatchOptions opt)
+        public static void SetHatchOptions(this Hatch? h, HatchOptions? opt)
         {
             if (h == null || opt == null)
                 return;

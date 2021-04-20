@@ -3,20 +3,18 @@
     using System;
     using System.Drawing;
     using Autodesk.AutoCAD.DatabaseServices;
-    using JetBrains.Annotations;
 
     /// <summary>
     /// Ошибка с Error (можно показать объект на чертеже)
     /// </summary>
-    [PublicAPI]
     public class ErrorException : Exception
     {
-        public ErrorException([NotNull] Errors.Error err) : base(err.Message)
+        public ErrorException(Errors.Error err) : base(err.Message)
         {
             Error = err;
         }
 
-        public ErrorException(string msg, [NotNull] Entity ent, Icon icon) : base(msg)
+        public ErrorException(string msg, Entity ent, Icon icon) : base(msg)
         {
             Error = new Errors.Error(msg, ent, icon);
         }

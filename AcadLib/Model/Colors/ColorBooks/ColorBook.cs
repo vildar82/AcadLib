@@ -5,10 +5,8 @@ namespace AcadLib.Colors
     using System.Collections.Generic;
     using System.IO;
     using Errors;
-    using JetBrains.Annotations;
     using OfficeOpenXml;
 
-    [PublicAPI]
     public class ColorBook
     {
         public ColorBook(string name)
@@ -21,8 +19,7 @@ namespace AcadLib.Colors
 
         public string Name { get; set; }
 
-        [NotNull]
-        public static ColorBook ReadFromFile([NotNull] string ncsFile)
+        public static ColorBook ReadFromFile(string ncsFile)
         {
             var colorBookNcs = new ColorBook("NCS");
 
@@ -65,7 +62,6 @@ namespace AcadLib.Colors
             return colorBookNcs;
         }
 
-        [NotNull]
         private static Result<byte> GetByte(string value)
         {
             return !byte.TryParse(value, out var res)

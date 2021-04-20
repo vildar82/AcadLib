@@ -3,9 +3,7 @@
     using System.Collections.Generic;
     using Autodesk.AutoCAD.DatabaseServices;
     using Autodesk.AutoCAD.Geometry;
-    using JetBrains.Annotations;
 
-    [PublicAPI]
     public class Extents3dComparer : IEqualityComparer<Extents3d>
     {
         public Extents3dComparer()

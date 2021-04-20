@@ -4,7 +4,6 @@
     using System.Collections.Generic;
     using System.Linq;
     using Autodesk.AutoCAD.ApplicationServices;
-    using JetBrains.Annotations;
     using NetLib;
     using NetLib.WPF;
     using Application = Autodesk.AutoCAD.ApplicationServices.Core.Application;
@@ -20,14 +19,14 @@
         [Reactive]
         public List<LayerInfo> Layers { get; set; }
 
-        private void BindingDoc([NotNull] Document doc)
+        private void BindingDoc(Document doc)
         {
             Update();
             doc.ImpliedSelectionChanged -= Document_ImpliedSelectionChanged1;
             doc.ImpliedSelectionChanged += Document_ImpliedSelectionChanged1;
         }
 
-        private void DocumentManager_DocumentActivated(object sender, [NotNull] DocumentCollectionEventArgs e)
+        private void DocumentManager_DocumentActivated(object sender, DocumentCollectionEventArgs e)
         {
             BindingDoc(e.Document);
         }

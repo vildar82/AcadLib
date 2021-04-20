@@ -6,7 +6,6 @@ namespace AcadLib.Styles.StyleManager.Model
     using Autodesk.AutoCAD.DatabaseServices;
     using Errors;
     using Filer;
-    using JetBrains.Annotations;
 
     public class StyleTable : StyleTableBase
     {
@@ -144,7 +143,7 @@ namespace AcadLib.Styles.StyleManager.Model
             }
         }
 
-        private void ReplaceLayer([NotNull] Database db, ObjectId layerId, ObjectId replaceId, string replaceName)
+        private void ReplaceLayer(Database db, ObjectId layerId, ObjectId replaceId, string replaceName)
         {
             var bt = db.BlockTableId.GetObjectT<BlockTable>();
             foreach (var btr in bt.GetObjects<BlockTableRecord>())

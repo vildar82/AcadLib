@@ -4,22 +4,18 @@
     using Autodesk.AutoCAD.DatabaseServices;
     using Collections.Generic;
     using IO;
-    using JetBrains.Annotations;
     using Linq;
 
-    [PublicAPI]
     public static class DataExtensions
     {
         // Gets the column names collection of the datatable
-        [NotNull]
-        public static IEnumerable<string> GetColumnNames([NotNull] this DataTable dataTbl)
+        public static IEnumerable<string> GetColumnNames(this DataTable dataTbl)
         {
             return dataTbl.Columns.Cast<DataColumn>().Select(col => col.ColumnName);
         }
 
         // Creates an AutoCAD Table from the datatable.
-        [NotNull]
-        public static Table ToAcadTable([NotNull] this DataTable dataTbl, double rowHeight, double columnWidth)
+        public static Table ToAcadTable(this DataTable dataTbl, double rowHeight, double columnWidth)
         {
             // return dataTbl.Rows.Cast<DataRow>().ToAcadTable(dataTbl.TableName, dataTbl.GetColumnNames(), rowHeight, columnWidth);
             var tbl = new Table();
@@ -39,7 +35,7 @@
         }
 
         // Writes a csv file from the datatable.
-        public static void WriteCsv([NotNull] this DataTable dataTbl, [NotNull] string filename)
+        public static void WriteCsv(this DataTable dataTbl, string filename)
         {
             using (var writer = new StreamWriter(filename))
             {
@@ -52,7 +48,7 @@
         }
 
         // Writes an Excel file from the datatable (using late binding)
-        public static void WriteXls([NotNull] this DataTable dataTbl, string filename, [CanBeNull] string sheetName, bool visible)
+        public static void WriteXls(this DataTable dataTbl, string filename, string? sheetName, bool visible)
         {
             var mis = Type.Missing;
             var xlApp = LateBinding.GetOrCreateInstance("Excel.Application");

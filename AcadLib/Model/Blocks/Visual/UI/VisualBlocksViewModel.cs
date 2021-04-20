@@ -4,7 +4,6 @@
     using System.Linq;
     using System.Reactive;
     using System.Windows;
-    using JetBrains.Annotations;
     using NetLib.WPF;
     using ReactiveUI;
 
@@ -14,7 +13,7 @@
         {
         }
 
-        public VisualBlocksViewModel([NotNull] List<IVisualBlock> visuals)
+        public VisualBlocksViewModel(List<IVisualBlock> visuals)
         {
             Groups = visuals.GroupBy(g => g.Group).Select(s => new VisualGroup { Name = s.Key, Blocks = s.ToList() }).ToList();
             Insert = CreateCommand<IVisualBlock>(OnInsertExecute);

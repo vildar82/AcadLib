@@ -5,12 +5,10 @@
     using Autodesk.AutoCAD.DatabaseServices;
     using Autodesk.AutoCAD.EditorInput;
     using Autodesk.AutoCAD.Geometry;
-    using JetBrains.Annotations;
 
     /// <summary>
     /// Перемещение (drag) группы объектов за мышкой
     /// </summary>
-    [PublicAPI]
     public static class DragSel
     {
         /// <summary>
@@ -21,8 +19,7 @@
         /// <param name="ed"></param>
         /// <param name="ids"></param>
         /// <param name="pt"></param>
-        /// <returns></returns>
-        public static bool Drag(this Editor ed, [CanBeNull] ObjectId[] ids, Point3d pt)
+        public static bool Drag(this Editor ed, ObjectId[] ids, Point3d pt)
         {
             return Drag(ed, ids, pt, true);
         }
@@ -36,8 +33,7 @@
         /// <param name="ids"></param>
         /// <param name="pt"></param>
         /// /// <param name="escErase">Удалять при нажатии Esc</param>
-        /// <returns></returns>
-        public static bool Drag(this Editor ed, [CanBeNull] ObjectId[] ids, Point3d pt, bool escErase)
+        public static bool Drag(this Editor ed, ObjectId[]? ids, Point3d pt, bool escErase)
         {
             if (ids == null || !ids.Any())
                 return false;
@@ -96,7 +92,7 @@
         /// <param name="ed"></param>
         /// <param name="ents">Объекты не резиденты чертежа (будут вставленны в текущее пространство листа)</param>
         /// <param name="height">Высота разбиения объектов по высоте (вставка в столбик, пока высота столбца меньше заданной высоты)</param>
-        public static void Drag([NotNull] this Editor ed, [NotNull] List<Entity> ents, double height = 10000)
+        public static void Drag(this Editor ed, List<Entity> ents, double height = 10000)
         {
             var db = ed.Document.Database;
             var ids = new List<ObjectId>();

@@ -18,7 +18,6 @@
 // Ported to C# By Dror Gluska, April 9th, 2009
 namespace RTreeLib
 {
-    using JetBrains.Annotations;
 
     /**
      * <p>Used by RTree. There are no public methods in this class.</p>
@@ -26,7 +25,6 @@ namespace RTreeLib
      * @author aled@sourceforge.net
      * @version 1.0b2p1
      */
-    [PublicAPI]
     public class Node<T>
     {
         internal Rectangle[] entries;
@@ -44,8 +42,7 @@ namespace RTreeLib
             ids = new int[maxNodeEntries];
         }
 
-        [CanBeNull]
-        public Rectangle GetEntry(int index)
+        public Rectangle? GetEntry(int index)
         {
             return index < entryCount ? entries[index] : null;
         }
@@ -75,7 +72,7 @@ namespace RTreeLib
             return mbr;
         }
 
-        internal void AddEntry([NotNull] Rectangle r, int id)
+        internal void AddEntry(Rectangle r, int id)
         {
             ids[entryCount] = id;
             entries[entryCount] = r.Copy();
@@ -166,10 +163,8 @@ namespace RTreeLib
         /**
          * eliminate null entries, move all entries to the start of the source node
          */
-#pragma warning disable 618
 
-        internal void Reorganize([NotNull] RTree<T> rtree)
-#pragma warning restore 618
+        internal void Reorganize(RTree<T> rtree)
         {
             var countdownIndex = rtree.maxNodeEntries - 1;
             for (var index = 0; index < entryCount; index++)

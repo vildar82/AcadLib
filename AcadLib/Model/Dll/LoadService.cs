@@ -7,13 +7,11 @@
     using System.Linq;
     using System.Reflection;
     using Autodesk.AutoCAD.DatabaseServices;
-    using JetBrains.Annotations;
     using NetLib;
 
     /// <summary>
     /// Загрузка вспомогательных сборок
     /// </summary>
-    [PublicAPI]
     public static class LoadService
     {
         public static void DeleteTry(string file)
@@ -31,8 +29,7 @@
             }
         }
 
-        [NotNull]
-        public static List<DllVer> GetDllsForCurVerAcad([NotNull] List<string> dlls)
+        public static List<DllVer> GetDllsForCurVerAcad(List<string> dlls)
         {
             Logger.Log.Info($"GetDllsForCurVerAcad dlls={dlls.JoinToString(Path.GetFileNameWithoutExtension)}");
             var dllsToLoad = new List<DllVer>();
@@ -71,7 +68,7 @@
                 @"Dll\EntityFramework.SqlServer.dll"));
         }
 
-        public static void LoadFrom([NotNull] string dll)
+        public static void LoadFrom(string dll)
         {
             if (File.Exists(dll))
             {
@@ -129,7 +126,7 @@
             }
         }
 
-        public static void LoadPackages([NotNull] string name)
+        public static void LoadPackages(string name)
         {
             var dllLocal = Path.Combine(IO.Path.GetUserPluginFolder("packages"), name);
             LoadFromTry(dllLocal);

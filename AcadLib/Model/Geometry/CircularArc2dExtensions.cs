@@ -1,11 +1,9 @@
-﻿using NetLib;
-
-namespace AcadLib.Geometry
+﻿namespace AcadLib.Geometry
 {
     using System;
     using Autodesk.AutoCAD.DatabaseServices;
     using Autodesk.AutoCAD.Geometry;
-    using JetBrains.Annotations;
+    using NetLib;
 
     /// <summary>
     /// Provides extension methods for the CircularArc2dType
@@ -17,7 +15,7 @@ namespace AcadLib.Geometry
         /// </summary>
         /// <param name="arc">The instance to which the method applies.</param>
         /// <returns>The algebraic area.</returns>
-        public static double AlgebricArea([NotNull] this CircularArc2d arc)
+        public static double AlgebricArea(this CircularArc2d arc)
         {
             var rad = arc.Radius;
             var ang = arc.IsClockWise ? arc.StartAngle - arc.EndAngle : arc.EndAngle - arc.StartAngle;
@@ -29,7 +27,7 @@ namespace AcadLib.Geometry
         /// </summary>
         /// <param name="arc">The instance to which the method applies.</param>
         /// <returns>The centroid of the arc.</returns>
-        public static Point2d Centroid([NotNull] this CircularArc2d arc)
+        public static Point2d Centroid(this CircularArc2d arc)
         {
             var start = arc.StartPoint;
             var end = arc.EndPoint;
@@ -39,8 +37,7 @@ namespace AcadLib.Geometry
             return arc.Center.Polar(angle - Math.PI / 2.0, chord * chord * chord / (12.0 * area));
         }
 
-        [NotNull]
-        public static Circle CreateCircle([NotNull] this CircularArc2d arc)
+        public static Circle CreateCircle(this CircularArc2d arc)
         {
             return new Circle(arc.Center.Convert3d(), Vector3d.ZAxis, arc.Radius);
         }
@@ -56,7 +53,7 @@ namespace AcadLib.Geometry
         /// <param name="arc">The instance to which this method applies.</param>
         /// <param name="pt">The Point2d to which tangents are searched</param>
         /// <returns>An array of LineSegement2d representing the tangents (2) or null if there is none.</returns>
-        public static LineSegment2d[]? GetTangentsTo([NotNull] this CircularArc2d arc, Point2d pt)
+        public static LineSegment2d[]? GetTangentsTo(this CircularArc2d arc, Point2d pt)
         {
             // check if the point is inside the circle
             var center = arc.Center;
@@ -90,8 +87,8 @@ namespace AcadLib.Geometry
         /// <param name="flags">An enum value specifying which type of tangent is returned.</param>
         /// <returns>An array of LineSegment2d representing the tangents (maybe 2 or 4) or null if there is none.</returns>
         public static LineSegment2d[]? GetTangentsTo(
-            [NotNull] this CircularArc2d arc,
-            [NotNull] CircularArc2d other,
+            this CircularArc2d arc,
+            CircularArc2d other,
             TangentType flags)
         {
             // check if a circle is inside the other
@@ -161,7 +158,7 @@ namespace AcadLib.Geometry
             return result;
         }
 
-        public static bool IsCircle([NotNull] this CircularArc2d arc)
+        public static bool IsCircle(this CircularArc2d arc)
         {
             return Math.Abs(Math.Abs(arc.EndAngle - arc.StartAngle) - MathExt.PI2) < 0.00001;
         }

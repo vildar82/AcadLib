@@ -2,12 +2,10 @@
 {
     using Autodesk.AutoCAD.DatabaseServices;
     using Autodesk.AutoCAD.Geometry;
-    using JetBrains.Annotations;
 
-    [PublicAPI]
     public static class LineExt
     {
-        public static Point3d Center([NotNull] this Line line)
+        public static Point3d Center(this Line line)
         {
             return line.StartPoint.Center(line.EndPoint);
         }

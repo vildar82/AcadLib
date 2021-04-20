@@ -13,7 +13,6 @@
     using System.Windows.Threading;
     using AutoCAD_PIK_Manager;
     using AutoCAD_PIK_Manager.Settings;
-    using JetBrains.Annotations;
     using NetLib;
     using NetLib.Notification;
     using Application = Autodesk.AutoCAD.ApplicationServices.Core.Application;
@@ -31,7 +30,7 @@
         private static List<FileWatcherRx> watchers;
         private static bool isNotify;
 
-        public static bool NeedNotify([CanBeNull] string updateDesc, out string descResult)
+        public static bool NeedNotify(string updateDesc, out string descResult)
         {
             descResult = updateDesc;
             if (updateDesc.IsNullOrEmpty())
@@ -120,7 +119,7 @@
         /// <param name="msg">Сообщение</param>
         /// <param name="updateVersions">Обновленные группы настроек</param>
         /// <returns>True - есть новая версия</returns>
-        private static bool Check(bool includeUserNotNotify,[CanBeNull] out string msg,[CanBeNull] out List<GroupInfo> updateVersions)
+        private static bool Check(bool includeUserNotNotify, out string msg, out List<GroupInfo> updateVersions)
         {
             try
             {
@@ -154,7 +153,7 @@
             return false;
         }
 
-        private static bool IsNotNotify([NotNull] GroupInfo groupInfo)
+        private static bool IsNotNotify(GroupInfo groupInfo)
         {
             if (NotNotifyGroups.TryGetValue(groupInfo.GroupName, out var updateDate))
             {
@@ -207,7 +206,7 @@
             return true;
         }
 
-        private static void OnFileVersionChanged([NotNull] EventPattern<FileSystemEventArgs> e)
+        private static void OnFileVersionChanged(EventPattern<FileSystemEventArgs> e)
         {
             try
             {

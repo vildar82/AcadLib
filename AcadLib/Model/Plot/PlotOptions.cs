@@ -1,9 +1,7 @@
 ﻿namespace AcadLib.Plot
 {
     using System;
-    using JetBrains.Annotations;
 
-    [PublicAPI]
     [Serializable]
     public class PlotOptions
     {

@@ -3,7 +3,6 @@
     using System;
     using Autodesk.AutoCAD.DatabaseServices;
     using Autodesk.AutoCAD.Geometry;
-    using JetBrains.Annotations;
 
     /// <summary>
     /// AutoCAD coordinate systems enumeration.
@@ -126,7 +125,6 @@
         /// <param name="direction">Direction (in WCS coordinates) of the projection</param>
         /// <param name="dirPlane">The plane which origin is 0, 0, 0 and 'direction' is the normal.</param>
         /// <returns>The newly created Polyline.</returns>
-        [NotNull]
         internal static Polyline ProjectExtents(Extents3d extents, Plane plane, Vector3d direction, Plane dirPlane)
         {
             var pt1 = extents.MinPoint.TransformBy(Matrix3d.PlaneToWorld(dirPlane));

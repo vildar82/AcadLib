@@ -1,17 +1,13 @@
-﻿using AcadLib.PaletteProps.UI;
-
-namespace AcadLib.PaletteProps
+﻿namespace AcadLib.PaletteProps
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Windows.Controls;
-    using JetBrains.Annotations;
 
     /// <summary>
     /// Методы расширения для свойтв на палитре
     /// </summary>
-    [PublicAPI]
     public static class ValuesExt
     {
         /// <summary>
@@ -31,7 +27,7 @@ namespace AcadLib.PaletteProps
         /// <param name="value">Значение</param>
         /// <param name="update">Обновление значения</param>
         /// <returns>Контрол для палитры</returns>
-        public static Control CreateControl([NotNull] this IEnumerable<object> values, Action<object> update = null, bool isReadOnly = false)
+        public static Control CreateControl(this IEnumerable<object> values, Action<object> update = null, bool isReadOnly = false)
         {
             var value = GetValue(values);
             return GetControl(values.FirstOrDefault(), value, update, isReadOnly);

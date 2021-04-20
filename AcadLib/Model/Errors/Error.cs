@@ -8,11 +8,9 @@
     using Autodesk.AutoCAD.DatabaseServices;
     using Autodesk.AutoCAD.EditorInput;
     using Autodesk.AutoCAD.Geometry;
-    using JetBrains.Annotations;
     using NetLib.WPF.Data;
     using UI;
 
-    [PublicAPI]
     public class Error : IError
     {
         protected string _msg;
@@ -34,7 +32,7 @@
         {
         }
 
-        public Error(string message, [CanBeNull] Icon icon = null)
+        public Error(string message, Icon? icon = null)
         {
             _msg = PrepareMessage(message);
             _shortMsg = GetShortMsg(_msg);
@@ -43,7 +41,7 @@
             DefineStatus();
         }
 
-        public Error(string message, [NotNull] Entity ent, [CanBeNull] Icon icon = null)
+        public Error(string message, Entity ent, Icon? icon = null)
         {
             _msg = PrepareMessage(message);
             _shortMsg = GetShortMsg(_msg);
@@ -55,7 +53,7 @@
             DefineStatus();
         }
 
-        public Error(string message, [NotNull] Entity ent, Matrix3d trans, [CanBeNull] Icon icon = null)
+        public Error(string message, Entity ent, Matrix3d trans, Icon? icon = null)
         {
             _msg = PrepareMessage(message);
             _shortMsg = GetShortMsg(_msg);
@@ -67,7 +65,7 @@
             DefineStatus();
         }
 
-        public Error(string message, Extents3d ext, [NotNull] Entity ent, [CanBeNull] Icon icon = null)
+        public Error(string message, Extents3d ext, Entity ent, Icon? icon = null)
         {
             _msg = PrepareMessage(message);
             _shortMsg = GetShortMsg(_msg);
@@ -81,7 +79,7 @@
             DefineStatus();
         }
 
-        public Error(string message, Extents3d ext, ObjectId idEnt, [CanBeNull] Icon icon = null)
+        public Error(string message, Extents3d ext, ObjectId idEnt, Icon? icon = null)
         {
             _msg = PrepareMessage(message);
             _shortMsg = GetShortMsg(_msg);
@@ -95,7 +93,7 @@
             DefineStatus();
         }
 
-        public Error(string message, Extents3d ext, Matrix3d trans, [CanBeNull] Icon icon = null)
+        public Error(string message, Extents3d ext, Matrix3d trans, Icon? icon = null)
         {
             _msg = PrepareMessage(message);
             _shortMsg = GetShortMsg(_msg);
@@ -109,7 +107,7 @@
             DefineStatus();
         }
 
-        public Error(string message, ObjectId idEnt, [CanBeNull] Icon icon = null)
+        public Error(string message, ObjectId idEnt, Icon? icon = null)
         {
             _msg = PrepareMessage(message);
             _shortMsg = GetShortMsg(_msg);
@@ -121,7 +119,7 @@
             DefineStatus();
         }
 
-        public Error(string message, ObjectId idEnt, Matrix3d trans, [CanBeNull] Icon icon = null)
+        public Error(string message, ObjectId idEnt, Matrix3d trans, Icon? icon = null)
         {
             _msg = PrepareMessage(message);
             _shortMsg = GetShortMsg(_msg);
@@ -133,7 +131,7 @@
             DefineStatus();
         }
 
-        private Error([NotNull] Error err)
+        private Error(Error err)
         {
             _msg = err._msg;
             Group = err.Group;
@@ -226,9 +224,7 @@
         /// <summary>
         /// Сгруппированные ошибки по одинаковым сообщениям.
         /// </summary>
-        /// <returns></returns>
-        [NotNull]
-        public static List<IError> GetCollapsedErrors([NotNull] List<IError> errors)
+        public static List<IError> GetCollapsedErrors(List<IError> errors)
         {
             var errCounts = errors.GroupBy(e => e.Message).Select(g =>
             {
@@ -269,13 +265,13 @@
             }
         }
 
-        public int CompareTo([NotNull] IError other)
+        public int CompareTo(IError other)
         {
             var res = Status.CompareTo(other.Status);
             return res != 0 ? res : string.CompareOrdinal(Message, other.Message);
         }
 
-        public bool Equals(IError other)
+        public bool Equals(IError? other)
         {
             return other != null && string.Equals(Message, other.Message);
         }
@@ -285,7 +281,6 @@
             return Message.GetHashCode();
         }
 
-        [NotNull]
         public IError GetCopy()
         {
             return (IError)MemberwiseClone();
@@ -297,7 +292,7 @@
             _shortMsg = GetShortMsg(_msg);
         }
 
-        public void AddButton(string title, string tooltip, [NotNull] Action click)
+        public void AddButton(string title, string tooltip, Action click)
         {
             AcadHelper.InvokeInMainThread(() =>
             {
@@ -323,8 +318,7 @@
             });
         }
 
-        [NotNull]
-        private static string GetShortMsg([NotNull] string msg)
+        private static string GetShortMsg(string msg)
         {
             var resVal = msg.Length > 200 ? msg.Substring(0, 200) : msg;
             return resVal.Replace("\n", " ");

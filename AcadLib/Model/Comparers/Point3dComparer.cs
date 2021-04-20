@@ -2,12 +2,10 @@
 {
     using System.Collections.Generic;
     using Autodesk.AutoCAD.Geometry;
-    using JetBrains.Annotations;
 
     /// <summary>
     /// Сравнение точек с заданным допуском
     /// </summary>
-    [PublicAPI]
     public class Point3dEqualityComparer : IEqualityComparer<Point3d>
     {
         /// <summary>
@@ -28,7 +26,6 @@
         /// <summary>
         /// Допуск 1 мм.
         /// </summary>
-        [NotNull]
         public static Point3dEqualityComparer Comparer1 => new Point3dEqualityComparer(1);
 
         public Tolerance Tolerance { get; set; } = Tolerance.Global;

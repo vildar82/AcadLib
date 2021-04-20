@@ -4,13 +4,11 @@
     using System.Collections.Generic;
     using System.Xml.Serialization;
     using Autodesk.AutoCAD.DatabaseServices;
-    using JetBrains.Annotations;
     using Newtonsoft.Json;
 
     /// <summary>
     /// Свойства динамического блока
     /// </summary>
-    [PublicAPI]
     public class Property : IEquatable<Property>, ICloneable
     {
         public Property()
@@ -39,7 +37,7 @@
             Type = type;
         }
 
-        public Property([NotNull] DynamicBlockReferenceProperty dynProp)
+        public Property(DynamicBlockReferenceProperty dynProp)
         {
             Name = dynProp.PropertyName;
             Value = dynProp.Value;
@@ -74,8 +72,7 @@
         /// <summary>
         /// Все видимые атрибуты и динамические свойства блока
         /// </summary>
-        [NotNull]
-        public static List<Property> GetAllProperties([NotNull] BlockReference blRef)
+        public static List<Property> GetAllProperties(BlockReference blRef)
         {
             var props = new List<Property>();
             var attrs = AttributeInfo.GetAttrRefs(blRef);
@@ -92,8 +89,7 @@
         /// <summary>
         /// Динамические свойства блока
         /// </summary>
-        [NotNull]
-        public static List<Property> GetDynamicProperties([NotNull] BlockReference blRef)
+        public static List<Property> GetDynamicProperties(BlockReference blRef)
         {
             var props = new List<Property>();
             if (blRef.DynamicBlockReferencePropertyCollection != null)
@@ -136,7 +132,6 @@
 
         public override int GetHashCode()
         {
-            // ReSharper disable once NonReadonlyMemberInGetHashCode
             return Name.GetHashCode();
         }
 

@@ -4,9 +4,7 @@
     using System.Collections.Generic;
     using Autodesk.AutoCAD.DatabaseServices;
     using Autodesk.AutoCAD.Runtime;
-    using JetBrains.Annotations;
 
-    [PublicAPI]
     public static class AttSyncExt
     {
         public static void SynchronizeAttributes(this ObjectId btrId)
@@ -20,7 +18,7 @@
         /// <summary>
         /// Синхронизация атрибутов блока. Требуется запущенная транзакция
         /// </summary>
-        public static void SynchronizeAttributes([NotNull] this BlockTableRecord target)
+        public static void SynchronizeAttributes(this BlockTableRecord target)
         {
             if (target == null)
                 throw new ArgumentNullException(nameof(target));
@@ -50,8 +48,7 @@
             }
         }
 
-        [NotNull]
-        private static List<AttributeDefinition> GetAttributes([NotNull] this BlockTableRecord target)
+        private static List<AttributeDefinition> GetAttributes(this BlockTableRecord target)
         {
             var attDefs = new List<AttributeDefinition>();
             foreach (var id in target)
@@ -67,8 +64,8 @@
         }
 
         private static void ResetAttributes(
-            [NotNull] this BlockReference br,
-            [NotNull] List<AttributeDefinition> attDefs,
+            this BlockReference br,
+            List<AttributeDefinition> attDefs,
             Transaction tr)
         {
             var attValues = new Dictionary<string, string>();

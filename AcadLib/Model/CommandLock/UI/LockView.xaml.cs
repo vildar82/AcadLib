@@ -3,14 +3,13 @@
     using System;
     using System.Diagnostics;
     using System.Windows.Documents;
-    using JetBrains.Annotations;
 
     /// <summary>
     /// Interaction logic for LockView.xaml
     /// </summary>
     public partial class LockView
     {
-        public LockView([NotNull] LockViewModel vm) : base(vm)
+        public LockView(LockViewModel vm) : base(vm)
         {
             DataContext = vm;
             InitializeComponent();
@@ -25,7 +24,7 @@
             }
         }
 
-        private void Addlink([NotNull] string linkText)
+        private void Addlink(string linkText)
         {
             try
             {

@@ -4,9 +4,7 @@
     using System.Collections.Generic;
     using Autodesk.AutoCAD.DatabaseServices;
     using Autodesk.AutoCAD.Geometry;
-    using JetBrains.Annotations;
 
-    [PublicAPI]
     public class ReferenceFiler : DwgFiler
     {
         // member data
@@ -41,7 +39,6 @@
             return new IntPtr();
         }
 
-        [NotNull]
         public override byte[] ReadBinaryChunk()
         {
             return new byte[0];
@@ -101,7 +98,6 @@
             return new Scale3d();
         }
 
-        [NotNull]
         public override string ReadString()
         {
             return string.Empty;

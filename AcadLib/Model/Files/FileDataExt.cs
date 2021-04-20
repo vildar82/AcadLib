@@ -1,10 +1,8 @@
 ﻿namespace AcadLib.Files
 {
     using IO;
-    using JetBrains.Annotations;
     using NetLib;
 
-    [PublicAPI]
     public static class FileDataExt
     {
         /// <summary>
@@ -15,8 +13,7 @@
         /// <param name="name">Имя файла без расширения</param>
         /// <param name="xmlOrJson">true - xml, false - json</param>
         /// <returns>Данные</returns>
-        [NotNull]
-        public static LocalFileData<T> GetLocalFileData<T>([NotNull] string plugin, [NotNull] string name, bool xmlOrJson)
+        public static LocalFileData<T> GetLocalFileData<T>(string plugin, string name, bool xmlOrJson)
             where T : class, new()
         {
             var ext = xmlOrJson ? ".xml" : ".json";
@@ -32,8 +29,7 @@
         /// <param name="name">Имя файла без расширения</param>
         /// <param name="xmlOrJson">true - xml, false - json</param>
         /// <returns>Данные</returns>
-        [NotNull]
-        public static FileData<T> GetSharedFileData<T>([NotNull] string plugin, [NotNull] string name, bool xmlOrJson)
+        public static FileData<T> GetSharedFileData<T>(string plugin, string name, bool xmlOrJson)
             where T : class, new()
         {
             var ext = xmlOrJson ? ".xml" : ".json";

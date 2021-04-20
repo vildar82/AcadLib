@@ -3,7 +3,6 @@
     using System.Collections.Generic;
     using Autodesk.AutoCAD.ApplicationServices;
     using Autodesk.AutoCAD.EditorInput;
-    using JetBrains.Annotations;
 
     public static class LayersSelectedService
     {
@@ -14,7 +13,6 @@
             view.Show();
         }
 
-        [NotNull]
         public static List<LayerInfo> GetSelectedLayers()
         {
             var doc = AcadHelper.Doc;
@@ -23,12 +21,9 @@
             if (sel.Status != PromptStatus.OK)
                 return new List<LayerInfo>();
             List<LayerInfo> layers;
-            using (var t = doc.TransactionManager.StartTransaction())
-            {
-                layers = sel.Value.GetObjectIds().Layers();
-                t.Commit();
-            }
-
+            using var t = doc.TransactionManager.StartTransaction();
+            layers = sel.Value.GetObjectIds().Layers();
+            t.Commit();
             return layers;
         }
     }

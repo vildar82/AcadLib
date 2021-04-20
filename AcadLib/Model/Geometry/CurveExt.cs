@@ -5,10 +5,8 @@
     using System.Linq;
     using Autodesk.AutoCAD.DatabaseServices;
     using Autodesk.AutoCAD.Geometry;
-    using JetBrains.Annotations;
     using NetLib;
 
-    [PublicAPI]
     public static class CurveExt
     {
         /// <summary>
@@ -32,14 +30,14 @@
             return center;
         }
 
-        public static Point3d Centroid([NotNull] this Curve c)
+        public static Point3d Centroid(this Curve c)
         {
             var pts = c.GetGeCurve().GetSamplePoints(10).Select(s => s.Point).ToList();
             return new Point3d(pts.Average(a => a.X), pts.Average(a => a.Y), 0);
         }
 
         [Obsolete("Использую GetParameterAtPointTry с допусом.")]
-        public static double GetParameterAtPointTry([NotNull] this Curve c, Point3d pt, bool extend = false)
+        public static double GetParameterAtPointTry(this Curve c, Point3d pt, bool extend = false)
         {
             try
             {
@@ -52,7 +50,7 @@
             }
         }
 
-        public static double? GetParameterAtPointTry([NotNull] this Curve c, Point3d pt, double delta, bool extend = false)
+        public static double? GetParameterAtPointTry(this Curve c, Point3d pt, double delta, bool extend = false)
         {
             try
             {
@@ -68,8 +66,7 @@
             return null;
         }
 
-        [NotNull]
-        public static List<Point3d> GetPoints([NotNull] this Curve curve)
+        public static List<Point3d> GetPoints(this Curve curve)
         {
             if (curve is Polyline pl)
                 return pl.GetPoints().Select(s => s.Convert3d()).ToList();
@@ -89,7 +86,7 @@
             return IsPointInsidePolylineByRay(ray, pt, c, tolerance);
         }
 
-        public static bool IsPointInsidePolylineByRay([NotNull] Ray ray, Point3d pt, Curve c, Tolerance tolerance)
+        public static bool IsPointInsidePolylineByRay(Ray ray, Point3d pt, Curve c, Tolerance tolerance)
         {
             var pts = new Point3dCollection();
             ray.IntersectWith(c, Intersect.OnBothOperands, new Plane(), pts, IntPtr.Zero, IntPtr.Zero);
@@ -103,13 +100,13 @@
             return pts.Count.IsOdd() || IsPointOnPolyline(c, pt, tolerance);
         }
 
-        public static bool IsPointOnPolyline([NotNull] this Curve c, Point3d pt, Tolerance tolerance)
+        public static bool IsPointOnPolyline(this Curve c, Point3d pt, Tolerance tolerance)
         {
             var ptPl = c.GetClosestPointTo(pt, Vector3d.ZAxis, false);
             return pt.IsEqualTo(ptPl, tolerance);
         }
 
-        public static bool IsVertex([NotNull] this Curve c, Point3d pt, double tolerance = 0.0001)
+        public static bool IsVertex(this Curve c, Point3d pt, double tolerance = 0.0001)
         {
             return c.GetParameterAtPointTry(pt).IsWholeNumber(tolerance);
         }

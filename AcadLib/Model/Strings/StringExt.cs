@@ -2,19 +2,16 @@
 {
     using System.Text.RegularExpressions;
     using Autodesk.AutoCAD.DatabaseServices;
-    using JetBrains.Annotations;
     using NetLib;
 
-    [PublicAPI]
     public static class StringExt
     {
-        [NotNull]
-        public static string GetValidDbSymbolName([NotNull] this string name)
+        public static string GetValidDbSymbolName(this string name)
         {
             return GetValidDbSymbolName(name, ".");
         }
 
-        public static string GetValidDbSymbolName([NotNull] this string name, string replacement)
+        public static string GetValidDbSymbolName(this string name, string replacement)
         {
             // string testString = "<>/?\";:*|,='";
             if (name.IsNullOrEmpty())

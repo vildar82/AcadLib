@@ -3,14 +3,13 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using JetBrains.Annotations;
     using NetLib;
 
     public class IntVM : BaseValueVM
     {
-        public static IntView Create([NotNull] IEnumerable<int> values,
-            Action<object> update = null,
-            Action<IntVM> config = null,
+        public static IntView Create(IEnumerable<int> values,
+            Action<object>? update = null,
+            Action<IntVM>? config = null,
             bool isReadOnly = false)
         {
             if (update == null)
@@ -21,8 +20,8 @@
 
         public static IntView Create(
             object value,
-            Action<object> update = null,
-            Action<IntVM> config = null,
+            Action<object>? update = null,
+            Action<IntVM>? config = null,
             bool isReadOnly = false)
         {
             if (update == null)
@@ -31,7 +30,7 @@
             return Create<IntView, IntVM>(value, updateA, config, isReadOnly);
         }
 
-        private static Action<object, BaseValueVM> GetUpdateAction(Action<object> update)
+        private static Action<object, BaseValueVM>? GetUpdateAction(Action<object>? update)
         {
             if (update == null)
                 return null;

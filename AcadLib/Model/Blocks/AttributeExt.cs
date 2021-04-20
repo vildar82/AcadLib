@@ -5,15 +5,13 @@
     using System.Linq;
     using Autodesk.AutoCAD.DatabaseServices;
     using Blocks;
-    using JetBrains.Annotations;
 
     /// <summary>
     /// Расширенные методы AttributeReference
     /// </summary>
-    [PublicAPI]
     public static class AttributeExt
     {
-        public static IEnumerable<AttributeInfo> EnumerateAttributes([CanBeNull] this BlockReference blRef)
+        public static IEnumerable<AttributeInfo> EnumerateAttributes(this BlockReference blRef)
         {
             if (blRef == null)
                 yield break;
@@ -47,8 +45,7 @@
             }
         }
 
-        [NotNull]
-        public static Dictionary<string, DBText> GetAttributeDictionary([NotNull] this BlockReference blockRef)
+        public static Dictionary<string, DBText> GetAttributeDictionary(this BlockReference blockRef)
         {
             return blockRef.GetAttributes().Where(a => a.Visible).ToDictionary(GetTag, StringComparer.OrdinalIgnoreCase);
         }
@@ -58,7 +55,7 @@
         /// Returns an enumeration of all AttributeDefinitions whose Constant property is
         /// true, and all AttributeReferences attached to the block reference.
         /// </summary>
-        public static IEnumerable<DBText> GetAttributes([NotNull] this BlockReference blockRef)
+        public static IEnumerable<DBText> GetAttributes(this BlockReference blockRef)
         {
             var tr = blockRef.GetTransaction();
             var btr = (BlockTableRecord)blockRef.BlockTableRecord.GetObject(OpenMode.ForRead);
@@ -90,8 +87,7 @@
         // Requires an active transaction (not an OpenCloseTransaction)
         // Returns a dictionary whose values are either constant AttributeDefinitions
         // or AttributeReferences, keyed to their tags:
-        [NotNull]
-        public static Transaction GetTransaction([NotNull] this DBObject obj)
+        public static Transaction GetTransaction(this DBObject obj)
         {
             if (obj.Database == null)
                 throw new ArgumentException("No database");
@@ -101,7 +97,7 @@
             return tr;
         }
 
-        public static bool Is([NotNull] this AttributeReference attr, string tag)
+        public static bool Is(this AttributeReference attr, string tag)
         {
             return string.Equals(attr.Tag, tag, StringComparison.CurrentCultureIgnoreCase);
         }
@@ -109,7 +105,7 @@
         /// <summary>
         /// Поворот атрибута в 0
         /// </summary>
-        public static void Normalize([NotNull] this AttributeReference atr)
+        public static void Normalize(this AttributeReference atr)
         {
             if (Math.Abs(atr.Rotation) > 0.0001)
             {
@@ -119,7 +115,7 @@
             }
         }
 
-        private static string GetTag([NotNull] DBText dbText)
+        private static string GetTag(DBText dbText)
         {
             switch (dbText)
             {

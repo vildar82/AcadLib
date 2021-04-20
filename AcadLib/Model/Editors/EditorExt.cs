@@ -1,21 +1,19 @@
-﻿using System.Diagnostics;
-using Application = Autodesk.AutoCAD.ApplicationServices.Core.Application;
-
-namespace AcadLib.Editors
+﻿namespace AcadLib.Editors
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics;
     using System.Linq;
     using System.Reflection;
     using Autodesk.AutoCAD.DatabaseServices;
     using Autodesk.AutoCAD.EditorInput;
     using Autodesk.AutoCAD.Geometry;
-    using JetBrains.Annotations;
     using NetLib.Monad;
+    using Application = Autodesk.AutoCAD.ApplicationServices.Core.Application;
 
     public static class EditorExt
     {
-        public static void AcadLoadInfo([NotNull] this Assembly assm)
+        public static void AcadLoadInfo(this Assembly assm)
         {
             try
             {
@@ -31,9 +29,9 @@ namespace AcadLib.Editors
         }
 
         public static void AcadLoadError(
-            [NotNull] this Assembly assm,
-            [CanBeNull] Exception ex = null,
-            [CanBeNull] string err = null)
+            this Assembly assm,
+            Exception? ex = null,
+            string? err = null)
         {
             try
             {
@@ -51,7 +49,7 @@ namespace AcadLib.Editors
         /// </summary>
         /// <param name="ids">Элементв</param>
         /// <param name="ed">Редактор</param>
-        public static void SetSelectionAndZoom([NotNull] this List<ObjectId> ids, Editor ed = null)
+        public static void SetSelectionAndZoom(this List<ObjectId> ids, Editor? ed = null)
         {
             try
             {
@@ -108,8 +106,7 @@ namespace AcadLib.Editors
         /// Выбор объектов в заданных границах
         /// В модели
         /// </summary>
-        [NotNull]
-        public static List<ObjectId> SelectInExtents([NotNull] this Editor ed, Extents3d ext)
+        public static List<ObjectId> SelectInExtents(this Editor ed, Extents3d ext)
         {
             using (ed.Document.LockDocument())
             {
@@ -133,8 +130,7 @@ namespace AcadLib.Editors
         /// Выбор объектов в заданных границах
         /// В модели
         /// </summary>
-        [NotNull]
-        public static List<ObjectId> SelectInExtents2([NotNull] this Editor ed, Extents3d ext)
+        public static List<ObjectId> SelectInExtents2(this Editor ed, Extents3d ext)
         {
             Debug.WriteLine($"SelectInExtents2 IsApplicationContext={Application.DocumentManager.IsApplicationContext}.");
             List<TypedValue> filterList = new List<TypedValue>
@@ -145,7 +141,7 @@ namespace AcadLib.Editors
                 new TypedValue((int)DxfCode.XCoordinate, ext.MinPoint),
                 new TypedValue((int)DxfCode.Operator, "<,<,*"),
                 new TypedValue((int)DxfCode.XCoordinate, ext.MaxPoint),
-                new TypedValue((int)DxfCode.Operator, "and>")
+                new TypedValue((int)DxfCode.Operator, "and>"),
             };
             var selRes = ed.SelectAll(new SelectionFilter(filterList.ToArray()));
             if (selRes.Status == PromptStatus.OK)
@@ -156,8 +152,7 @@ namespace AcadLib.Editors
             throw new OperationCanceledException();
         }
 
-        [NotNull]
-        public static List<ObjectId> SelectByPolygon([NotNull] this Editor ed, [NotNull] IEnumerable<Point3d> pts)
+        public static List<ObjectId> SelectByPolygon(this Editor ed, IEnumerable<Point3d> pts)
         {
             using (ed.Document.LockDocument())
             {

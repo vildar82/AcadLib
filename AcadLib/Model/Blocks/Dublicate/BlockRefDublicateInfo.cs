@@ -9,13 +9,12 @@
     /// <summary>
     /// Данные о вхождении блока
     /// </summary>
-    [PublicAPI]
     public class BlockRefDublicateInfo : IEqualityComparer<BlockRefDublicateInfo>, IEquatable<BlockRefDublicateInfo>
     {
         public const double pi2 = 2 * Math.PI;
         public static double toleranceRotateNear360 = pi2 - CheckDublicateBlocks.Tolerance.EqualVector;
 
-        public BlockRefDublicateInfo([NotNull] BlockReference blRef, Matrix3d transToModel, double rotateToModel)
+        public BlockRefDublicateInfo(BlockReference blRef, Matrix3d transToModel, double rotateToModel)
         {
             IdBlRef = blRef.Id;
             Transform = blRef.BlockTransform;

@@ -3,7 +3,6 @@
     using System.Collections.Generic;
     using System.Linq;
     using Autodesk.AutoCAD.DatabaseServices;
-    using JetBrains.Annotations;
     using NetLib;
     using General = AcadLib.General;
 
@@ -23,8 +22,7 @@
             return Commands.Any(a => a.EqualsIgnoreCase(globalCommandName));
         }
 
-        [CanBeNull]
-        public override List<ObjectId> GetAutoLayerEnts([CanBeNull] List<ObjectId> idAddedEnts)
+        public override List<ObjectId> GetAutoLayerEnts(List<ObjectId>? idAddedEnts)
         {
             return idAddedEnts?.Where(IsVportEnt).ToList();
         }

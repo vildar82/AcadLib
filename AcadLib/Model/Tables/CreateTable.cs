@@ -4,7 +4,6 @@
     using Autodesk.AutoCAD.ApplicationServices;
     using Autodesk.AutoCAD.DatabaseServices;
     using Autodesk.AutoCAD.EditorInput;
-    using JetBrains.Annotations;
     using Jigs;
     using NetLib;
 
@@ -14,7 +13,6 @@
     /// 2 Create
     /// 3 Insert
     /// </summary>
-    [PublicAPI]
     public abstract class CreateTable : ICreateTable
     {
         protected readonly Database db;
@@ -52,14 +50,13 @@
 
         public abstract void CalcRows();
 
-        [NotNull]
         public Table Create()
         {
             var table = GetTable();
             return table;
         }
 
-        public void Insert([NotNull] Table table, [NotNull] Document doc)
+        public void Insert(Table table, Document doc)
         {
             insertTable(table, doc);
         }
@@ -69,7 +66,6 @@
         /// <summary>
         /// перед вызовом необходимо заполнить свойства - Title, NumRows, NumColumns
         /// </summary>
-        [NotNull]
         protected Table GetTable()
         {
             var table = new Table();
@@ -115,7 +111,7 @@
 
         protected abstract void SetColumnsAndCap(ColumnsCollection columns);
 
-        private void insertTable([NotNull] Table table, [NotNull] Document doc)
+        private void insertTable(Table table, Document doc)
         {
             using var t = doc.TransactionManager.StartTransaction();
             var jigTable = new TableJig(table, scale, "Вставка таблицы");

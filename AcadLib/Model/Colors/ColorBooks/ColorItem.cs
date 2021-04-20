@@ -4,9 +4,7 @@ namespace AcadLib.Colors
     using Autodesk.AutoCAD.Colors;
     using Autodesk.AutoCAD.DatabaseServices;
     using Autodesk.AutoCAD.Geometry;
-    using JetBrains.Annotations;
 
-    [PublicAPI]
     public class ColorItem
     {
         public ColorItem(string name, byte r, byte g, byte b)
@@ -19,7 +17,7 @@ namespace AcadLib.Colors
 
         public string Name { get; set; }
 
-        public void Create(Point2d ptCell, [NotNull] BlockTableRecord cs, [NotNull] Transaction t)
+        public void Create(Point2d ptCell, BlockTableRecord cs, Transaction t)
         {
             var cellWidth = ColorBookHelper.CellWidth;
             var cellHeight = ColorBookHelper.CellHeight;

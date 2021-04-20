@@ -2,7 +2,6 @@ namespace AcadLib.PaletteProps
 {
     using System;
     using System.Collections.Generic;
-    using JetBrains.Annotations;
 
     public class StringListVM : BaseValueVM
     {
@@ -10,9 +9,9 @@ namespace AcadLib.PaletteProps
 
         public bool AllowCustomValue { get; set; }
 
-        public static StringListView Create([NotNull] IEnumerable<string> values,
-            Action<object> update = null,
-            Action<StringListVM> config = null,
+        public static StringListView Create(IEnumerable<string> values,
+            Action<object>? update = null,
+            Action<StringListVM>? config = null,
             bool isReadOnly = false)
         {
             if (update == null)
@@ -22,8 +21,8 @@ namespace AcadLib.PaletteProps
 
         public static StringListView Create(
             object value,
-            Action<object> update = null,
-            Action<StringListVM> config = null,
+            Action<object>? update = null,
+            Action<StringListVM>? config = null,
             bool isReadOnly = false)
         {
             if (update == null)

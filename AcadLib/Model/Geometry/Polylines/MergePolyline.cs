@@ -6,9 +6,7 @@ namespace AcadLib.Geometry
     using System.Linq;
     using Autodesk.AutoCAD.DatabaseServices;
     using Autodesk.AutoCAD.Geometry;
-    using JetBrains.Annotations;
 
-    [PublicAPI]
     public static class MergePolyline
     {
         /// <summary>
@@ -18,7 +16,7 @@ namespace AcadLib.Geometry
         /// <param name="tolerancePoint">Допуск для определения совпадения вершин полилиний</param>
         /// <returns>Объединенная полилиния</returns>
         /// <exception cref="Exception">Ошибка объединения полининий без самопересечения.</exception>
-        public static Polyline? Merge([CanBeNull] this List<Polyline> pls, double tolerancePoint = 2)
+        public static Polyline? Merge(this List<Polyline> pls, double tolerancePoint = 2)
         {
             if (pls == null || pls.Count == 0)
                 return null;
@@ -75,10 +73,9 @@ namespace AcadLib.Geometry
             return merge;
         }
 
-        [NotNull]
         private static Polyline AddVertex(
-            [NotNull] Polyline pl1,
-            [NotNull] Polyline pl2,
+            Polyline pl1,
+            Polyline pl2,
             int indexInPl1,
             int indexInPl2,
             Point2d ptInPl2,
@@ -97,12 +94,11 @@ namespace AcadLib.Geometry
             return plNew;
         }
 
-        [NotNull]
         private static Polyline Merge(
-            [NotNull] Polyline pl1,
-            [NotNull] Polyline pl2,
-            [NotNull] PolylineVertex ptInPl1,
-            [NotNull] PolylineVertex ptInPl2)
+            Polyline pl1,
+            Polyline pl2,
+            PolylineVertex ptInPl1,
+            PolylineVertex ptInPl2)
         {
             var indexInPl1 = ptInPl1.Index + 1;
             var indexInPl2 = ptInPl2.Index;
@@ -117,7 +113,7 @@ namespace AcadLib.Geometry
             return plMerged;
         }
 
-        private static Polyline? MergeTwoPl([NotNull] Polyline pl1, [NotNull] Polyline pl2, double tolerance)
+        private static Polyline? MergeTwoPl(Polyline pl1, Polyline pl2, double tolerance)
         {
             Polyline? plMerged = null;
 
@@ -166,7 +162,7 @@ namespace AcadLib.Geometry
             return plMerged;
         }
 
-        private static int NextIndex(int index, [NotNull] Polyline pl, int step)
+        private static int NextIndex(int index, Polyline pl, int step)
         {
             var next = index + step;
             if (next == pl.NumberOfVertices)
@@ -185,8 +181,7 @@ namespace AcadLib.Geometry
         /// Сортировка полилиний по расчтоянию между центрами границ
         /// </summary>
         /// <param name="pls"></param>
-        [NotNull]
-        private static List<Polyline> SortByNearestCenterExtents([NotNull] List<Polyline> pls)
+        private static List<Polyline> SortByNearestCenterExtents(List<Polyline> pls)
         {
             var res = new List<Polyline>();
             var plsCenters = pls.Select(s => new { pl = s, center = s.GeometricExtents.Center() })

@@ -11,11 +11,9 @@
     using Autodesk.AutoCAD.EditorInput;
     using Autodesk.AutoCAD.Geometry;
     using Errors;
-    using JetBrains.Annotations;
     using NetLib;
 
     /// <inheritdoc />
-    [PublicAPI]
     public class BlockBase : IBlock
     {
         private bool _alreadyCalcExtents;
@@ -26,7 +24,7 @@
         /// Блок - по имени и ссылке на вхождение блока
         /// Заполняются параметры блока. и граница Bounds
         /// </summary>
-        public BlockBase([NotNull] BlockReference blRef, string blName)
+        public BlockBase(BlockReference blRef, string blName)
         {
             BlName = blName;
             Update(blRef);
@@ -105,9 +103,7 @@
             get
             {
                 if (_alreadyCalcExtents) return _extentsToShow;
-#pragma warning disable 618
                 using var blRef = (BlockReference)IdBlRef.Open(OpenMode.ForRead, false, true);
-#pragma warning restore 618
                 try
                 {
                     _extentsToShow = blRef.GeometricExtents;
@@ -165,13 +161,11 @@
             blRef.Erase();
         }
 
-        [CanBeNull]
         public T GetPropValue<T>(string propMatch, bool isRequired = true, bool exactMatch = true)
         {
             return GetPropValue<T>(propMatch, out var _, isRequired, exactMatch);
         }
 
-        [CanBeNull]
         public T GetPropValue<T>(string propMatch, out bool hasProperty, bool isRequired = true, bool exactMatch = true)
         {
             var resVal = default(T);
@@ -281,7 +275,6 @@
         /// <summary>
         /// Поиск полилинии в этом блоке на слое
         /// </summary>
-        [NotNull]
         public List<Polyline> FindPolylineInLayer(string layer)
         {
             var btr = (BlockTableRecord)IdBtr.GetObject(OpenMode.ForRead);
@@ -471,7 +464,7 @@
             }
         }
 
-        private Color GetColor([NotNull] BlockReference blRef)
+        private Color GetColor(BlockReference blRef)
         {
             if (blRef.Color.IsByLayer && !blRef.LayerId.IsNull)
             {

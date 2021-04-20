@@ -3,13 +3,11 @@
     using System;
     using System.Collections.Generic;
     using Autodesk.AutoCAD.DatabaseServices;
-    using JetBrains.Annotations;
 
     /// <summary>
     /// Описание AttributeReference для хранения
     /// Так же подходит для AttributeDefinition
     /// </summary>
-    [PublicAPI]
     [Obsolete("Лучше используй AttributeInfo.")]
     public class AttributeRefInfo
     {
@@ -18,7 +16,7 @@
         /// иначе исключение ArgumentException
         /// </summary>
         /// <param name="attr"></param>
-        public AttributeRefInfo([NotNull] DBText attr)
+        public AttributeRefInfo(DBText attr)
         {
             if (attr is AttributeDefinition attDef)
             {
@@ -49,7 +47,6 @@
 
         public string Text { get; set; }
 
-        [NotNull]
         public static List<AttributeRefInfo> GetAttrDefs(ObjectId idBtr)
         {
             var resVal = new List<AttributeRefInfo>();
@@ -68,8 +65,7 @@
             return resVal;
         }
 
-        [NotNull]
-        public static List<AttributeRefInfo> GetAttrRefs([CanBeNull] BlockReference blRef)
+        public static List<AttributeRefInfo> GetAttrRefs(BlockReference blRef)
         {
             var resVal = new List<AttributeRefInfo>();
             if (blRef?.AttributeCollection != null)

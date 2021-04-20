@@ -5,9 +5,7 @@ namespace AcadLib.Geometry
     using System.Collections.Generic;
     using Autodesk.AutoCAD.DatabaseServices;
     using Autodesk.AutoCAD.Geometry;
-    using JetBrains.Annotations;
 
-    [PublicAPI]
     public static class PolylineLoops
     {
         /// <summary>
@@ -19,9 +17,8 @@ namespace AcadLib.Geometry
         /// <param name="above">Петля выше или ниже точек пересечения</param>
         /// <param name="includePtIntersects">Включать ли сами точки пересечения в результат</param>
         /// <returns>Список точек петли пересечения</returns>
-        [NotNull]
         public static List<Point2d> GetLoopSideBetweenHorizontalIntersectPoints(
-            [NotNull] this Polyline contour,
+            this Polyline contour,
             Point3d ptIntersect1,
             Point3d ptIntersect2,
             bool above = true,
@@ -38,9 +35,8 @@ namespace AcadLib.Geometry
         /// <summary>
         /// Точки петли полилинии слева/справа от точек пересечения
         /// </summary>
-        [NotNull]
         public static List<Point2d> GetLoopSideBetweenVerticalIntersectPoints(
-            [NotNull] this Polyline contour,
+            this Polyline contour,
             Point3d ptIntersect1,
             Point3d ptIntersect2,
             bool isRightSide = true,
@@ -54,7 +50,7 @@ namespace AcadLib.Geometry
             return res;
         }
 
-        private static void AddPoint([NotNull] List<Point2d> pointsLoop, int dir, ref int indexCur, [NotNull] Polyline contour)
+        private static void AddPoint(List<Point2d> pointsLoop, int dir, ref int indexCur, Polyline contour)
         {
             var pt = contour.GetPoint2dAt(indexCur);
             pointsLoop.Add(pt);
@@ -69,9 +65,8 @@ namespace AcadLib.Geometry
             }
         }
 
-        [NotNull]
         private static List<Point2d> GetLoopSide(
-            [NotNull] this Polyline contour,
+            this Polyline contour,
             Point3d ptIntersect1,
             Point3d ptIntersect2,
             Func<LineSegment3d, bool> checkSeg,
@@ -124,7 +119,7 @@ namespace AcadLib.Geometry
         }
 
         private static int GetStartIndex(
-            [NotNull] Polyline contour,
+            Polyline contour,
             Point3d ptIntersect1,
             Func<LineSegment3d, bool> checkSeg,
             out int dir)

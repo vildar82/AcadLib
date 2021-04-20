@@ -4,13 +4,11 @@
     using Autodesk.AutoCAD.DatabaseServices;
     using Autodesk.AutoCAD.EditorInput;
     using Autodesk.AutoCAD.Geometry;
-    using JetBrains.Annotations;
 
     /// <summary>
     /// Запрос точки вставки с висящим на курсоре прямоугольником.
     /// Точка вставки - нижний левый угол
     /// </summary>
-    [PublicAPI]
     public class RectangleJig : EntityJig
     {
         public RectangleJig(double length, double height) : base(new Polyline())
@@ -26,7 +24,7 @@
 
         public Point3d Position { get; set; }
 
-        protected override SamplerStatus Sampler([NotNull] JigPrompts prompts)
+        protected override SamplerStatus Sampler(JigPrompts prompts)
         {
             var res = prompts.AcquirePoint("\nТочка вставки:");
             if (res.Status != PromptStatus.OK)

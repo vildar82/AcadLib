@@ -2,9 +2,7 @@
 {
     using System.Windows.Input;
     using System.Windows.Media;
-    using JetBrains.Annotations;
 
-    [PublicAPI]
     public interface IVisualBlock
     {
         string File { get; set; }

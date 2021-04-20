@@ -1,11 +1,9 @@
 ﻿namespace AcadLib.Lisp
 {
-    using System;
     using System.Collections.Generic;
     using System.IO;
     using AutoCAD_PIK_Manager.Settings;
     using Autodesk.AutoCAD.ApplicationServices;
-    using JetBrains.Annotations;
     using Path = IO.Path;
 
     public static class LispAutoloader
@@ -40,7 +38,7 @@
             if (lispFiles.Count == 0) lispFiles = null;
         }
 
-        public static void LoadLisp([NotNull] Document doc)
+        public static void LoadLisp(Document doc)
         {
             foreach (var refLisp in PikSettings.PikFileSettings.AutoLoadLispPathBySettings)
             {

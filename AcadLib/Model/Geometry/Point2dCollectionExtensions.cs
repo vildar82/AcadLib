@@ -2,12 +2,10 @@
 {
     using System.Collections.Generic;
     using Autodesk.AutoCAD.Geometry;
-    using JetBrains.Annotations;
 
     /// <summary>
     /// Provides extension methods for the Point2dCollection type.
     /// </summary>
-    [PublicAPI]
     public static class Point2dCollectionExtensions
     {
         /// <summary>
@@ -16,7 +14,7 @@
         /// <param name="pts">The instance to which the method applies.</param>
         /// <param name="pt">The point to search.</param>
         /// <returns>true if the point is found; otherwise, false.</returns>
-        public static bool Contains([NotNull] this Point2dCollection pts, Point2d pt)
+        public static bool Contains(this Point2dCollection pts, Point2d pt)
         {
             return pts.Contains(pt, Tolerance.Global);
         }
@@ -28,7 +26,7 @@
         /// <param name="pt">The point to search.</param>
         /// <param name="tol">The tolerance to use in comparisons.</param>
         /// <returns>true if the point is found; otherwise, false.</returns>
-        public static bool Contains([NotNull] this Point2dCollection pts, Point2d pt, Tolerance tol)
+        public static bool Contains(this Point2dCollection pts, Point2d pt, Tolerance tol)
         {
             foreach (var t in pts)
             {
@@ -43,7 +41,7 @@
         /// Removes duplicated points in the collection.
         /// </summary>
         /// <param name="pts">The instance to which the method applies.</param>
-        public static void RemoveDuplicate([NotNull] this Point2dCollection pts)
+        public static void RemoveDuplicate(this Point2dCollection pts)
         {
             pts.RemoveDuplicate(Tolerance.Global);
         }
@@ -53,7 +51,7 @@
         /// </summary>
         /// <param name="pts">The instance to which the method applies.</param>
         /// <param name="tol">The tolerance to use in comparisons.</param>
-        public static void RemoveDuplicate([NotNull] this Point2dCollection pts, Tolerance tol)
+        public static void RemoveDuplicate(this Point2dCollection pts, Tolerance tol)
         {
             var ptlst = new List<Point2d>();
             foreach (var t in pts)

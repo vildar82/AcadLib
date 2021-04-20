@@ -2,12 +2,10 @@
 {
     using System.Collections.Generic;
     using Autodesk.AutoCAD.DatabaseServices;
-    using JetBrains.Annotations;
 
     /// <summary>
     /// Состояние слоев - для проверки видимости объектов на чертеже
     /// </summary>
-    [PublicAPI]
     public class LayerVisibleState
     {
         private Dictionary<string, bool> layerVisibleDict;
@@ -16,7 +14,7 @@
         /// Нужно создавать новый объект LayerVisibleState после возмоного изменения состояния слоев пользователем.
         /// </summary>
         /// <param name="db"></param>
-        public LayerVisibleState([NotNull] Database db)
+        public LayerVisibleState(Database db)
         {
             layerVisibleDict = GetLayerVisibleState(db);
         }
@@ -25,8 +23,7 @@
         /// Объект на видим - не скрыт, не на выключенном или замороженном слое
         /// </summary>
         /// <param name="ent"></param>
-        /// <returns></returns>
-        public bool IsVisible([NotNull] Entity ent)
+        public bool IsVisible(Entity ent)
         {
             bool res;
             if (!ent.Visible)
@@ -42,8 +39,7 @@
             return res;
         }
 
-        [NotNull]
-        private Dictionary<string, bool> GetLayerVisibleState([NotNull] Database db)
+        private Dictionary<string, bool> GetLayerVisibleState(Database db)
         {
             var res = new Dictionary<string, bool>();
             var lt = (LayerTable)db.LayerTableId.GetObject(OpenMode.ForRead);

@@ -3,11 +3,10 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using JetBrains.Annotations;
 
     public class BoolVM : BaseValueVM
     {
-        public static BoolView Create([NotNull] IEnumerable<bool> values,
+        public static BoolView Create(IEnumerable<bool> values,
             Action<object> update = null,
             Action<BoolVM> config = null,
             bool isReadOnly = false)

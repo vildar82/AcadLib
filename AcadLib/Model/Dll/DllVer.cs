@@ -2,12 +2,10 @@
 {
     using System.IO;
     using System.Text.RegularExpressions;
-    using JetBrains.Annotations;
 
-    [PublicAPI]
     public class DllVer
     {
-        public DllVer([NotNull] string fileDll, int ver)
+        public DllVer(string fileDll, int ver)
         {
             Dll = fileDll;
             Ver = ver;
@@ -24,8 +22,7 @@
 
         public int Ver { get; set; }
 
-        [CanBeNull]
-        public static DllVer GetDllVer([NotNull] string file)
+        public static DllVer GetDllVer(string file)
         {
             DllVer dllVer;
             var match = Regex.Match(file, @"(_v(\d{4}).dll)$");

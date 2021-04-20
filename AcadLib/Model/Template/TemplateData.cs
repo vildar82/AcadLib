@@ -1,10 +1,8 @@
 ﻿namespace AcadLib.Template
 {
     using System.Collections.Generic;
-    using JetBrains.Annotations;
     using Layers;
 
-    [PublicAPI]
     public class TemplateData
     {
         private LayerInfo zero = new LayerInfo("0");
@@ -13,14 +11,12 @@
 
         public string Name { get; set; }
 
-        [CanBeNull]
-        public LayerInfo GetLayer([NotNull] string layer)
+        public LayerInfo GetLayer(string layer)
         {
             return GetLayer(layer, false);
         }
 
-        [CanBeNull]
-        public LayerInfo GetLayer([NotNull] string layer, bool logErr)
+        public LayerInfo GetLayer(string layer, bool logErr)
         {
             if (!Layers.TryGetValue(layer, out var li))
             {

@@ -8,10 +8,8 @@
     using Autodesk.AutoCAD.DatabaseServices;
     using Autodesk.AutoCAD.EditorInput;
     using Autodesk.AutoCAD.Geometry;
-    using JetBrains.Annotations;
     using Layers;
 
-    [PublicAPI]
     public static class BlockInsert
     {
         // Файл шаблонов блоков
@@ -22,7 +20,7 @@
         /// <summary>
         /// Добавление атрибутов к вставке блока
         /// </summary>
-        public static void AddAttributes(BlockReference blRef, [NotNull] BlockTableRecord btrBl, Transaction t)
+        public static void AddAttributes(BlockReference blRef, BlockTableRecord btrBl, Transaction t)
         {
             foreach (var atrDef in btrBl.GetObjects<AttributeDefinition>())
             {
@@ -81,7 +79,8 @@
                         }
                         catch (Exception ex)
                         {
-                            Logger.Log.Error(ex,
+                            Logger.Log.Error(
+                                ex,
                                 msg: $"Ошибка типа значения для дин параметра '{item.PropertyName}' " +
                                      $"при вставке блока '{blName}': тип устанавливаемого значение '{prop.Value.GetType()}', " +
                                      $"а должен быть тип '{item.UnitsType}'");
@@ -157,13 +156,11 @@
         /// <param name="owner">Контейнер</param>
         /// <param name="t"></param>
         /// <param name="scale"></param>
-        /// <returns></returns>
-        [NotNull]
         public static BlockReference InsertBlockRef(
             string blName,
             Point3d pt,
-            [NotNull] BlockTableRecord owner,
-            [NotNull] Transaction t,
+            BlockTableRecord owner,
+            Transaction t,
             double scale = 1)
         {
             var db = owner.Database;
@@ -194,8 +191,8 @@
         public static BlockReference InsertBlockRef(
             BlockTableRecord btr,
             Point3d pt,
-            [NotNull] BlockTableRecord owner,
-            [NotNull] Transaction t,
+            BlockTableRecord owner,
+            Transaction t,
             double scale = 1)
         {
             return InsertBlockRef(btr.Id, pt, owner, t, scale);
@@ -207,8 +204,8 @@
         public static BlockReference InsertBlockRef(
             ObjectId btrId,
             Point3d pt,
-            [NotNull] BlockTableRecord owner,
-            [NotNull] Transaction t,
+            BlockTableRecord owner,
+            Transaction t,
             double scale = 1)
         {
             var db = owner.Database;

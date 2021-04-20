@@ -1,5 +1,4 @@
-﻿// ReSharper disable once CheckNamespace
-namespace Gile.Publish
+﻿namespace Gile.Publish
 {
     using System;
     using System.Collections.Generic;
@@ -8,10 +7,8 @@ namespace Gile.Publish
     using Autodesk.AutoCAD.ApplicationServices.Core;
     using Autodesk.AutoCAD.DatabaseServices;
     using Autodesk.AutoCAD.PlottingServices;
-    using JetBrains.Annotations;
 
     // Class to plot a multi-sheet DWF file
-    [PublicAPI]
     public class MultiSheetsDwf : PlotToFileConfig
     {
         public MultiSheetsDwf(string outputFile, IEnumerable<Layout> layouts)
@@ -30,7 +27,6 @@ namespace Gile.Publish
     }
 
     // Base class for the different configurations
-    [PublicAPI]
     public abstract class PlotToFileConfig
     {
         private const string LOG = "publish.log";
@@ -47,7 +43,7 @@ namespace Gile.Publish
 
         // Base constructor
         // ReSharper disable once PublicConstructorInAbstractClass
-        public PlotToFileConfig([CanBeNull] string outputFile, IEnumerable<Layout> layouts, string plotType)
+        public PlotToFileConfig(string? outputFile, IEnumerable<Layout> layouts, string plotType)
         {
             var db = HostApplicationServices.WorkingDatabase;
             dwgFile = db.Filename;
@@ -92,8 +88,7 @@ namespace Gile.Publish
         }
 
         // Creates an entry collection (one per layout) for the DSD file
-        [NotNull]
-        private DsdEntryCollection CreateDsdEntryCollection([NotNull] IEnumerable<Layout> layouts)
+        private DsdEntryCollection CreateDsdEntryCollection(IEnumerable<Layout> layouts)
         {
             var entries = new DsdEntryCollection();
             foreach (var layout in layouts)

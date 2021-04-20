@@ -6,7 +6,6 @@
     using System.Linq;
     using Autodesk.AutoCAD.ApplicationServices;
     using Autodesk.AutoCAD.DatabaseServices;
-    using JetBrains.Annotations;
     using Registry;
     using Application = Autodesk.AutoCAD.ApplicationServices.Core.Application;
 
@@ -39,7 +38,6 @@
             }
         }
 
-        [NotNull]
         public static string GetInfo()
         {
             var info = string.Empty;
@@ -101,7 +99,7 @@
             Save();
         }
 
-        private static void AutoLayerEntities([NotNull] AutoLayer autoLayer, [NotNull] IEnumerable<ObjectId> autoLayerEnts)
+        private static void AutoLayerEntities(AutoLayer autoLayer, IEnumerable<ObjectId> autoLayerEnts)
         {
             var layId = autoLayer.Layer.CheckLayerState();
             foreach (var idEnt in autoLayerEnts)
@@ -114,7 +112,7 @@
             }
         }
 
-        private static void AutoLayersBtr([CanBeNull] BlockTableRecord btr)
+        private static void AutoLayersBtr(BlockTableRecord? btr)
         {
             if (btr == null)
                 return;
@@ -146,12 +144,12 @@
             }
         }
 
-        private static void Doc_CommandCancelled(object sender, [NotNull] CommandEventArgs e)
+        private static void Doc_CommandCancelled(object sender, CommandEventArgs e)
         {
             EndCommand(sender as Document, e.GlobalCommandName);
         }
 
-        private static void Doc_CommandEnded(object sender, [NotNull] CommandEventArgs e)
+        private static void Doc_CommandEnded(object sender, CommandEventArgs e)
         {
             EndCommand(sender as Document, e.GlobalCommandName);
         }
@@ -179,12 +177,12 @@
             document.CommandCancelled += Doc_CommandCancelled;
         }
 
-        private static void DocumentManager_DocumentActivated(object sender, [NotNull] DocumentCollectionEventArgs e)
+        private static void DocumentManager_DocumentActivated(object sender, DocumentCollectionEventArgs e)
         {
             SubscribeDocument(e.Document);
         }
 
-        private static void EndCommand([CanBeNull] Document document, string globalCommandName)
+        private static void EndCommand(Document? document, string globalCommandName)
         {
             curAutoLayer = GetAutoLayerCommand(globalCommandName);
             if (curAutoLayer == null || document == null)
@@ -203,17 +201,15 @@
             return AutoLayers.Find(f => f.IsAutoLayerCommand(globalCommandName));
         }
 
-        [NotNull]
         private static List<AutoLayer> GetAutoLayers()
         {
             var als = new List<AutoLayer>
             {
-                new AutoLayerDim()
+                new AutoLayerDim(),
             };
             return als;
         }
 
-        [NotNull]
         private static RegExt GetReg()
         {
             return new RegExt("AutoLayers");
@@ -236,16 +232,14 @@
             }
         }
 
-        private static void ProcessingAutoLayers([NotNull] AutoLayer currentAutoLayerAutoLayer, List<ObjectId> idsAddedEnt)
+        private static void ProcessingAutoLayers(AutoLayer currentAutoLayerAutoLayer, List<ObjectId> idsAddedEnt)
         {
             var autoLayerEnts = currentAutoLayerAutoLayer.GetAutoLayerEnts(idsAddedEnt);
             if (autoLayerEnts == null)
                 return;
-            using (var t = _doc.TransactionManager.StartTransaction())
-            {
-                AutoLayerEntities(currentAutoLayerAutoLayer, autoLayerEnts);
-                t.Commit();
-            }
+            using var t = _doc.TransactionManager.StartTransaction();
+            AutoLayerEntities(currentAutoLayerAutoLayer, autoLayerEnts);
+            t.Commit();
         }
 
         private static void Save()
@@ -269,7 +263,7 @@
             _doc.CommandWillStart += Doc_CommandWillStart;
         }
 
-        private static void UnsubscribeDocument([CanBeNull] Document document)
+        private static void UnsubscribeDocument(Document? document)
         {
             if (document == null)
                 return;

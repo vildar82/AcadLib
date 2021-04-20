@@ -6,13 +6,11 @@
     using ApplicationServices.Core;
     using DatabaseServices;
     using EditorInput;
-    using JetBrains.Annotations;
     using AcRx = Autodesk.AutoCAD.Runtime;
 
     /// <summary>
     /// Provides extension methods for the Point3d type.
     /// </summary>
-    [PublicAPI]
     public static class Point3dExtensions
     {
         public static Point3d Move(this Point3d pt, double x, double y, double z = 0)
@@ -128,7 +126,6 @@
                 org.Z);
         }
 
-        [NotNull]
         public static string ToStringEx(this Point3d pt)
         {
             return pt.ToString("0.00", CultureInfo.CurrentCulture);

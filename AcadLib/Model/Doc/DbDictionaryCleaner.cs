@@ -4,7 +4,6 @@ namespace AcadLib.Doc
     using System.Linq;
     using AutoCAD_PIK_Manager.Settings;
     using Autodesk.AutoCAD.DatabaseServices;
-    using JetBrains.Annotations;
     using NetLib;
 
     public static class DbDictionaryCleaner
@@ -19,7 +18,7 @@ namespace AcadLib.Doc
         /// <summary>
         /// Не вызывать в момент открытия чертежа - приводит к фаталам!!!
         /// </summary>
-        public static void Clean([NotNull] Database db)
+        public static void Clean(Database db)
         {
             if (cleanPaths == null || cleanPaths.Count == 0) return;
             cleanPaths.ForEach(p => Clean(db.NamedObjectsDictionaryId, p));
@@ -30,9 +29,7 @@ namespace AcadLib.Doc
             if (keys.Count == 0) return;
             foreach (var key in keys)
             {
-#pragma warning disable 618
                 using var dict = dictId.Open(OpenMode.ForRead, false, true) as DBDictionary;
-#pragma warning restore 618
                 if (dict?.Contains(key) == true)
                 {
                     dictId = dict.GetAt(key);
@@ -44,9 +41,7 @@ namespace AcadLib.Doc
                 }
             }
 
-#pragma warning disable 618
             using var dbo = dictId.Open(OpenMode.ForWrite, false, true);
-#pragma warning restore 618
             dbo?.Erase();
 
             var msg = $"DbDictionaryCleaner: Удален словарь по пути '{keys.JoinToString("/")}'";

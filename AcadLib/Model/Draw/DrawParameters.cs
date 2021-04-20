@@ -4,10 +4,8 @@ namespace AcadLib
     using System;
     using Autodesk.AutoCAD.Colors;
     using Autodesk.AutoCAD.DatabaseServices;
-    using JetBrains.Annotations;
     using Layers;
 
-    [PublicAPI]
     internal class DrawParameters : IDisposable
     {
         private Database db;
@@ -18,11 +16,11 @@ namespace AcadLib
         private LineWeight oldLineWeight;
 
         public DrawParameters(
-            [NotNull] Database db,
-            [CanBeNull] LayerInfo layer = null,
-            [CanBeNull] Color color = null,
+            Database db,
+            LayerInfo? layer = null,
+            Color? color = null,
             LineWeight? lineWeight = null,
-            [CanBeNull] string lineType = null,
+            string? lineType = null,
             double? lineTypeScale = null)
         {
             this.db = db;
@@ -44,11 +42,11 @@ namespace AcadLib
             Setup();
         }
 
-        public Color Color { get; set; }
+        public Color? Color { get; set; }
 
-        public LayerInfo Layer { get; set; }
+        public LayerInfo? Layer { get; set; }
 
-        public string LineType { get; set; }
+        public string? LineType { get; set; }
 
         public double? LineTypeScale { get; set; }
 

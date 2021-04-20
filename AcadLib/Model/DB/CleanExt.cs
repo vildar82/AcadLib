@@ -1,11 +1,10 @@
 ﻿namespace AcadLib
 {
     using Autodesk.AutoCAD.DatabaseServices;
-    using JetBrains.Annotations;
 
     public static class CleanExt
     {
-        public static int CleanZombieBlock([NotNull] this Database db)
+        public static int CleanZombieBlock(this Database db)
         {
             var countZombie = 0;
             using var t = db.TransactionManager.StartTransaction();

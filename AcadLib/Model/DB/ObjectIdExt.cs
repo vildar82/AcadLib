@@ -7,10 +7,8 @@
     using Autodesk.AutoCAD.ApplicationServices;
     using Autodesk.AutoCAD.DatabaseServices;
     using Autodesk.AutoCAD.EditorInput;
-    using JetBrains.Annotations;
     using Application = Autodesk.AutoCAD.ApplicationServices.Core.Application;
 
-    [PublicAPI]
     public static class ObjectIdExt
     {
         /// <summary>
@@ -18,16 +16,14 @@
         /// </summary>
         /// <param name="entId">Примитив</param>
         /// <param name="ed">Редактор</param>
-        public static void Select(this ObjectId entId, [NotNull] Editor ed)
+        public static void Select(this ObjectId entId, Editor ed)
         {
             ed.SetImpliedSelection(new[] { entId });
         }
 
         public static void HighlightEntity(this ObjectId entId)
         {
-#pragma warning disable 618
             using var ent = (Entity)entId.Open(OpenMode.ForRead, false, true);
-#pragma warning restore 618
             ent.Highlight();
         }
 
@@ -59,13 +55,13 @@
             return idsEnt.Select(s => map[s].Value).ToList();
         }
 
-        public static void FlickObjectHighlight([NotNull] this Entity ent, int num = 2, int delay1 = 50, int delay2 = 50)
+        public static void FlickObjectHighlight(this Entity ent, int num = 2, int delay1 = 50, int delay2 = 50)
         {
             FlickObjectHighlight(new[] { ent }, num, delay1, delay2);
         }
 
         public static void FlickObjectHighlight(
-            [NotNull] this IEnumerable<Entity> ents,
+            this IEnumerable<Entity> ents,
             int num = 2,
             int delay1 = 50,
             int delay2 = 50)
@@ -101,7 +97,7 @@
         }
 
         public static void FlickObjectHighlight(
-            [CanBeNull] this List<ObjectId> ids,
+            this List<ObjectId>? ids,
             int num = 2,
             int delay1 = 50,
             int delay2 = 50)
@@ -109,9 +105,7 @@
             if (ids?.Any() != true)
                 return;
             var doc = Application.DocumentManager.MdiActiveDocument;
-#pragma warning disable 618
             using var ents = new DisposableSet<Entity>(ids.Select(s => (Entity)s.Open(OpenMode.ForRead)));
-#pragma warning restore 618
             for (var i = 0; i < num; i++)
             {
                 // Highlight entity

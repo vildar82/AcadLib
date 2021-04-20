@@ -4,11 +4,10 @@
     using ApplicationServices.Core;
     using DatabaseServices;
     using Geometry;
-    using JetBrains.Annotations;
 
     public static class EditorExtension
     {
-        public static void Zoom([CanBeNull] this Editor ed, Extents3d ext)
+        public static void Zoom(this Editor? ed, Extents3d ext)
         {
             if (ed == null)
                 return;
@@ -22,7 +21,7 @@
             ed.SetCurrentView(view);
         }
 
-        public static void ZoomExtents([CanBeNull] this Editor ed)
+        public static void ZoomExtents(this Editor? ed)
         {
             if (ed == null)
                 return;

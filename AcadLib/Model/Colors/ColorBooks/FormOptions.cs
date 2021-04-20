@@ -2,9 +2,7 @@
 namespace AcadLib.Colors
 {
     using System.Windows.Forms;
-    using JetBrains.Annotations;
 
-    [PublicAPI]
     public partial class FormOptions : Form
     {
         public FormOptions(Options options)

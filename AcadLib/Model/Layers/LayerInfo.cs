@@ -7,11 +7,9 @@ namespace AcadLib.Layers
     using Autodesk.AutoCAD.Colors;
     using Autodesk.AutoCAD.DatabaseServices;
     using Colors;
-    using JetBrains.Annotations;
     using NetLib;
     using Newtonsoft.Json;
 
-    [PublicAPI]
     [Serializable]
     [Equals(DoNotAddEqualityOperators = true)]
     public class LayerInfo
@@ -71,7 +69,6 @@ namespace AcadLib.Layers
         /// <summary>
         /// Только для Serializable
         /// </summary>
-        [PublicAPI]
         public string ColorStr
         {
             get => colorStr;
@@ -117,7 +114,7 @@ namespace AcadLib.Layers
         /// </summary>
         /// <param name="lay"></param>
         /// <param name="db">Чертеж</param>
-        public void SetProp([NotNull] LayerTableRecord lay, Database db)
+        public void SetProp(LayerTableRecord lay, Database db)
         {
             if (!Name.IsNullOrEmpty())
                 lay.Name = Name;

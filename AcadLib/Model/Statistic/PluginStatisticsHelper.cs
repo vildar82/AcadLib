@@ -12,11 +12,9 @@ namespace AcadLib.Statistic
     using Autodesk.AutoCAD.ApplicationServices.Core;
     using Autodesk.AutoCAD.DatabaseServices;
     using Db;
-    using JetBrains.Annotations;
     using NetLib;
     using General = General;
 
-    [PublicAPI]
     public static class PluginStatisticsHelper
     {
         private static string _app;
@@ -24,12 +22,10 @@ namespace AcadLib.Statistic
         private static bool? _isCivil = GetIsCivil();
         private static bool _isInsertStatisticError;
 
-        [NotNull]
         public static string AcadYear => HostApplicationServices.Current.releaseMarketVersion;
 
         public static bool IsCivil => _isCivil ?? false;
 
-        [NotNull]
         public static string App => _app ??= IsCivil ? "Civil" : "AutoCAD";
 
         public static void AddStatistic()

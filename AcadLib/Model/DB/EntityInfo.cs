@@ -1,14 +1,11 @@
-﻿// ReSharper disable once CheckNamespace
-namespace AcadLib.DB
+﻿namespace AcadLib.DB
 {
     using System;
     using Autodesk.AutoCAD.DatabaseServices;
-    using JetBrains.Annotations;
 
-    [PublicAPI]
     public class EntityInfo : IEquatable<EntityInfo>
     {
-        public EntityInfo([NotNull] Entity ent)
+        public EntityInfo(Entity ent)
         {
             ClassName = ent.GetRXClass().Name;
             Id = ent.Id;
@@ -52,11 +49,6 @@ namespace AcadLib.DB
                       Layer.Equals(other.Layer) &&
                       Linetype.Equals(other.Linetype) &&
                       Lineweight.Equals(other.Lineweight);
-#if DEBUG
-            if (!res)
-            {
-            }
-#endif
             return res;
         }
 
@@ -67,7 +59,6 @@ namespace AcadLib.DB
 
         public override int GetHashCode()
         {
-            // ReSharper disable once NonReadonlyMemberInGetHashCode
             return Extents.GetHashCode();
         }
     }

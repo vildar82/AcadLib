@@ -3,7 +3,6 @@
     using System.Collections.Generic;
     using System.Linq;
     using Autodesk.AutoCAD.DatabaseServices;
-    using JetBrains.Annotations;
 
     /// <summary>
     /// Авто-слои для размеров
@@ -16,13 +15,12 @@
             Commands = new List<string> { "DIM" };
         }
 
-        public override bool IsAutoLayerCommand([NotNull] string globalCommandName)
+        public override bool IsAutoLayerCommand(string globalCommandName)
         {
             return globalCommandName.StartsWith("DIM");
         }
 
-        [CanBeNull]
-        public override List<ObjectId> GetAutoLayerEnts([CanBeNull] List<ObjectId> idAddedEnts)
+        public override List<ObjectId> GetAutoLayerEnts(List<ObjectId>? idAddedEnts)
         {
             return idAddedEnts?.Where(IsDimEnt).ToList();
         }

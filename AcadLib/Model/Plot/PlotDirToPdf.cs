@@ -17,14 +17,12 @@ namespace AcadLib.Plot
     using Autodesk.AutoCAD.EditorInput;
     using Autodesk.AutoCAD.PlottingServices;
     using Autodesk.AutoCAD.Publishing;
-    using JetBrains.Annotations;
     using Layouts;
     using Application = Autodesk.AutoCAD.ApplicationServices.Core.Application;
 
     /// <summary>
     /// http://adndevblog.typepad.com/autocad/2012/05/how-to-use-the-autodeskautocadpublishingpublisherpublishdsd-api-in-net.html
     /// </summary>
-    [PublicAPI]
     public class PlotDirToPdf
     {
         private static readonly NetLib.Comparers.AlphanumComparator alphaComparer = NetLib.Comparers.AlphanumComparator.New;
@@ -33,7 +31,7 @@ namespace AcadLib.Plot
         private string[] filesDwg;
         private string title = "Печать";
 
-        public PlotDirToPdf([NotNull] string dir, bool includeSubdirs, string filePdfOutputName = "")
+        public PlotDirToPdf(string dir, bool includeSubdirs, string filePdfOutputName = "")
         {
             filesDwg = Directory.GetFiles(dir, "*.dwg",
                 includeSubdirs ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly);
@@ -42,12 +40,12 @@ namespace AcadLib.Plot
             this.filePdfOutputName = filePdfOutputName == string.Empty ? Path.GetFileName(dir) : filePdfOutputName;
         }
 
-        public PlotDirToPdf([NotNull] string dir, string filePdfOutputName = "")
+        public PlotDirToPdf(string dir, string filePdfOutputName = "")
             : this(dir, false, filePdfOutputName)
         {
         }
 
-        public PlotDirToPdf([NotNull] string[] filesDwg, string filePdfOutputName)
+        public PlotDirToPdf(string[] filesDwg, string filePdfOutputName)
         {
             dir = Path.GetDirectoryName(filesDwg.First());
             this.filesDwg = filesDwg;
@@ -56,7 +54,7 @@ namespace AcadLib.Plot
 
         public PlotOptions Options { get; set; }
 
-        public static void PromptAndPlot([NotNull] Document doc)
+        public static void PromptAndPlot(Document doc)
         {
             var ed = doc.Editor;
             var plotOptData = FileDataExt.GetLocalFileData<PlotOptions>("PlotToPdf", "PlotOptions", false);
@@ -142,7 +140,6 @@ namespace AcadLib.Plot
             while (repeat);
         }
 
-        [NotNull]
         public List<int> GetFilterNumbers(int countTabs, string filter)
         {
             var resNums = new List<int>();
@@ -296,7 +293,7 @@ namespace AcadLib.Plot
             }
         }
 
-        private void CheckFileAccess([NotNull] string destFile)
+        private void CheckFileAccess(string destFile)
         {
             var fi = new FileInfo(destFile);
             var countWhile = 0;
@@ -321,13 +318,12 @@ namespace AcadLib.Plot
             throw new Exception("Превышено число попыток доступа к файлу. Выход.");
         }
 
-        private bool FilterByName([NotNull] string tabName)
+        private bool FilterByName(string tabName)
         {
             return Regex.IsMatch(tabName, Options.FilterByNames, RegexOptions.IgnoreCase);
         }
 
-        [NotNull]
-        private List<Layout> FilterLayouts([NotNull] List<Layout> layouts, [NotNull] PlotOptions options)
+        private List<Layout> FilterLayouts(List<Layout> layouts, PlotOptions options)
         {
             var resLayouts = new List<Layout>();
             var filterNums = GetFilterNumbers(layouts.Count, options.FilterByNumbers);
@@ -429,7 +425,7 @@ namespace AcadLib.Plot
             PlotFiles();
         }
 
-        private void PostProcessDSD([NotNull] DsdData dsd, [NotNull] string destFile)
+        private void PostProcessDSD(DsdData dsd, string destFile)
         {
             var tmpFile = Path.Combine(dir, "temp.dsd");
             dsd.WriteDsd(tmpFile);
