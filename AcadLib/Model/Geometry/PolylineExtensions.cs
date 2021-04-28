@@ -46,7 +46,9 @@
         {
             var closest = pl.GetClosestPointTo(pt, Vector3d.ZAxis, false);
             var parameter = pl.GetParameterAtPoint(closest);
-            var index = (int)NetLib.DoubleExt.Round(parameter, 0);
+            var index = (int)parameter.Round(0);
+            if (pl.Closed && index == pl.NumberOfVertices)
+                index = 0;
             return pl.GetPoint3dAt(index);
         }
 
@@ -87,7 +89,7 @@
             var pl2 = (Polyline)pl1.Clone();
 
             // le point spécifié est sur un sommet de la polyligne
-            if (Math.Abs(NetLib.DoubleExt.Round(param, 6) - index) < 0.0001)
+            if (Math.Abs(param.Round(6) - index) < 0.0001)
             {
                 for (var i = pl1.NumberOfVertices - 1; i > index; i--)
                 {
