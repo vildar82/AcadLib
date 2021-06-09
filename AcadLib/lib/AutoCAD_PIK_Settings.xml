@@ -234,6 +234,11 @@
             БИМ юзеры
             </summary>
         </member>
+        <member name="P:AutoCAD_PIK_Manager.Settings.SettingsPikFile.ExcludeUpdatePipesCatalogUsers">
+            <summary>
+            Исключение пользователей из обновления каталога труб
+            </summary>
+        </member>
         <member name="M:AutoCAD_PIK_Manager.Update.GetCopyedFiles(System.IO.DirectoryInfo,System.IO.DirectoryInfo,System.Threading.CancellationToken,System.Boolean)">
             <summary>
             Копирование файлов настроек с сервера

@@ -6,5 +6,5 @@
     <StartArguments>/nologo /product ACAD</StartArguments>
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
     <EnableSQLServerDebugging>false</EnableSQLServerDebugging>
-  </PropertyGroup>  
+  </PropertyGroup>
 </Project>

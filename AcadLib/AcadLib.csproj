@@ -17,7 +17,7 @@
     <TargetFrameworkProfile />
     <NullableContextOptions>enable</NullableContextOptions>
     <Nullable>enable</Nullable>
-    <LangVersion>8</LangVersion>
+    <LangVersion>default</LangVersion>
   </PropertyGroup>
   <PropertyGroup>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
