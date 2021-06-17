@@ -30,7 +30,7 @@
             var attDefs = target.GetAttributes();
             foreach (ObjectId id in target.GetBlockReferenceIds(true, false))
             {
-                var br = id.GetObjectT<BlockReference>();
+                var br = id.GetObjectT<BlockReference>(OpenMode.ForWrite);
                 br.ResetAttributes(attDefs, tr);
             }
 
