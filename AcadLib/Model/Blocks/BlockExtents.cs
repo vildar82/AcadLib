@@ -94,39 +94,32 @@
         /// <param name="mat">Матрица преобразования из системы координат блока в МСК.</param>
         private static Extents3d GetBlockExtents(Entity en, ref Matrix3d mat, Extents3d ext)
         {
-            if (en is BlockReference bref)
+            if (en is BlockReference blRef)
             {
-                var matIns = mat * bref.BlockTransform;
-#pragma warning disable 618
-                using (var btr = (BlockTableRecord)bref.BlockTableRecord.Open(OpenMode.ForRead))
-#pragma warning restore 618
+                var matIns = mat * blRef.BlockTransform;
+                using var btr = (BlockTableRecord)blRef.BlockTableRecord.Open(OpenMode.ForRead);
+                foreach (var id in btr)
                 {
-                    foreach (var id in btr)
+                    // Пропускаем все тексты.
+                    if (id.ObjectClass.IsDerivedFrom(General.ClassDbTextRX) ||
+                        id.ObjectClass.IsDerivedFrom(General.ClassMTextRX) ||
+                        id.ObjectClass.IsDerivedFrom(General.ClassMLeaderRX) ||
+                        id.ObjectClass.IsDerivedFrom(General.ClassDimension))
                     {
-                        // Пропускаем все тексты.
-                        if (id.ObjectClass.IsDerivedFrom(General.ClassDbTextRX) ||
-                            id.ObjectClass.IsDerivedFrom(General.ClassMTextRX) ||
-                            id.ObjectClass.IsDerivedFrom(General.ClassMLeaderRX) ||
-                            id.ObjectClass.IsDerivedFrom(General.ClassDimension))
-                        {
-                            continue;
-                        }
-#pragma warning disable 618
-                        using (var obj = id.Open(OpenMode.ForRead, false, true))
-#pragma warning restore 618
-                        {
-                            var enCur = obj as Entity;
-                            if (enCur == null || enCur.Visible != true)
-                                continue;
-                            if (IsEmptyExt(ref ext))
-                            {
-                                ext.AddExtents(GetBlockExtents(enCur, ref matIns, ext));
-                            }
-                            else
-                            {
-                                ext = GetBlockExtents(enCur, ref matIns, ext);
-                            }
-                        }
+                        continue;
+                    }
+
+                    using var obj = id.Open(OpenMode.ForRead, false, true);
+                    var enCur = obj as Entity;
+                    if (enCur == null || enCur.Visible != true)
+                        continue;
+                    if (IsEmptyExt(ref ext))
+                    {
+                        ext.AddExtents(GetBlockExtents(enCur, ref matIns, ext));
+                    }
+                    else
+                    {
+                        ext = GetBlockExtents(enCur, ref matIns, ext);
                     }
                 }
             }
@@ -134,8 +127,9 @@
             {
                 if (mat.IsUniscaledOrtho())
                 {
-                    using (var enTr = en.GetTransformedCopy(mat))
+                    try
                     {
+                        using var enTr = en.GetTransformedCopy(mat);
                         switch (enTr)
                         {
                             case Dimension dim:
@@ -170,6 +164,10 @@
                         }
 
                         return ext;
+                    }
+                    catch
+                    {
+                        // ignored
                     }
                 }
 

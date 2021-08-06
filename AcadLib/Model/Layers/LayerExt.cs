@@ -60,40 +60,36 @@
         {
             var resVal = new Dictionary<string, ObjectId>();
             var db = HostApplicationServices.WorkingDatabase;
-            using (var lt = (LayerTable)db.LayerTableId.Open(OpenMode.ForRead))
+            using var lt = (LayerTable)db.LayerTableId.Open(OpenMode.ForRead);
+            foreach (var layer in layers.Where(w => w != null))
             {
-                foreach (var layer in layers.Where(w => w != null))
+                ObjectId layId;
+                var layName = layer.Name;
+                if (layName.IsNullOrEmpty())
                 {
-                    ObjectId layId;
-                    var layName = layer.Name;
-                    if (layName.IsNullOrEmpty())
-                    {
-                        layId = db.Clayer;
+                    layId = db.Clayer;
 
-                        // Берем текущиий
-                        CheckLayerState(layId, out layName);
-                        layer.Name = layName;
-                    }
-                    else if (lt.Has(layer.Name))
-                    {
-                        layId = lt[layer.Name];
-                        CheckLayerState(layId, out _);
-                        if (checkProps)
-                        {
-                            using (var lay = (LayerTableRecord)layId.Open(OpenMode.ForWrite))
-                            {
-                                layer.SetProp(lay, db);
-                            }
-                        }
-                    }
-                    else
-                    {
-                        layId = CreateLayer(layer, lt);
-                    }
-
-                    layer.LayerId = layId;
-                    resVal.Add(layName, layId);
+                    // Берем текущиий
+                    CheckLayerState(layId, out layName);
+                    layer.Name = layName;
                 }
+                else if (lt.Has(layer.Name))
+                {
+                    layId = lt[layer.Name];
+                    CheckLayerState(layId, out _);
+                    if (checkProps)
+                    {
+                        using var lay = (LayerTableRecord)layId.Open(OpenMode.ForWrite);
+                        layer.SetProp(lay, db);
+                    }
+                }
+                else
+                {
+                    layId = CreateLayer(layer, lt);
+                }
+
+                layer.LayerId = layId;
+                resVal.Add(layName, layId);
             }
 
             return resVal;
@@ -159,13 +155,11 @@
             ObjectId idLayer;
 
             // Если слоя нет, то он создается.
-            using (var newLayer = new LayerTableRecord())
-            {
-                layerInfo.SetProp(newLayer, lt.Database);
-                lt.UpgradeOpen();
-                idLayer = lt.Add(newLayer);
-                lt.DowngradeOpen();
-            }
+            using var newLayer = new LayerTableRecord();
+            layerInfo.SetProp(newLayer, lt.Database);
+            lt.UpgradeOpen();
+            idLayer = lt.Add(newLayer);
+            lt.DowngradeOpen();
 
             return idLayer;
         }
@@ -183,10 +177,8 @@
             var db = HostApplicationServices.WorkingDatabase;
 
             // Если уже был создан слой, то возвращаем его. Опасно, т.к. перед повторным запуском команды покраски, могут удалить/переименовать слой марок.
-            using (var lt = (LayerTable)db.LayerTableId.Open(OpenMode.ForRead))
-            {
-                idLayer = lt.Has(layerInfo.Name) ? lt[layerInfo.Name] : CreateLayer(layerInfo, lt);
-            }
+            using var lt = (LayerTable)db.LayerTableId.Open(OpenMode.ForRead);
+            idLayer = lt.Has(layerInfo.Name) ? lt[layerInfo.Name] : CreateLayer(layerInfo, lt);
 
             return idLayer;
         }
@@ -202,26 +194,24 @@
             layerName = null;
             if (!layerId.IsValidEx())
                 return;
-            using (var lay = (LayerTableRecord)layerId.Open(OpenMode.ForRead))
+            using var lay = (LayerTableRecord)layerId.Open(OpenMode.ForRead);
+            layerName = lay.Name;
+            if (lay.IsLocked || lay.IsOff || lay.IsFrozen)
             {
-                layerName = lay.Name;
-                if (lay.IsLocked || lay.IsOff || lay.IsFrozen)
+                lay.UpgradeOpen();
+                if (lay.IsOff)
                 {
-                    lay.UpgradeOpen();
-                    if (lay.IsOff)
-                    {
-                        lay.IsOff = false;
-                    }
+                    lay.IsOff = false;
+                }
 
-                    if (lay.IsLocked)
-                    {
-                        lay.IsLocked = false;
-                    }
+                if (lay.IsLocked)
+                {
+                    lay.IsLocked = false;
+                }
 
-                    if (lay.IsFrozen)
-                    {
-                        lay.IsFrozen = false;
-                    }
+                if (lay.IsFrozen)
+                {
+                    lay.IsFrozen = false;
                 }
             }
         }
