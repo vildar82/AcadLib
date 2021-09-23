@@ -1,5 +1,6 @@
 ﻿using AcadLib.Blocks;
 using AcadLib.Doc;
+using DynamicData.Kernel;
 using OfficeOpenXml;
 
 namespace AcadLib
@@ -572,43 +573,69 @@ namespace AcadLib
             }
         }
 
-        [CanBeNull]
-        private Assembly CurrentDomain_AssemblyResolve(object sender, ResolveEventArgs args)
+        private Assembly? CurrentDomain_AssemblyResolve(object sender, ResolveEventArgs args)
         {
-            if (dllsResolve == null)
-            {
-                // Сборки в основной папке dll
-                dllsResolve = DllResolve.GetDllResolve(CurDllDir, SearchOption.AllDirectories);
-
-                // Все сборки из папки Script\NET
-                dllsResolve.AddRange(DllResolve.GetDllResolve(
-                    Path.Combine(PikSettings.LocalSettingsFolder, @"Script\NET"),
-                    SearchOption.AllDirectories));
-
-                // Оставить только сборки под текущую версию автокада
-                dllsResolve = FilterDllResolveVersions(dllsResolve);
-            }
-
-            Debug.WriteLine($"AcadLib AssemblyResolve {args.Name}");
-            var dllResolver = dllsResolve.FirstOrDefault(f => f.IsResolve(args.Name));
-            if (dllResolver == null)
-            {
-                Debug.WriteLine("AcadLib dllResolver == null");
-                return null;
-            }
-
             try
             {
+                if (dllsResolve == null)
+                {
+                    // Сборки в основной папке dll
+                    dllsResolve = DllResolve.GetDllResolve(CurDllDir, SearchOption.AllDirectories);
+
+                    // Все сборки из папки Script\NET
+                    dllsResolve.AddRange(DllResolve.GetDllResolve(
+                        Path.Combine(PikSettings.LocalSettingsFolder, @"Script\NET"),
+                        SearchOption.AllDirectories));
+
+                    // Оставить только сборки под текущую версию автокада
+                    dllsResolve = FilterDllResolveVersions(dllsResolve);
+                }
+
+                Debug.WriteLine($"AcadLib AssemblyResolve {args.Name}");
+                var dllResolver = dllsResolve.FirstOrDefault(f => f.IsResolve(args.Name));
+                if (dllResolver == null)
+                {
+                    var fmAssembly = ResolveFmAssembly(args.Name);
+                    if (fmAssembly != null)
+                    {
+                        Logger.Log.Info($"resolve fm assembly - {fmAssembly.FullName}");
+                        return fmAssembly;
+                    }
+
+                    Debug.WriteLine("AcadLib dllResolver == null");
+                    return null;
+                }
+
                 var asm = dllResolver.LoadAssembly();
                 Logger.Log.Info($"resolve assembly - {asm.FullName}");
                 return asm;
             }
             catch (Exception ex)
             {
-                Logger.Log.Error(ex, $"Ошибка AssemblyResolve - {dllResolver.DllFile}.");
+                Logger.Log.Error(ex, $"Ошибка AssemblyResolve - {args.Name}.");
             }
 
             return null;
+        }
+
+        private Assembly? ResolveFmAssembly(string argsName)
+        {
+            var fmResolvers = new List<string>
+            {
+                "FamilyManager.CAD.Data",
+                "FamilyManager.CAD.Shared",
+                "FamilyManager.Client.Shared",
+                "BimLab.FamilyManager.Shared",
+                "BimLab.FamilyManager.V2.Dto",
+                "FamilyManager.V2.SDK.Client",
+            };
+
+            var fmResolver = fmResolvers.FirstOrDefault(argsName.StartsWith);
+            if (fmResolver == null)
+                return null;
+
+            return AppDomain.CurrentDomain.GetAssemblies()
+                .FirstOrDefault(a => a.FullName.StartsWith(fmResolver));
         }
 
         [NotNull]

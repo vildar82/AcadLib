@@ -69,12 +69,12 @@
         /// Полилиния должна быть в базе чертежа
         /// </summary>
         public static Hatch? CreateAssociativeHatch(
-            [NotNull] Curve loop,
-            [NotNull] BlockTableRecord cs,
-            [NotNull] Transaction t,
+            Curve loop,
+            BlockTableRecord cs,
+            Transaction t,
             double scale,
             string pattern = "SOLID",
-            [CanBeNull] string layer = null,
+            string? layer = null,
             LineWeight lw = LineWeight.LineWeight015)
         {
             var h = new Hatch();
@@ -93,7 +93,7 @@
             h.Associative = true;
             h.HatchStyle = HatchStyle.Normal;
 
-            // добавление контура полилинии в гштриховку
+            // добавление контура полилинии в штриховку
             var ids = new ObjectIdCollection { loop.Id };
             try
             {
@@ -101,7 +101,7 @@
             }
             catch (Exception ex)
             {
-                Logger.Log.Error(ex, $"CreateAssociativeHatch");
+                Logger.Log.Error(ex, "CreateAssociativeHatch");
                 h.Erase();
                 return null;
             }
@@ -112,7 +112,6 @@
             return h;
         }
 
-        [NotNull]
         public static Hatch CreateHatch(this List<Point2d> pts)
         {
             pts = pts.DistinctPoints();
@@ -125,7 +124,7 @@
             return h;
         }
 
-        public static Hatch? CreateHatch([CanBeNull] this List<PolylineVertex> pts)
+        public static Hatch? CreateHatch(this List<PolylineVertex>? pts)
         {
             if (pts?.Any() != true)
                 return null;
@@ -143,8 +142,7 @@
             return h;
         }
 
-        [NotNull]
-        public static Hatch CreateHatch([NotNull] this List<Point3d> pts)
+        public static Hatch CreateHatch(this List<Point3d> pts)
         {
             return CreateHatch(pts.ConvertAll(Point3dExtensions.Convert2d));
         }
@@ -160,7 +158,7 @@
             return CreateHatch(vertexes);
         }
 
-        public static double GetHatchArea([NotNull] this Hatch hatch)
+        public static double GetHatchArea(this Hatch hatch)
         {
             double area = 0;
             try
@@ -233,7 +231,7 @@
             return Math.Abs(area);
         }
 
-        public static HatchOptions? GetHatchOptions([CanBeNull] this Hatch h)
+        public static HatchOptions? GetHatchOptions(this Hatch? h)
         {
             return h == null ? null : new HatchOptions(h);
         }
@@ -243,9 +241,8 @@
         /// </summary>
         /// <param name="ht">Штриховка</param>
         /// <param name="loopType">Из каких типов островков</param>
-        [NotNull]
         public static DisposableSet<Polyline> GetPolylines(
-            [NotNull] this Hatch ht,
+            this Hatch ht,
             HatchLoopTypes loopType = HatchLoopTypes.External)
         {
             var loops = GetPolylines2(ht, Tolerance.Global, loopType);
@@ -254,9 +251,8 @@
             return res;
         }
 
-        [NotNull]
         public static DisposableSet<HatchLoopPl> GetPolylines2(
-            [NotNull] this Hatch ht,
+            this Hatch ht,
             Tolerance weddingTolerance,
             HatchLoopTypes loopType = (HatchLoopTypes)119,
             bool wedding = false)
@@ -335,7 +331,7 @@
             return loops;
         }
 
-        public static void SetHatchOptions([CanBeNull] this Hatch h, [CanBeNull] HatchOptions opt)
+        public static void SetHatchOptions(this Hatch? h, HatchOptions? opt)
         {
             if (h == null || opt == null)
                 return;
