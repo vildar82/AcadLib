@@ -27,7 +27,7 @@
             foreach (var atrDef in btrBl.GetObjects<AttributeDefinition>())
             {
                 if (atrDef.Constant) continue;
-                using var atrRef = new AttributeReference();
+                var atrRef = new AttributeReference();
                 blRef.AttributeCollection.AppendAttribute(atrRef);
                 t.AddNewlyCreatedDBObject(atrRef, true);
                 atrRef.SetAttributeFromBlock(atrDef, blRef.BlockTransform);

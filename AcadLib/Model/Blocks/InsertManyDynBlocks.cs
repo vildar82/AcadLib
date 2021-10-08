@@ -1,11 +1,11 @@
-using System;
-using System.Collections.Generic;
-using Autodesk.AutoCAD.DatabaseServices;
-using Autodesk.AutoCAD.Geometry;
-using NetLib;
-
 namespace AcadLib.Blocks
 {
+    using System;
+    using System.Collections.Generic;
+    using Autodesk.AutoCAD.DatabaseServices;
+    using Autodesk.AutoCAD.Geometry;
+    using NetLib;
+
     /// <summary>
     /// Вставка кучи блоков с дин параметрами - кэширование блоков с одинаковыми параметрами
     /// </summary>
@@ -22,7 +22,6 @@ namespace AcadLib.Blocks
             }
 
             var blRef = template.Id.CopyEnt(blData.Owner.Id).GetObject<BlockReference>(OpenMode.ForWrite);
-
             var matrix = Matrix3d.Identity;
             var vec = blData.Point - blRef.Position;
             if (vec.Length > 0)
@@ -63,7 +62,15 @@ namespace AcadLib.Blocks
         {
             foreach (var item in _templates)
             {
-                item.Value.Erase();
+                try
+                {
+                    using var entity = item.Value.Id.Open(OpenMode.ForWrite, false, true);
+                    entity.Erase();
+                }
+                catch
+                {
+                    ////
+                }
             }
         }
     }
