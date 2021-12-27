@@ -630,7 +630,7 @@ namespace AcadLib
                 "FamilyManager.V2.SDK.Client",
             };
 
-            var fmResolver = fmResolvers.FirstOrDefault(argsName.StartsWith);
+            var fmResolver = fmResolvers.FirstOrDefault(r => argsName.StartsWith(r + ","));
             if (fmResolver == null)
                 return null;
 
