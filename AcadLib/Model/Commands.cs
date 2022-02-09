@@ -625,6 +625,7 @@ namespace AcadLib
                 "FamilyManager.CAD.Data",
                 "FamilyManager.CAD.Shared",
                 "FamilyManager.Client.Shared",
+                "FamilyManager.Controls",
                 "BimLab.FamilyManager.Shared",
                 "BimLab.FamilyManager.V2.Dto",
                 "FamilyManager.V2.SDK.Client",
