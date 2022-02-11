@@ -1,6 +1,7 @@
 ﻿using AcadLib.Blocks;
 using AcadLib.Doc;
 using DynamicData.Kernel;
+using NetLib.Monad;
 using OfficeOpenXml;
 
 namespace AcadLib
@@ -94,12 +95,13 @@ namespace AcadLib
 
                 Notify.SetScreenSettings(new NotifyOptions(with: 400));
 
-                CheckUpdates.Start();
-                if (Settings.Default.UpgradeRequired)
+                try
                 {
-                    Settings.Default.Upgrade();
-                    Settings.Default.UpgradeRequired = false;
-                    Settings.Default.Save();
+                    CheckUpdates.Start();
+                    CheckUpdateSettings();
+                }
+                catch
+                {
                 }
 
                 PaletteSetCommands.Init();
@@ -118,7 +120,14 @@ namespace AcadLib
                 RibbonBuilder.InitRibbon();
                 Logger.Log.Info("end Initialize AcadLib");
                 AcadLibAssembly.AcadLoadInfo();
-                CheckUser();
+
+                try
+                {
+                    CheckUser();
+                }
+                catch
+                {
+                }
 
                 // Восстановление вкладок чCheckUpdatesNotifyертежей
                 //Utils.Tabs.RestoreTabs.Init(); // Фаталит у Черновой
@@ -129,6 +138,16 @@ namespace AcadLib
             {
                 $"PIK. Ошибка загрузки AcadLib, версия:{AcadLibVersion} - {ex.Message}.".WriteToCommandLine();
                 Logger.Log.Error(ex, "AcadLib Initialize.");
+            }
+        }
+
+        private void CheckUpdateSettings()
+        {
+            if (Settings.Default.UpgradeRequired)
+            {
+                Settings.Default.Upgrade();
+                Settings.Default.UpgradeRequired = false;
+                Settings.Default.Save();
             }
         }
 
