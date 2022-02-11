@@ -85,7 +85,7 @@ namespace AcadLib
                 AppDomain.CurrentDomain.AssemblyResolve += CurrentDomain_AssemblyResolve;
                 Logger.Log.Info("start Initialize AcadLib");
                 StatusBarEx.AddPaneUserGroup();
-                PluginStatisticsHelper.StartAutoCAD();
+                SendStartAutocadStatistic();
                 if (PikSettings.IsDisabledSettings)
                 {
                     Logger.Log.Info("Настройки отключены (PikSettings.IsDisabledSettings) - загрузка прервана.");
@@ -118,11 +118,7 @@ namespace AcadLib
                 RibbonBuilder.InitRibbon();
                 Logger.Log.Info("end Initialize AcadLib");
                 AcadLibAssembly.AcadLoadInfo();
-                if (AutocadUserService.User == null)
-                {
-                    Logger.Log.Warn("Настройки группы пользователя не заданы - открытие окна настроек пользователя.");
-                    UserSettingsService.Show();
-                }
+                CheckUser();
 
                 // Восстановление вкладок чCheckUpdatesNotifyертежей
                 //Utils.Tabs.RestoreTabs.Init(); // Фаталит у Черновой
@@ -133,6 +129,34 @@ namespace AcadLib
             {
                 $"PIK. Ошибка загрузки AcadLib, версия:{AcadLibVersion} - {ex.Message}.".WriteToCommandLine();
                 Logger.Log.Error(ex, "AcadLib Initialize.");
+            }
+        }
+
+        private void CheckUser()
+        {
+            try
+            {
+                if (AutocadUserService.User == null)
+                {
+                    Logger.Log.Warn("Настройки группы пользователя не заданы - открытие окна настроек пользователя.");
+                    UserSettingsService.Show();
+                }
+            }
+            catch (Exception ex)
+            {
+                ex.LogError();
+            }
+        }
+
+        private void SendStartAutocadStatistic()
+        {
+            try
+            {
+                PluginStatisticsHelper.StartAutoCAD();
+            }
+            catch (Exception ex)
+            {
+                ex.LogError();
             }
         }
 

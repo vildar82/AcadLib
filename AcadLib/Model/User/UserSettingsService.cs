@@ -38,11 +38,6 @@
         public static PluginSettings CommonSettings { get; set; }
 
         /// <summary>
-        /// Пользователь согласен на предварительные обновления
-        /// </summary>
-        public static bool IsPreviewUpdate => AutocadUserService.User?.PreviewUpdate ?? false;
-
-        /// <summary>
         /// Получение значения настройки плагина
         /// </summary>
         /// <typeparam name="T">Тип значения</typeparam>

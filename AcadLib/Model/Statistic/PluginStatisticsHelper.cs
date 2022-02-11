@@ -1,12 +1,11 @@
-﻿using System.Net.Http;
-using System.Text;
-
-namespace AcadLib.Statistic
+﻿namespace AcadLib.Statistic
 {
     using System;
     using System.Diagnostics;
     using System.IO;
+    using System.Net.Http;
     using System.Reflection;
+    using System.Text;
     using System.Threading.Tasks;
     using AutoCAD_PIK_Manager.Settings;
     using Autodesk.AutoCAD.ApplicationServices.Core;
