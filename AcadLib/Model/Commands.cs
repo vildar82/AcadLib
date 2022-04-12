@@ -663,6 +663,9 @@ namespace AcadLib
 
         private Assembly? ResolveFmAssembly(string argsName)
         {
+            if (argsName.Contains("resources", StringComparison.OrdinalIgnoreCase))
+                return null;
+
             var fmResolvers = new List<string>
             {
                 "FamilyManager.CAD.Data",
@@ -674,7 +677,7 @@ namespace AcadLib
                 "FamilyManager.V2.SDK.Client",
             };
 
-            var fmResolver = fmResolvers.FirstOrDefault(r => argsName.StartsWith(r + ","));
+            var fmResolver = fmResolvers.FirstOrDefault(argsName.StartsWith);
             if (fmResolver == null)
                 return null;
 
