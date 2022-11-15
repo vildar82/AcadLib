@@ -10,11 +10,11 @@ namespace AcadLib.UI.Ribbon.Elements
         public void Execute()
         {
             var doc = Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager.MdiActiveDocument;
-            if (doc == null) return;
+            if (doc == null)
+                return;
+
             using (doc.LockDocument())
-            {
                 doc.SendStringToExecute(Command + " ", true, false, true);
-            }
         }
 
         public override ICommand GetCommand()

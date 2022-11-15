@@ -12,6 +12,7 @@
     using System.Windows.Media.Imaging;
     using AutoCAD_PIK_Manager.Settings;
     using Autodesk.AutoCAD.ApplicationServices;
+    using Autodesk.Internal.Windows;
     using Autodesk.Private.Windows;
     using Autodesk.Windows;
     using Data;
@@ -306,9 +307,9 @@
         [NotNull]
         private static void SetItemData([NotNull] RibbonItem item, RibbonItemData itemData, ImageSource image, RibbonItemSize size)
         {
-            item.Text = item.Name; // Текст рядом с кнопкой, если ShowText = true
-            item.Name = item.Name; // Тест на всплявающем окошке (заголовов)
-            item.Description = item.Description; // Описание на всплывающем окошке
+            item.Text = itemData.Name; // Текст рядом с кнопкой, если ShowText = true
+            item.Name = itemData.Name; // Тест на всплявающем окошке (заголовов)
+            item.Description = itemData.Description; // Описание на всплывающем окошке
             item.LargeImage = ResizeImage(image, 32);
             item.Image = ResizeImage(image, 16);
             item.ToolTip = GetToolTip(itemData, image);

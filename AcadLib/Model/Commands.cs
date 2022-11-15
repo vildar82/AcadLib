@@ -30,6 +30,7 @@ namespace AcadLib
     using Layers.AutoLayers;
     using Layers.LayersSelected;
     using NetLib;
+    using NetLib.Comparers;
     using NetLib.IO;
     using NetLib.Notification;
     using PaletteCommands;
@@ -682,7 +683,9 @@ namespace AcadLib
                 return null;
 
             return AppDomain.CurrentDomain.GetAssemblies()
-                .FirstOrDefault(a => a.FullName.StartsWith(fmResolver));
+                .Where(a => a.FullName.StartsWith(fmResolver))
+                .OrderByDescending(o => o.FullName, new AlphanumComparator())
+                .FirstOrDefault();
         }
 
         [NotNull]
