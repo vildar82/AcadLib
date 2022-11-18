@@ -614,6 +614,7 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Readme.md" />
     <None Include="AcadLib.nuspec" />
     <None Include="Resources\restoreFiles16.ico" />
     <None Include="Resources\restoreFiles32.ico" />
@@ -786,7 +787,7 @@
       <Version>5.5.13.2</Version>
     </PackageReference>
     <PackageReference Include="NetLib">
-      <Version>1.2.6</Version>
+      <Version>1.2.7</Version>
     </PackageReference>
     <PackageReference Include="PropertyChanged.Fody">
       <Version>3.2.9</Version>

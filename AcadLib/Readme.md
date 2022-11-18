@@ -1,0 +1,1 @@
+nuget pack AcadLib.csproj -properties Configuration=Release
