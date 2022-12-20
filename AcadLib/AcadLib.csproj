@@ -1,54 +1,48 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{2008AE5D-550A-4478-A9B5-297832058377}</ProjectGuid>
-    <OutputType>Library</OutputType>
     <CodeAnalysisRuleSet>$(SolutionDir)stylecop.ruleset</CodeAnalysisRuleSet>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>AcadLib</RootNamespace>
-    <AssemblyName>AcadLib</AssemblyName>
-    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
+    <TargetFramework>net472</TargetFramework>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
-    <TargetFrameworkProfile />
     <NullableContextOptions>enable</NullableContextOptions>
     <Nullable>enable</Nullable>
     <LangVersion>default</LangVersion>
+    <AssemblyTitle>AcadLib</AssemblyTitle>
+    <Product>AcadLib</Product>
+    <Description>Net4.7.2 c# AutoCAD Library, WPF + ReactiveUI</Description>
+    <Copyright>Copyright 2018</Copyright>
+    <Version>2021.1.6</Version>
+    <AssemblyVersion>2021.1.6</AssemblyVersion>
+    <PlatformTarget>x64</PlatformTarget>
+    <UseWPF>true</UseWPF>
+    <Authors>Vildar</Authors>
+    <PackageId>AcadLib</PackageId>
+    <PackageProjectUrl>https://github.com/vildar82/AcadLib</PackageProjectUrl>
+    <PackageReleaseNotes>StartupCommand</PackageReleaseNotes>
+    <PackageTags>C# AutoCAD</PackageTags>
+    <IsTool>True</IsTool>
   </PropertyGroup>
   <PropertyGroup>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>x64</PlatformTarget>
-    <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
     <OutputPath>$(AppData)\Autodesk\ApplicationPlugins\PIK.CAD.bundle\Settings\Dll\</OutputPath>
     <DefineConstants>TRACE;DEBUG;JETBRAINS_ANNOTATIONS</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
     <UseVSHostingProcess>true</UseVSHostingProcess>
-    <Prefer32Bit>false</Prefer32Bit>
     <RunCodeAnalysis>false</RunCodeAnalysis>
     <DocumentationFile>$(AppData)\Autodesk\ApplicationPlugins\PIK.CAD.bundle\Settings\Dll\AcadLib.xml</DocumentationFile>
     <NoWarn>CS1591</NoWarn>
     <ShouldCreateLogs>False</ShouldCreateLogs>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>x64</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
+    <OutputPath>bin\$(Configuration)\</OutputPath>
     <DefineConstants>TRACE;JETBRAINS_ANNOTATIONS</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
     <WarningLevel>0</WarningLevel>
-    <DocumentationFile>bin\Release\AcadLib.xml</DocumentationFile>
-    <Prefer32Bit>false</Prefer32Bit>
-    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <DocumentationFile>bin\$(Configuration)\AcadLib.xml</DocumentationFile>
     <NoWarn>CS1561, CS1591, CS1573, CS1570</NoWarn>
     <ShouldCreateLogs>True</ShouldCreateLogs>
     <AdvancedSettingsExpanded>False</AdvancedSettingsExpanded>
@@ -61,8 +55,6 @@
     <DocumentationFile>bin\Release\AcadLib.xml</DocumentationFile>
     <NoWarn>CS1561, CS1591, CS1573, CS1570</NoWarn>
     <DebugType>pdbonly</DebugType>
-    <PlatformTarget>x64</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
     <WarningLevel>0</WarningLevel>
     <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
@@ -70,37 +62,44 @@
     <ReferencePath>lib</ReferencePath>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="AcCoreMgd">
-      <HintPath>lib\AcCoreMgd.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="AcDbMgd">
-      <Private>False</Private>
-      <HintPath>lib\AcDbMgd.dll</HintPath>
-    </Reference>
-    <Reference Include="acdbmgdbrep">
-      <HintPath>lib\acdbmgdbrep.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="AcMgd">
-      <HintPath>lib\AcMgd.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
+    <_PackageFiles Include="$(OutputPath)\AutoCAD_PIK_Settings.dll">
+      <BuildAction>None</BuildAction>
+      <PackagePath>lib\</PackagePath>
+    </_PackageFiles>
+    <_PackageFiles Include="$(OutputPath)\AcMPolygonMGD.dll">
+      <BuildAction>None</BuildAction>
+      <PackagePath>lib\</PackagePath>
+    </_PackageFiles>
+    <_PackageFiles Include="$(OutputPath)\AeccDbMgd.dll">
+      <BuildAction>None</BuildAction>
+      <PackagePath>lib\</PackagePath>
+    </_PackageFiles>
+    <_PackageFiles Include="$(OutputPath)\AecBaseMgd.dll">
+      <BuildAction>None</BuildAction>
+      <PackagePath>lib\</PackagePath>
+    </_PackageFiles>
+    <_PackageFiles Include="$(OutputPath)\GlobalHooks.dll">
+      <BuildAction>None</BuildAction>
+      <PackagePath>lib\</PackagePath>
+    </_PackageFiles>
+    <_PackageFiles Include="$(OutputPath)\GoogleDoc.dll">
+      <BuildAction>None</BuildAction>
+      <PackagePath>lib\</PackagePath>
+    </_PackageFiles>
+    <_PackageFiles Include="$(OutputPath)\MongoDblib.dll">
+      <BuildAction>None</BuildAction>
+      <PackagePath>lib\</PackagePath>
+    </_PackageFiles>
+  </ItemGroup>
+  <ItemGroup>
     <Reference Include="AcMPolygonMGD">
-      <HintPath>lib\AcMPolygonMGD.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="AdUiPalettes">
-      <HintPath>lib\AdUiPalettes.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="AdWindows">
-      <HintPath>lib\AdWindows.dll</HintPath>
-      <Private>False</Private>
+      <HintPath>lib\AcMPolygonMGD.dll</HintPath>      
     </Reference>
     <Reference Include="AeccDbMgd">
-      <HintPath>lib\AeccDbMgd.dll</HintPath>
-      <Private>False</Private>
+      <HintPath>lib\AeccDbMgd.dll</HintPath>      
+    </Reference>
+    <Reference Include="AecBaseMgd">
+      <HintPath>lib\AecBaseMgd.dll</HintPath>      
     </Reference>
     <Reference Include="AutoCAD_PIK_Settings">
       <SpecificVersion>False</SpecificVersion>
@@ -109,8 +108,7 @@
       <HintPath>lib\GlobalHooks.dll</HintPath>
     </Reference>
     <Reference Include="GoogleDoc, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
-      <HintPath>lib\GoogleDoc.dll</HintPath>
-      <Private>False</Private>
+      <HintPath>lib\GoogleDoc.dll</HintPath>      
     </Reference>
     <Reference Include="MongoDblib">
       <HintPath>lib\MongoDblib.dll</HintPath>
@@ -118,496 +116,49 @@
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="PresentationFramework.Aero2" />
-    <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.configuration" />
-    <Reference Include="System.Core" />
     <Reference Include="System.Design" />
-    <Reference Include="System.Drawing" />
     <Reference Include="System.IO.Compression" />
-    <Reference Include="System.Numerics" />
-    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Security" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.Transactions" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xaml" />
-    <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
-    <Reference Include="System.Xml" />
     <Reference Include="UIAutomationClient" />
     <Reference Include="WindowsBase" />
     <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
-  <ItemGroup>    
-    <Compile Include="Model\AcadHelper.cs" />
-    <Compile Include="Model\Blocks\BlockPropertiesTableExt.cs" />
-    <Compile Include="Model\Blocks\DictBlockName.cs" />
-    <Compile Include="Model\Blocks\InsertManyDynBlocks.cs" />
-    <Compile Include="Model\Blocks\Visual\VisualGroup.cs" />
-    <Compile Include="Model\CommandLock\Data\CaseInsensitiveDictionary.cs" />
-    <Compile Include="Model\CommandLock\Data\CommandLockInfo.cs" />
-    <Compile Include="Model\CommandLock\CommandLockService.cs" />
-    <Compile Include="Model\CommandLock\Data\CommandLocks.cs" />
-    <Compile Include="Model\CommandLock\UI\Button.cs" />
-    <Compile Include="Model\CommandLock\UI\LockViewModel.cs" />
-    <Compile Include="Model\CommandLock\UI\LockView.xaml.cs">
-      <DependentUpon>LockView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Model\Comparers\LineEqualityComparer.cs" />
-    <Compile Include="Model\DB\AddedObjects.cs" />
-    <Compile Include="Model\DB\CleanExt.cs" />
-    <Compile Include="Model\DB\DataExtensions.cs" />
-    <Compile Include="Model\DB\DbUsing.cs" />
-    <Compile Include="Model\DB\ExternalCopyObjectsExt.cs" />
-    <Compile Include="Model\DB\GenericExtensions.cs" />
-    <Compile Include="Model\DB\LineExt.cs" />
-    <Compile Include="Model\DB\LineWeightExt.cs" />
-    <Compile Include="Model\DB\SummaryInfoExt.cs" />
-    <Compile Include="Model\DB\SystemVariableExt.cs" />
-    <Compile Include="Model\Dim\DimBlkEnum.cs" />
-    <Compile Include="Model\Dim\DimensionExt.cs" />
-    <Compile Include="Model\Dll\DllVer.cs" />
-    <Compile Include="Model\Doc\DocAuto.cs" />
-    <Compile Include="Model\Doc\DbDictionaryCleaner.cs" />
-    <Compile Include="Model\Doc\DocSysVarAuto.cs" />
-    <Compile Include="Model\Doc\StartupCommand.cs" />
-    <Compile Include="Model\DrawOrder\DrawOrderExt.cs" />
-    <Compile Include="Model\Editors\CursorBadgeUsing.cs" />
-    <Compile Include="Model\Editors\EditorExt.cs" />
-    <Compile Include="Model\Editors\EditorExtension.cs" />
-    <Compile Include="Model\Errors\UI\ErrorModelOne.cs" />
-    <Compile Include="Model\Errors\UI\ErrorAddButton.cs" />
-    <Compile Include="Model\Errors\UI\ErrorModelList.cs" />
-    <Compile Include="Model\Errors\UsingInspector.cs" />
-    <Compile Include="Model\Exceptions\AnnotationScaleNotFound.cs" />
-    <Compile Include="Model\Filer\ReferenceFiler.cs" />
-    <Compile Include="Model\Filer\ReferenceFilerExt.cs" />
-    <Compile Include="Model\Filer\ReferenceFilerResult.cs" />
-    <Compile Include="Model\Geometry\AlgebraicArea.cs" />
-    <Compile Include="Model\Geometry\CircleExt.cs" />
-    <Compile Include="Model\Geometry\LineExt.cs" />
-    <Compile Include="Model\Geometry\Polylines\MergePolylineEx.cs" />
-    <Compile Include="Model\Geometry\Polylines\PolylineRalative.cs" />
-    <Compile Include="Model\Geometry\Polylines\RectangleExt.cs" />
-    <Compile Include="Model\Jigs\PolylineJig.cs" />
-    <Compile Include="Model\Link\DbObjectLink.cs" />
-    <Compile Include="Model\PaletteProps\TextBoxHelper.cs" />
-    <Compile Include="Model\PaletteProps\Values\BoolView.xaml.cs">
-      <DependentUpon>BoolView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Model\PaletteProps\Values\BoolVM.cs" />
-    <Compile Include="Model\PaletteProps\Values\ColorView.xaml.cs">
-      <DependentUpon>ColorView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Model\PaletteProps\Values\ColorVM.cs" />
-    <Compile Include="Model\PaletteProps\Values\DoubleVM.cs" />
-    <Compile Include="Model\PaletteProps\Values\DoubleView.xaml.cs">
-      <DependentUpon>DoubleView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Model\PaletteProps\Values\IValue.cs" />
-    <Compile Include="Model\PaletteProps\Values\StringListView.xaml.cs">
-      <DependentUpon>StringListView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Model\PaletteProps\Values\StringListVM.cs" />
-    <Compile Include="Model\PaletteProps\Values\StringView.xaml.cs">
-      <DependentUpon>StringView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Model\PaletteProps\Values\StringVM.cs" />
-    <Compile Include="Model\PaletteProps\Values\ValuesExt.cs" />
-    <Compile Include="Model\PaletteProps\InputBindingsManager.cs" />
-    <Compile Include="Model\PaletteProps\Data\PalettePropVM.cs" />
-    <Compile Include="Model\PaletteProps\Data\PalettePropsType.cs" />
-    <Compile Include="Model\PaletteProps\Data\PalettePropsProvider.cs" />
-    <Compile Include="Model\PaletteProps\Values\BaseValueVM.cs" />
-    <Compile Include="Model\PaletteProps\Values\IntListView.xaml.cs">
-      <DependentUpon>IntListView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Model\PaletteProps\Values\IntView.xaml.cs">
-      <DependentUpon>IntView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Model\PaletteProps\Values\IntListVM.cs" />
-    <Compile Include="Model\PaletteProps\Values\IntVM.cs" />
-    <Compile Include="Model\PaletteProps\PalettePropsService.cs" />
-    <Compile Include="Model\PaletteProps\Data\PalettePropsGroup.cs" />
-    <Compile Include="Model\PaletteProps\UI\PalettePropsView.xaml.cs">
-      <DependentUpon>PalettePropsView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Model\PaletteProps\UI\PalettePropsVM.cs" />
-    <Compile Include="Model\Lisp\LispAutoloader.cs" />
-    <Compile Include="Model\Plot\PdfEditor.cs" />
-    <Compile Include="Model\Plot\UI\PlotOptionsView.xaml.cs">
-      <DependentUpon>PlotOptionsView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Model\Plot\UI\PlotOptionsVM.cs" />
-    <Compile Include="Model\Reactive\DocumentsEvents.cs" />
-    <Compile Include="Model\Reactive\DbEvents.cs" />
-    <Compile Include="Model\Reactive\DboEvents.cs" />
-    <Compile Include="Model\Reactive\EventsMixin.cs" />
-    <Compile Include="Model\RTree\SpatialIndex\RtreeExt.cs" />
-    <Compile Include="Model\Statistic\CheckUpdates.cs" />
-    <Compile Include="Model\Statistic\CivilTest.cs" />
-    <Compile Include="Model\Statistic\Db\PluginStatisticDbContext.cs" />
-    <Compile Include="Model\Files\FileDataExt.cs" />
-    <Compile Include="Model\Geometry\CurveExt.cs" />
-    <Compile Include="Model\Geometry\Polylines\Join\JoinPolyline.cs" />
-    <Compile Include="Model\Geometry\Polylines\Join\JoinPolylines.cs" />
-    <Compile Include="Model\Hatches\HatchLoopPl.cs" />
-    <Compile Include="Model\Hatches\HatchOptions.cs" />
-    <Compile Include="Model\Jigs\DragEntitiesJig.cs" />
-    <Compile Include="Model\Layers\AutoLayers\AutoLayer.cs" />
-    <Compile Include="Model\Layers\AutoLayers\AutoLayerVport.cs" />
-    <Compile Include="Model\Layers\AutoLayers\AutoLayerDim.cs" />
-    <Compile Include="Model\Layers\AutoLayers\AutoLayersService.cs" />
-    <Compile Include="Model\Blocks\AttSyncExt.cs" />
-    <Compile Include="Model\Blocks\BlockBase.cs" />
-    <Compile Include="Model\Blocks\CommonBlocks\Leader.cs" />
-    <Compile Include="Model\Blocks\IBlock.cs" />
-    <Compile Include="Model\Blocks\Property.cs" />
-    <Compile Include="Model\Blocks\PropertyType.cs" />
-    <Compile Include="Model\Blocks\Visual\UI\VisualBlocksViewModel.cs" />
-    <Compile Include="Model\Brep\BrepLoopType.cs" />
-    <Compile Include="Model\Colors\ColorExt.cs" />
-    <Compile Include="Model\Comparers\Extents3dComparer.cs" />
-    <Compile Include="Model\Comparers\Point2dComparer.cs" />
-    <Compile Include="Model\DB\EntityOptions.cs" />
-    <Compile Include="Model\DB\LineTypeExt.cs" />
-    <Compile Include="Model\DB\ManagedSystemVariable.cs" />
-    <Compile Include="Model\Draw\DrawParameters.cs" />
-    <Compile Include="Model\Draw\Draw.cs" />
-    <Compile Include="Model\Errors\ErrorStatus.cs" />
-    <Compile Include="Model\Errors\IError.cs" />
-    <Compile Include="Model\Errors\UI\ErrorModelBase.cs" />
-    <Compile Include="Model\Errors\UI\ErrorsView.xaml.cs">
-      <DependentUpon>ErrorsView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Model\Errors\UI\ErrorsVM.cs" />
-    <Compile Include="Model\Exceptions\ErrorException.cs" />
-    <Compile Include="Model\Field\UpdateField.cs" />
-    <Compile Include="Model\Geometry\DisposableCollection.cs" />
-    <Compile Include="Model\Geometry\Polylines\AverageVertexPolylines.cs" />
-    <Compile Include="Model\Geometry\Polylines\MergePolyline.cs" />
-    <Compile Include="Model\Geometry\Polylines\PolylineLoops.cs" />
-    <Compile Include="Model\Geometry\Polylines\PolylineVertex.cs" />
-    <Compile Include="Model\Hatches\HatchExt.cs" />
-    <Compile Include="Model\IO\Path.cs" />
-    <Compile Include="Model\Jigs\DragSel.cs" />
-    <Compile Include="Model\Layers\Filter\ImportLayerFilter.cs" />
-    <Compile Include="Model\Layers\LayersSelected\LayersSelectedService.cs" />
-    <Compile Include="Model\Layers\LayersSelected\LayersSelectedView.xaml.cs">
-      <DependentUpon>LayersSelectedView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Model\Layers\LayersSelected\LayersSelectedVM.cs" />
-    <Compile Include="Model\Layers\LayerState\ImportLayerState.cs" />
-    <Compile Include="Model\Strings\StringExt.cs" />
-    <Compile Include="Model\Styles\StyleManager\Model\IStyleItem.cs" />
-    <Compile Include="Model\Styles\StyleManager\Model\IStyleTable.cs" />
-    <Compile Include="Model\Styles\StyleManager\Model\StyleItemBase.cs" />
-    <Compile Include="Model\Styles\StyleManager\Model\StyleTable.cs" />
-    <Compile Include="Model\Styles\StyleManager\Model\StyleTableBase.cs" />
-    <Compile Include="Model\Styles\StyleManager\Model\StyleItem.cs" />
-    <Compile Include="Model\Styles\StyleManager\StyleManagerService.cs" />
-    <Compile Include="Model\Styles\StyleManager\UI\StyleManagerView.xaml.cs">
-      <DependentUpon>StyleManagerView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Model\Styles\StyleManager\UI\StyleManagerVM.cs" />
-    <Compile Include="Model\Styles\StyleManager\UI\StyleTableVM.cs" />
-    <Compile Include="Model\Tables\Google\GoogleTable.cs" />
-    <Compile Include="Model\Template\CopyFromTemplate.cs" />
-    <Compile Include="Model\Template\TemplateManager.cs" />
-    <Compile Include="Model\Layers\LayerVisibleState.cs" />
-    <Compile Include="Model\Layouts\LayoutsExt.cs" />
-    <Compile Include="Model\Log\Logger.cs" />
-    <Compile Include="Model\Blocks\AttributeExt.cs" />
-    <Compile Include="Model\Blocks\AttributeInfo.cs" />
-    <Compile Include="Model\Blocks\AttributeRefInfo.cs" />
-    <Compile Include="Model\Blocks\BlockExtents.cs" />
-    <Compile Include="Model\Blocks\BlockInsert.cs" />
-    <Compile Include="Model\Blocks\Block.cs" />
-    <Compile Include="Model\Blocks\BlockList.cs" />
-    <Compile Include="Model\Blocks\Counter.cs" />
-    <Compile Include="Model\Blocks\Dublicate\BlockRefDublicateInfo.cs" />
-    <Compile Include="Model\Blocks\Dublicate\CheckDublicateBlocks.cs" />
-    <Compile Include="Model\Blocks\Dublicate\Tree\PointTree.cs" />
-    <Compile Include="Model\DB\Extensions.cs" />
-    <Compile Include="Model\Blocks\BlockAttribute.cs" />
-    <Compile Include="Model\Blocks\LateBinfing.cs" />
-    <Compile Include="Model\Commands.cs" />
-    <Compile Include="Model\Blocks\Visual\BlockPreviewHelper.cs" />
-    <Compile Include="Model\Blocks\Visual\IVisualBlock.cs" />
-    <Compile Include="Model\Blocks\Visual\VisualBlock.cs" />
-    <Compile Include="Model\Blocks\Visual\VisualInsertBlock.cs" />
-    <Compile Include="Model\Blocks\Visual\UI\WindowVisualBlocks.xaml.cs">
-      <DependentUpon>WindowVisualBlocks.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Model\Brep\BrepExtensions.cs" />
-    <Compile Include="Model\Colors\ColorBooks\ColorBook.cs" />
-    <Compile Include="Model\Colors\ColorBooks\ColorBookHelper.cs" />
-    <Compile Include="Model\Colors\ColorBooks\ColorItem.cs" />
-    <Compile Include="Model\Colors\ColorBooks\FormOptions.cs">
+  <ItemGroup>
+    <Compile Update="Model\Colors\ColorBooks\FormOptions.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Model\Colors\ColorBooks\FormOptions.designer.cs">
-      <DependentUpon>FormOptions.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Model\Colors\ColorBooks\Options.cs" />
-    <Compile Include="Model\Comparers\Point3dComparer.cs" />
-    <Compile Include="Model\DB\EntityInfo.cs" />
-    <Compile Include="Model\Jigs\RectangleJig.cs" />
-    <Compile Include="Model\Plot\PlotOptions.cs" />
-    <Compile Include="Model\Registry\RegExt.cs" />
-    <Compile Include="Model\RTree\SpatialIndex\RectangleExt.cs" />
-    <Compile Include="Model\Scale\ScaleHelper.cs" />
-    <Compile Include="Model\Statistic\PluginStatisticsHelper.cs" />
-    <Compile Include="Model\Tables\CreateTable.cs" />
-    <Compile Include="Model\Tables\ICreateTable.cs" />
-    <Compile Include="Model\Entitys\EntityHelper.cs" />
-    <Compile Include="Model\Template\TemplateData.cs" />
-    <Compile Include="Model\Test\BatchRemoveLayouts.cs" />
-    <Compile Include="Model\UI\Hotkeys\HotKeyService.cs" />
-    <Compile Include="Model\UI\Hotkeys\Keys.cs" />
-    <Compile Include="Model\UI\Hotkeys\ModifyKey.cs" />
-    <Compile Include="Model\UI\Palette.cs" />
-    <Compile Include="Model\UI\PaletteCommands\Blocks\PaletteInsertBlock.cs" />
-    <Compile Include="Model\UI\PaletteCommands\Blocks\PaletteVisualInsertBlocks.cs" />
-    <Compile Include="Model\UI\PaletteCommands\CommandInfo.cs" />
-    <Compile Include="Model\UI\PaletteCommands\SplitCommand.cs" />
-    <Compile Include="Model\UI\PaletteCommands\ToggleButton.cs" />
-    <Compile Include="Model\UI\PaletteCommands\UI\CommandsControl.xaml.cs">
-      <DependentUpon>CommandsControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Model\CommandStarter.cs" />
-    <Compile Include="Model\UI\PaletteCommands\ContextMenu\MenuItemCommand.cs" />
-    <Compile Include="Model\UI\PaletteCommands\IPaletteCommand.cs" />
-    <Compile Include="Model\UI\PaletteCommands\PaletteCommand.cs" />
-    <Compile Include="Model\UI\PaletteCommands\PaletteModel.cs" />
-    <Compile Include="Model\UI\PaletteCommands\PaletteSetCommands.cs" />
-    <Compile Include="Model\UI\PaletteCommands\UI\ImagesAndText.xaml.cs">
-      <DependentUpon>ImagesAndText.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Model\UI\PaletteCommands\UI\ListCommands.xaml.cs">
-      <DependentUpon>ListCommands.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Model\UI\PaletteCommands\UI\OnlyImages.xaml.cs">
-      <DependentUpon>OnlyImages.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Model\UI\PaletteCommands\UI\PaletteOptionsView.xaml.cs">
-      <DependentUpon>PaletteOptionsView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Model\UI\PaletteCommands\UI\PaletteOptionsViewModel.cs" />
-    <Compile Include="Model\UI\PaletteCommands\UserGroupPalette.cs" />
-    <Compile Include="Model\UI\Properties\DictionaryEditor\AttributeProvider.cs" />
-    <Compile Include="Model\UI\Properties\DictionaryEditor\DefaultProvider.cs" />
-    <Compile Include="Model\UI\Properties\DictionaryEditor\EditableKeyValuePair.cs" />
-    <Compile Include="Model\UI\Properties\DictionaryEditor\GenericDictionaryEditor.cs" />
-    <Compile Include="Model\UI\Properties\DictionaryEditor\GenericDictionaryEditorAttribute.cs" />
-    <Compile Include="Model\UI\Properties\DictionaryEditor\KeyValueDescriptor.cs" />
-    <Compile Include="Model\UI\Properties\PropertiesService.cs" />
-    <Compile Include="Model\UI\Properties\PropertiesView.xaml.cs">
-      <DependentUpon>PropertiesView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Model\UI\Properties\PropertiesViewModel.cs" />
-    <Compile Include="Model\UI\Properties\XmlSerializableDictionary.cs" />
-    <Compile Include="Model\UI\Ribbon\Attribute\RibbonCommandAttribute.cs" />
-    <Compile Include="Model\UI\Ribbon\ConverterPaletteToRibbon.cs" />
-    <Compile Include="Model\UI\Ribbon\Data\RibbonGroupData.cs" />
-    <Compile Include="Model\UI\Ribbon\Data\RibbonPanelData.cs" />
-    <Compile Include="Model\UI\Ribbon\Data\RibbonTabData.cs" />
-    <Compile Include="Model\UI\Ribbon\Editor\AccessItem.cs" />
-    <Compile Include="Model\UI\Ribbon\Editor\BlockFile.cs" />
-    <Compile Include="Model\UI\Ribbon\Editor\BlockItem.cs" />
-    <Compile Include="Model\UI\Ribbon\Editor\Converters\ItemTypeConverter.cs" />
-    <Compile Include="Model\UI\Ribbon\Editor\Converters\RibbonItemToolTipConverter.cs" />
-    <Compile Include="Model\UI\Ribbon\Editor\Data\RibbonInsertBlockVM.cs" />
-    <Compile Include="Model\UI\Ribbon\Editor\Data\RibbonSplitVM.cs" />
-    <Compile Include="Model\UI\Ribbon\Editor\Data\RibbonToggleVM.cs" />
-    <Compile Include="Model\UI\Ribbon\Editor\Data\RibbonBreakVM.cs" />
-    <Compile Include="Model\UI\Ribbon\Editor\Data\RibbonCommandVM.cs" />
-    <Compile Include="Model\UI\Ribbon\Editor\Data\RibbonItemDataVM.cs" />
-    <Compile Include="Model\UI\Ribbon\Editor\Data\RibbonPanelDataVM.cs" />
-    <Compile Include="Model\UI\Ribbon\Editor\Data\RibbonTabDataVM.cs" />
-    <Compile Include="Model\UI\Ribbon\Editor\Data\RibbonVisualGroupInsertBlockVM.cs" />
-    <Compile Include="Model\UI\Ribbon\Editor\Data\RibbonVisualInsertBlockVM.cs" />
-    <Compile Include="Model\UI\Ribbon\Editor\RibbonEditor.cs" />
-    <Compile Include="Model\UI\Ribbon\Editor\RibbonView.xaml.cs">
-      <DependentUpon>RibbonView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Model\UI\Ribbon\Editor\RibbonVM.cs" />
-    <Compile Include="Model\UI\Ribbon\Elements\RibbonBreakPanel.cs" />
-    <Compile Include="Model\UI\Ribbon\Elements\RibbonCommand.cs" />
-    <Compile Include="Model\UI\Ribbon\Elements\RibbonInsertBlock.cs" />
-    <Compile Include="Model\UI\Ribbon\Elements\RibbonItemData.cs" />
-    <Compile Include="Model\UI\Ribbon\Elements\RibbonSplit.cs" />
-    <Compile Include="Model\UI\Ribbon\Elements\RibbonToggle.cs" />
-    <Compile Include="Model\UI\Ribbon\Elements\RibbonVisualGroupInsertBlock.cs" />
-    <Compile Include="Model\UI\Ribbon\Elements\RibbonVisualInsertBlock.cs" />
-    <Compile Include="Model\UI\Ribbon\Options\ItemOptions.cs" />
-    <Compile Include="Model\UI\Ribbon\RibbonBuilder.cs" />
-    <Compile Include="Model\UI\Ribbon\Options\RibbonOptions.cs" />
-    <Compile Include="Model\UI\StatusBar\StatusBarEx.cs" />
-    <Compile Include="Model\UI\StatusBar\View\StatusBarMenu.xaml.cs">
-      <DependentUpon>StatusBarMenu.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Model\Units\UnitsConvertHelper.cs" />
-    <Compile Include="Model\Units\UnitsNetExt.cs" />
-    <Compile Include="Model\UserInfo.cs" />
-    <Compile Include="Model\UserInfoData.cs" />
-    <Compile Include="Model\User\PluginSettings.cs" />
-    <Compile Include="Model\User\UI\UserGroup.cs" />
-    <Compile Include="Model\User\UI\UserSettingsView.xaml.cs">
-      <DependentUpon>UserSettingsView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Model\User\UI\UserSettingsVM.cs" />
-    <Compile Include="Model\User\UserProperty.cs" />
-    <Compile Include="Model\User\UserSettings.cs" />
-    <Compile Include="Model\User\UserSettingsService.cs" />
-    <Compile Include="Model\Utils\ClearObjectsExtData.cs" />
-    <Compile Include="Model\Utils\ListModules.cs" />
-    <Compile Include="Model\Utils\Optimization.cs" />
-    <Compile Include="Model\Utils\Tabs\Data\Session.cs" />
-    <Compile Include="Model\Utils\Tabs\History\Db\DbHistory.cs" />
-    <Compile Include="Model\Utils\Tabs\RestoreTabs.cs" />
-    <Compile Include="Model\Utils\Tabs\Data\Tabs.cs" />
-    <Compile Include="Model\Utils\Tabs\UI\ErrConverter.cs" />
-    <Compile Include="Model\Utils\Tabs\UI\History\HistoryTab.cs" />
-    <Compile Include="Model\Utils\Tabs\UI\History\HistoryModel.cs" />
-    <Compile Include="Model\Utils\Tabs\UI\SessionVM.cs" />
-    <Compile Include="Model\Utils\Tabs\UI\TabsView.xaml.cs">
-      <DependentUpon>TabsView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Model\Utils\Tabs\UI\TabsVM.cs" />
-    <Compile Include="Model\Utils\Tabs\UI\TabVM.cs" />
-    <Compile Include="Model\Utils\TestState.cs" />
-    <Compile Include="Model\VisualStyle\VisualStyleUsing.cs" />
-    <Compile Include="Model\Visual\IVisualElement.cs" />
-    <Compile Include="Model\Visual\IVisualService.cs" />
-    <Compile Include="Model\Visual\VisualBase.cs" />
-    <Compile Include="Model\Visual\VisualEntities.cs" />
-    <Compile Include="Model\Visual\VisualHelper.cs" />
-    <Compile Include="Model\Visual\VisualOption.cs" />
-    <Compile Include="Model\VisualStyle\VisualStyleExt.cs" />
-    <Compile Include="Model\Visual\VisualTransient.cs" />
-    <Compile Include="Model\Visual\VisualTransientSimple.cs" />
-    <Compile Include="Model\WPF\Controls\AcadColorPick.xaml.cs">
-      <DependentUpon>AcadColorPick.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Model\WPF\Controls\TransparenceSlider.xaml.cs">
-      <DependentUpon>TransparenceSlider.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Model\WPF\Converters\ColorNameConverter.cs" />
-    <Compile Include="Model\WPF\Converters\ColorToBrushConverter.cs" />
-    <Compile Include="Model\WPF\Converters\ConvertorBase.cs" />
-    <Compile Include="Model\WPF\Converters\TransparenceInvertConverter.cs" />
-    <Compile Include="Model\WPF\Converters\TransparenceToOpacityConverter.cs" />
-    <Compile Include="Model\XData\DboDataSaveExt.cs" />
-    <Compile Include="Model\XData\DicNODExt.cs" />
-    <Compile Include="Model\XData\DictNOD.cs" />
-    <Compile Include="Model\DB\EntityExt.cs" />
-    <Compile Include="Model\DB\ObjectIdExt.cs" />
-    <Compile Include="Model\General.cs" />
-    <Compile Include="Model\Layers\LayerExt.cs" />
-    <Compile Include="Model\Layers\LayerInfo.cs" />
-    <Compile Include="Model\DB\DBObjectExt.cs" />
-    <Compile Include="Model\Dll\LoadService.cs" />
-    <Compile Include="Model\Plot\PlotDirToPdf.cs" />
-    <Compile Include="Model\RTree\SpatialIndex\Node.cs" />
-    <Compile Include="Model\RTree\SpatialIndex\Point.cs" />
-    <Compile Include="Model\RTree\SpatialIndex\Rectangle.cs" />
-    <Compile Include="Model\RTree\SpatialIndex\RTree.cs" />
-    <Compile Include="Model\Tables\TableExt.cs" />
-    <Compile Include="Model\UI\Properties\FormProperties.cs">
+    <Compile Update="Model\UI\Properties\FormProperties.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Model\UI\Properties\FormProperties.Designer.cs">
-      <DependentUpon>FormProperties.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Model\XData\EntDictExt.cs" />
-    <Compile Include="Model\XData\ExtDicHelper.cs" />
-    <Compile Include="Model\XData\DicED.cs" />
-    <Compile Include="Model\XData\Interface\IDboDataSave.cs" />
-    <Compile Include="Model\XData\Interface\IExtDataSave.cs" />
-    <Compile Include="Model\XData\Interface\ITypedDataValues.cs" />
-    <Compile Include="Model\XData\RecXD.cs" />
-    <Compile Include="Model\XData\RegAppHelper.cs" />
-    <Compile Include="Model\XData\TypedValueExt.cs" />
-    <Compile Include="Model\XData\TypedValueKit.cs" />
-    <Compile Include="Model\XData\XDataExt.cs" />
-    <Compile Include="Model\XData\XDataViewer\FormXDataView.cs">
+    <Compile Update="Model\XData\XDataViewer\FormXDataView.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Model\XData\XDataViewer\FormXDataView.designer.cs">
-      <DependentUpon>FormXDataView.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Model\XData\XDataViewer\XDataView.cs" />
-    <Compile Include="Model\XRef\XRefExt.cs" />
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
-    <Compile Include="Model\UI\FileFolderDialog.cs">
+    <Compile Update="Model\UI\FileFolderDialog.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Model\DB\WorkingDatabaseSwitcher.cs" />
-    <Compile Include="Model\Editors\UserPrompt.cs" />
-    <Compile Include="Model\Editors\ViewTableRecordExtension.cs" />
-    <Compile Include="Model\Errors\Error.cs" />
-    <Compile Include="Model\Geometry\CircularArc2dExtensions.cs" />
-    <Compile Include="Model\Geometry\CircularArc3dExtensions.cs" />
-    <Compile Include="Model\Geometry\EditorExtensions.cs" />
-    <Compile Include="Model\Geometry\EllipseExtensions.cs" />
-    <Compile Include="Model\Geometry\ExtentsExtension.cs" />
-    <Compile Include="Model\Geometry\GeomExt.cs" />
-    <Compile Include="Model\Geometry\Point2dCollectionExtensions.cs" />
-    <Compile Include="Model\Geometry\Point2dExtensions.cs" />
-    <Compile Include="Model\Geometry\Point3dCollectionExtensions.cs" />
-    <Compile Include="Model\Geometry\Point3dExtensions.cs" />
-    <Compile Include="Model\Geometry\Polyline2dExtensions.cs" />
-    <Compile Include="Model\Geometry\Polyline3dExtensions.cs" />
-    <Compile Include="Model\Geometry\PolylineExtensions.cs" />
-    <Compile Include="Model\Geometry\PolylineSegment.cs" />
-    <Compile Include="Model\Geometry\PolylineSegmentCollection.cs" />
-    <Compile Include="Model\Geometry\RegionExtensions.cs" />
-    <Compile Include="Model\Geometry\SplineExtensions.cs" />
-    <Compile Include="Model\Geometry\Triangle.cs" />
-    <Compile Include="Model\Geometry\Triangle2d.cs" />
-    <Compile Include="Model\Geometry\Triangle3d.cs" />
-    <Compile Include="Model\Geometry\Vector3dExtensions.cs" />
-    <Compile Include="Model\Geometry\ViewportExtensions.cs" />
-    <Compile Include="Model\Errors\Inspector.cs" />
-    <Compile Include="Model\Jigs\BlockInsertJig.cs" />
-    <Compile Include="Model\Jigs\TableJig.cs" />
-    <Compile Include="Model\Plot\PlotToFileConfig.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Model\Registry\RegisterAcadDll.cs" />
-    <Compile Include="Model\RTree\Node.cs" />
-    <Compile Include="Model\RTree\Point.cs" />
-    <Compile Include="Model\RTree\Rectangle.cs" />
-    <Compile Include="Model\RTree\RTree.cs" />
-    <Compile Include="Model\DB\DbExtensions.cs" />
-    <Compile Include="Properties\Settings.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTimeSharedInput>True</DesignTimeSharedInput>
-      <DependentUpon>Settings.settings</DependentUpon>
-    </Compile>
-    <Compile Include="Properties\Version.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Model\Colors\ColorBooks\FormOptions.resx">
+    <EmbeddedResource Update="Model\Colors\ColorBooks\FormOptions.resx">
       <DependentUpon>FormOptions.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Model\UI\Properties\FormProperties.resx">
+    <EmbeddedResource Update="Model\UI\Properties\FormProperties.resx">
       <DependentUpon>FormProperties.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Model\XData\XDataViewer\FormXDataView.resx">
+    <EmbeddedResource Update="Model\XData\XDataViewer\FormXDataView.resx">
       <DependentUpon>FormXDataView.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Properties\Resources.resx">
+    <EmbeddedResource Update="Properties\Resources.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
@@ -615,16 +166,14 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Readme.md" />
-    <None Include="AcadLib.nuspec" />
     <None Include="Resources\restoreFiles16.ico" />
     <None Include="Resources\restoreFiles32.ico" />
     <Resource Include="Resources\no-user.png" />
-    <None Include="App.Config" />
     <None Include="Resources\userSettings.png" />
     <Resource Include="Resources\error.png" />
     <Resource Include="Resources\purge.png" />
     <Resource Include="Resources\stop.png" />
-    <Resource Include="Resources\notify.png" />    
+    <Resource Include="Resources\notify.png" />
     <Resource Include="Resources\select.ico" />
     <Resource Include="Resources\test.png" />
     <Resource Include="Resources\send2.png" />
@@ -653,106 +202,6 @@
     <Content Include="Model\RTree\LICENSE.txt" />
   </ItemGroup>
   <ItemGroup>
-    <Page Include="Model\Blocks\Visual\UI\WindowVisualBlocks.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Model\CommandLock\UI\LockView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Model\Errors\UI\ErrorsView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Model\Layers\LayersSelected\LayersSelectedView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Model\PaletteProps\UI\ComboBoxPaletteTemplate.xaml" />
-    <Page Include="Model\PaletteProps\Values\BoolView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Model\PaletteProps\Values\ColorView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Model\PaletteProps\Values\IntListView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Model\PaletteProps\Values\DoubleView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Model\PaletteProps\Values\IntView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Model\PaletteProps\Values\StringListView.xaml" />
-    <Page Include="Model\PaletteProps\Values\StringView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Model\PaletteProps\UI\PalettePropsStyle.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Model\PaletteProps\UI\PalettePropsView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Model\Plot\UI\PlotOptionsView.xaml" />
-    <Page Include="Model\Styles\StyleManager\UI\StyleManagerView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Model\UI\PaletteCommands\UI\CommandsControl.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Model\UI\PaletteCommands\UI\ImagesAndText.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Model\UI\PaletteCommands\UI\ListCommands.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Model\UI\PaletteCommands\UI\OnlyImages.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Model\UI\PaletteCommands\UI\PaletteOptionsView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Model\UI\Properties\PropertiesView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Model\UI\Ribbon\Editor\RibbonView.xaml" />
-    <Page Include="Model\UI\StatusBar\View\StatusBarMenu.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Model\User\UI\UserSettingsView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Model\Utils\Tabs\UI\TabsView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Model\WPF\Controls\AcadColorPick.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Model\WPF\Controls\TransparenceSlider.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Resource Include="Model\WPF\ScrollBarIOS.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -763,66 +212,27 @@
     </Resource>
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="AutoMapper">
-      <Version>10.0.0</Version>
-    </PackageReference>
-    <PackageReference Include="CsvHelper">
-      <Version>15.0.5</Version>
-    </PackageReference>
-    <PackageReference Include="EntityFramework">
-      <Version>6.4.4</Version>
-    </PackageReference>
-    <PackageReference Include="Equals.Fody">
-      <Version>4.0.1</Version>
-    </PackageReference>
-    <PackageReference Include="Extended.Wpf.Toolkit">
-      <Version>4.0.1</Version>
-    </PackageReference>
-    <PackageReference Include="Fody">
-      <Version>6.2.6</Version>
+    <PackageReference Include="AutoCAD2019.Base" Version="1.0.3" />
+    <PackageReference Include="AutoMapper" Version="10.0.*" />
+    <PackageReference Include="CsvHelper" Version="15.0.*" />
+    <PackageReference Include="EntityFramework" Version="6.4.4" />
+    <PackageReference Include="Equals.Fody" Version="4.0.1" />
+    <PackageReference Include="Extended.Wpf.Toolkit" Version="4.0.1" />
+    <PackageReference Include="Fody" Version="6.2.6">
       <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="iTextSharp">
-      <Version>5.5.13.2</Version>
-    </PackageReference>
-    <PackageReference Include="NetLib">
-      <Version>1.2.7</Version>
-    </PackageReference>
-    <PackageReference Include="PropertyChanged.Fody">
-      <Version>3.2.9</Version>
-    </PackageReference>
-    <PackageReference Include="System.Runtime.InteropServices.RuntimeInformation">
-      <Version>4.3.0</Version>
-    </PackageReference>
-    <PackageReference Include="UnitsNet">
-      <Version>4.70.1</Version>
-    </PackageReference>
-    <PackageReference Include="Yandex.Metrica">
-      <Version>3.5.1</Version>
-    </PackageReference>
-    <PackageReference Include="Google.Apis.Drive.v3">
-      <Version>1.49.0.2072</Version>
-    </PackageReference>
-    <PackageReference Include="Google.Apis.Sheets.v4">
-      <Version>1.49.0.2077</Version>
-    </PackageReference>
-    <PackageReference Include="Google.GData.Client">
-      <Version>2.2.0</Version>
-    </PackageReference>
+    <PackageReference Include="iTextSharp" Version="5.5.13.2" />
+    <PackageReference Include="NetLib" Version="1.2.*" />
+    <PackageReference Include="PropertyChanged.Fody" Version="3.2.9" />
+    <PackageReference Include="System.Runtime.InteropServices.RuntimeInformation" Version="4.3.0" />
+    <PackageReference Include="UnitsNet" Version="4.70.*" />
+    <PackageReference Include="Yandex.Metrica" Version="3.5.1" />
+    <PackageReference Include="Google.Apis.Drive.v3" Version="1.49.*" />
+    <PackageReference Include="Google.Apis.Sheets.v4" Version="1.49.*" />
+    <PackageReference Include="Google.GData.Client" Version="2.2.0" />
   </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <PropertyGroup>
-    <PostBuildEvent>if $(ConfigurationName) == ReleaseLocal (
-   c:\dev\nuget pack "$(ProjectPath)" -IncludeReferencedProjects -properties Configuration=ReleaseLocal
-   xcopy "$(ProjectDir)bin\Release" "$(AppData)\Autodesk\ApplicationPlugins\PIK.CAD.bundle\Settings\Dll\" /Y /C /Q
-)</PostBuildEvent>
-  </PropertyGroup>
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
+  <ItemGroup>
+    <Compile Remove="DbYouTube.Designer.cs" />
+    <Compile Remove="Model\UI\Ribbon\Elements\IRibbonElement.cs" />
+  </ItemGroup>
 </Project>
