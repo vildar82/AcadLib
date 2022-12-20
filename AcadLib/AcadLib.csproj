@@ -12,8 +12,8 @@
     <Product>AcadLib</Product>
     <Description>Net4.7.2 c# AutoCAD Library, WPF + ReactiveUI</Description>
     <Copyright>Copyright 2018</Copyright>
-    <Version>2021.1.6</Version>
-    <AssemblyVersion>2021.1.6</AssemblyVersion>
+    <Version>2021.1.8</Version>
+    <AssemblyVersion>2021.1.8</AssemblyVersion>
     <PlatformTarget>x64</PlatformTarget>
     <UseWPF>true</UseWPF>
     <Authors>Vildar</Authors>
@@ -21,7 +21,6 @@
     <PackageProjectUrl>https://github.com/vildar82/AcadLib</PackageProjectUrl>
     <PackageReleaseNotes>StartupCommand</PackageReleaseNotes>
     <PackageTags>C# AutoCAD</PackageTags>
-    <IsTool>True</IsTool>
   </PropertyGroup>
   <PropertyGroup>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
@@ -64,31 +63,31 @@
   <ItemGroup>
     <_PackageFiles Include="$(OutputPath)\AutoCAD_PIK_Settings.dll">
       <BuildAction>None</BuildAction>
-      <PackagePath>lib\</PackagePath>
+      <PackagePath>lib\net472\</PackagePath>
     </_PackageFiles>
     <_PackageFiles Include="$(OutputPath)\AcMPolygonMGD.dll">
       <BuildAction>None</BuildAction>
-      <PackagePath>lib\</PackagePath>
+      <PackagePath>lib\net472\</PackagePath>
     </_PackageFiles>
     <_PackageFiles Include="$(OutputPath)\AeccDbMgd.dll">
       <BuildAction>None</BuildAction>
-      <PackagePath>lib\</PackagePath>
+      <PackagePath>lib\net472\</PackagePath>
     </_PackageFiles>
     <_PackageFiles Include="$(OutputPath)\AecBaseMgd.dll">
       <BuildAction>None</BuildAction>
-      <PackagePath>lib\</PackagePath>
+      <PackagePath>lib\net472\</PackagePath>
     </_PackageFiles>
     <_PackageFiles Include="$(OutputPath)\GlobalHooks.dll">
       <BuildAction>None</BuildAction>
-      <PackagePath>lib\</PackagePath>
+      <PackagePath>lib\net472\</PackagePath>
     </_PackageFiles>
     <_PackageFiles Include="$(OutputPath)\GoogleDoc.dll">
       <BuildAction>None</BuildAction>
-      <PackagePath>lib\</PackagePath>
+      <PackagePath>lib\net472\</PackagePath>
     </_PackageFiles>
     <_PackageFiles Include="$(OutputPath)\MongoDblib.dll">
       <BuildAction>None</BuildAction>
-      <PackagePath>lib\</PackagePath>
+      <PackagePath>lib\net472\</PackagePath>
     </_PackageFiles>
   </ItemGroup>
   <ItemGroup>
