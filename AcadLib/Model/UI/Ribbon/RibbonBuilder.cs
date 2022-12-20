@@ -95,6 +95,7 @@
         private static void RibbonOnBackgroundRenderFinished(object sender, EventArgs e)
         {
             CreateRibbon();
+            ComponentManager.Ribbon.BackgroundRenderFinished -= RibbonOnBackgroundRenderFinished;
         }
 
         internal static void CreateRibbon()
