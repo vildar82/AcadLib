@@ -3,12 +3,10 @@
     using System;
     using Autodesk.AutoCAD.DatabaseServices;
     using Autodesk.AutoCAD.Geometry;
-    using JetBrains.Annotations;
 
-    [PublicAPI]
     public static class ViewTableRecordExtension
     {
-        public static Matrix3d EyeToWorld([NotNull] this ViewTableRecord view)
+        public static Matrix3d EyeToWorld(this ViewTableRecord view)
         {
             if (view == null)
                 throw new ArgumentNullException(nameof(view));
@@ -18,7 +16,7 @@
                 Matrix3d.PlaneToWorld(view.ViewDirection);
         }
 
-        public static Matrix3d WorldToEye([NotNull] this ViewTableRecord view)
+        public static Matrix3d WorldToEye(this ViewTableRecord view)
         {
             return view.EyeToWorld().Inverse();
         }

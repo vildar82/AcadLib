@@ -55,10 +55,10 @@
         public static Pane AddPane(
             string name,
             string toolTip,
-            [CanBeNull] Action<Pane, StatusBarMouseDownEventArgs> onClick = null,
+            Action<Pane, StatusBarMouseDownEventArgs>? onClick = null,
             int minWith = 20,
             int maxWith = 200,
-            [CanBeNull] Icon icon = null,
+            Icon? icon = null,
             PaneStyles style = PaneStyles.Normal)
         {
             var pane = new Pane

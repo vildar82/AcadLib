@@ -113,30 +113,11 @@
 
         public static void InsertStatistic(string appName, string? plugin, string? command, string? version, string? doc)
         {
+            SendLogToRobot(appName, plugin, command, version, doc);
+            SendLogToPikTools(plugin, command, version);
+
             if (_isInsertStatisticError || Environment.UserName.EqualsIgnoreCase("chuchkalovaav"))
                 return;
-
-            try
-            {
-                var client = new HttpClient();
-                var json = "{" +
-                           "\"source\": \"cad\"," +
-                           $"\"UserName\": \"{Environment.UserName}\"," +
-                           $"\"MachineName\": \"{Environment.MachineName}\"," +
-                           $"\"Message\": \"{command}\"," +
-                           $"\"Group\": \"{General.UserGroup}\"," +
-                           $"\"Application\": \"{appName}\"," +
-                           $"\"Plugin\": \"{plugin}\"," +
-                           $"\"Build\": \"{version}\"," +
-                           $"\"Doc\": \"{GetPath(doc)}\"" +
-                           "}";
-                var content = new StringContent(json, Encoding.UTF8, "application/json");
-                client.PostAsync("https://bim.pik.ru/robotlogs/cad", content).ConfigureAwait(false);
-            }
-            catch (Exception ex)
-            {
-                ex.LogError();
-            }
 
             Task.Run(() =>
             {
@@ -166,6 +147,69 @@
                     Logger.Log.Error(ex, $"PluginStatisticsHelper Insert. appName={appName}, plugin={plugin}, command={command}, version={version}, doc={doc}, docName={Path.GetFileName(doc)}");
                 }
             });
+        }
+
+        private static void SendLogToRobot(
+            string appName,
+            string? plugin,
+            string? command,
+            string? version,
+            string? doc)
+        {
+            try
+            {
+                var client = new HttpClient();
+                var json = "{" +
+                           "\"source\": \"cad\"," +
+                           $"\"UserName\": \"{Environment.UserName}\"," +
+                           $"\"MachineName\": \"{Environment.MachineName}\"," +
+                           $"\"Message\": \"{command}\"," +
+                           $"\"Group\": \"{General.UserGroup}\"," +
+                           $"\"Application\": \"{appName}\"," +
+                           $"\"Plugin\": \"{plugin}\"," +
+                           $"\"Build\": \"{version}\"," +
+                           $"\"Doc\": \"{GetPath(doc)}\"" +
+                           "}";
+                var content = new StringContent(json, Encoding.UTF8, "application/json");
+                client.PostAsync("https://bim.pik.ru/robotlogs/cad", content).ConfigureAwait(false);
+            }
+            catch (Exception ex)
+            {
+                ex.LogError();
+            }
+        }
+
+        private static void SendLogToPikTools(
+            string? plugin,
+            string? command,
+            string? version)
+        {
+            try
+            {
+                var client = new HttpClient();
+                var msg = $"Start command: {command}";
+                var json =
+                    "{" +
+                    $"\"Timestamp\": \"{DateTime.UtcNow}\"," +
+                    "\"Level\": \"Information\"," +
+                    $"\"MessageTemplate\": \"Message: {msg}\"," +
+                    "\"Properties\": {" +
+                    $"\"Msg\": \"{msg}\"," +
+                    "\"SourceContext\": \"Program\"," +
+                    $"\"MachineName\": \"{Environment.MachineName}\"," +
+                    $"\"EnvironmentUserName\": \"{Environment.UserName}\"," +
+                    $"\"Application\": \"{plugin ?? "Старые тулзы"}\"," +
+                    $"\"AutoCAD_Version\": \"{AcadYear}\"," +
+                    "\"Mode\": \"Production\"," +
+                    $"\"PluginVersion\": \"{version}\"" +
+                    "}}";
+                var content = new StringContent(json, Encoding.UTF8, "application/json");
+                client.PostAsync("http://10.177.202.52:5000", content).ConfigureAwait(false);
+            }
+            catch (Exception ex)
+            {
+                ex.LogError();
+            }
         }
 
         private static string GetPath(string? doc)
