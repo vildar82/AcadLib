@@ -113,14 +113,16 @@
 
         public static void InsertStatistic(string appName, string? plugin, string? command, string? version, string? doc)
         {
-            SendLogToRobot(appName, plugin, command, version, doc);
-            SendLogToPikTools(plugin, command, version);
-
-            if (_isInsertStatisticError || Environment.UserName.EqualsIgnoreCase("chuchkalovaav"))
-                return;
-
             Task.Run(() =>
             {
+                SendLogToRobot(appName, plugin, command, version, doc);
+                SendLogToPikTools(plugin, command, version);
+
+                if (_isInsertStatisticError || Environment.UserName.EqualsIgnoreCase("chuchkalovaav"))
+                {
+                    return;
+                }
+
                 try
                 {
                     var db = new PluginStatisticDbContext();
