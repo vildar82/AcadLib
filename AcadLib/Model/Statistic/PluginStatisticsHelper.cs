@@ -3,6 +3,7 @@
     using System;
     using System.Diagnostics;
     using System.IO;
+    using System.Linq;
     using System.Net.Http;
     using System.Reflection;
     using System.Text;
@@ -22,13 +23,17 @@
         private static string _acadLibVer;
         private static bool? _isCivil = GetIsCivil();
         private static bool _isInsertStatisticError;
+        private static string? _settingsVersions;
 
-        [NotNull]
-        public static string AcadYear => HostApplicationServices.Current.releaseMarketVersion;
+        static PluginStatisticsHelper()
+        {
+            AcadYear = HostApplicationServices.Current.releaseMarketVersion;
+        }
+
+        public static string AcadYear { get; }
 
         public static bool IsCivil => _isCivil ?? false;
 
-        [NotNull]
         public static string App => _app ??= IsCivil ? "Civil" : "AutoCAD";
 
         public static void AddStatistic()
@@ -146,12 +151,14 @@
                 catch (Exception ex)
                 {
                     _isInsertStatisticError = true;
-                    Logger.Log.Error(ex, $"PluginStatisticsHelper Insert. appName={appName}, plugin={plugin}, command={command}, version={version}, doc={doc}, docName={Path.GetFileName(doc)}");
+                    Logger.Log.Error(
+                        ex,
+                        $"PluginStatisticsHelper Insert. appName={appName}, plugin={plugin}, command={command}, version={version}, doc={doc}, docName={Path.GetFileName(doc)}");
                 }
-            });
+            }).ConfigureAwait(false);
         }
 
-        private static void SendLogToRobot(
+        private static async void SendLogToRobot(
             string appName,
             string? plugin,
             string? command,
@@ -160,7 +167,7 @@
         {
             try
             {
-                var client = new HttpClient();
+                using var client = new HttpClient();
                 var json = "{" +
                            "\"source\": \"cad\"," +
                            $"\"UserName\": \"{Environment.UserName}\"," +
@@ -173,44 +180,45 @@
                            $"\"Doc\": \"{GetPath(doc)}\"" +
                            "}";
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
-                client.PostAsync("https://bim.pik.ru/robotlogs/cad", content).ConfigureAwait(false);
+                await client.PostAsync("https://bim.pik.ru/robotlogs/cad", content);
             }
-            catch (Exception ex)
+            catch
             {
-                ex.LogError();
+                // ignore
             }
         }
 
-        private static void SendLogToPikTools(
+        private static async void SendLogToPikTools(
             string? plugin,
             string? command,
             string? version)
         {
             try
             {
-                var client = new HttpClient();
-                var msg = $"Start command: {command}";
+                using var client = new HttpClient();
+                _settingsVersions ??= Enumerable.Reverse(PikSettings.Versions)
+                    .JoinToString(g => $"{g.GroupName} - {g.VersionLocal}");
+
                 var json =
-                    "{" +
-                    $"\"Timestamp\": \"{DateTime.UtcNow}\"," +
+                    "[{" +
                     "\"Level\": \"Information\"," +
-                    $"\"MessageTemplate\": \"Message: {msg}\"," +
+                    $"\"MessageTemplate\": \"{plugin}, {command}\"," +
                     "\"Properties\": {" +
-                    $"\"Msg\": \"{msg}\"," +
                     "\"SourceContext\": \"Program\"," +
                     $"\"MachineName\": \"{Environment.MachineName}\"," +
                     $"\"EnvironmentUserName\": \"{Environment.UserName}\"," +
-                    $"\"Application\": \"{plugin ?? "Старые тулзы"}\"," +
+                    $"\"Application\": \"OldTools_Civil_{command ?? plugin}\"," +
                     $"\"AutoCAD_Version\": \"{AcadYear}\"," +
                     "\"Mode\": \"Production\"," +
-                    $"\"PluginVersion\": \"{version}\"" +
-                    "}}";
+                    $"\"Plugin_Version\": \"{_settingsVersions}, {version}\"" +
+                    "}}]";
+
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
-                client.PostAsync("http://10.177.202.52:5000", content).ConfigureAwait(false);
+                await client.PostAsync("http://10.177.202.52:5000", content);
             }
-            catch (Exception ex)
+            catch
             {
-                ex.LogError();
+                // ignore
             }
         }
 

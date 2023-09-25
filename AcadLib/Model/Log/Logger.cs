@@ -2,8 +2,10 @@
 {
     using System;
     using System.IO;
+    using System.Threading;
     using Autodesk.AutoCAD.ApplicationServices.Core;
     using JetBrains.Annotations;
+    using NetLib;
     using Yandex.Metrica;
 
     public static class Logger
@@ -157,10 +159,14 @@
             base.Warn(ex, newMsg);
         }
 
-        [NotNull]
         private static string GetMessage(string? msg)
         {
-            return $"{msg};Doc={Application.DocumentManager?.MdiActiveDocument?.Name}";
+            return Thread.CurrentThread.ManagedThreadId == 1
+                ? msg?.Contains("doc=", StringComparison.OrdinalIgnoreCase) == true
+                    ? msg
+                    : $"{msg};Doc={Application.DocumentManager?.MdiActiveDocument?.Name}"
+                : msg
+                  ?? string.Empty;
         }
     }
 }

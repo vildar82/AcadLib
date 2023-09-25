@@ -11,6 +11,7 @@ namespace AcadLib
     using System.Diagnostics;
     using System.IO;
     using System.Linq;
+    using System.Net;
     using System.Reflection;
     using System.Text.RegularExpressions;
     using System.Windows.Forms;
@@ -84,6 +85,8 @@ namespace AcadLib
 #endif
             try
             {
+                SetTlsSecureProtocol();
+
                 AppDomain.CurrentDomain.AssemblyResolve += CurrentDomain_AssemblyResolve;
                 Logger.Log.Info("start Initialize AcadLib");
                 StatusBarEx.AddPaneUserGroup();
@@ -139,6 +142,19 @@ namespace AcadLib
             {
                 $"PIK. Ошибка загрузки AcadLib, версия:{AcadLibVersion} - {ex.Message}.".WriteToCommandLine();
                 Logger.Log.Error(ex, "AcadLib Initialize.");
+            }
+        }
+
+        private static void SetTlsSecureProtocol()
+        {
+            try
+            {
+                ServicePointManager.Expect100Continue = true;
+                ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+            }
+            catch
+            {
+                // ignore
             }
         }
 
