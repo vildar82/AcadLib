@@ -99,39 +99,39 @@ namespace AcadLib
 
                 Notify.SetScreenSettings(new NotifyOptions(with: 400));
 
-                try
+                /*try
                 {
                     CheckUpdates.Start();
                     CheckUpdateSettings();
                 }
                 catch
                 {
-                }
+                }*/
 
                 PaletteSetCommands.Init();
                 AllCommandsCommon();
 
                 // Автослоиtest
-                AutoLayersService.Init();
+                /*AutoLayersService.Init();*/
 
                 // Загрузка сборок из папки ../Script/Net - без вложенных папок
                 LoadService.LoadFromFolder(Path.Combine(PikSettings.LocalSettingsFolder, @"Script\NET"), 1);
 
                 // Обработка чертежей
-                DocAuto.Start();
+                /*DocAuto.Start();*/
 
                 // Лента
                 RibbonBuilder.InitRibbon();
                 Logger.Log.Info("end Initialize AcadLib");
                 AcadLibAssembly.AcadLoadInfo();
 
-                try
+                /*try
                 {
                     CheckUser();
                 }
                 catch
                 {
-                }
+                }*/
 
                 // Восстановление вкладок чCheckUpdatesNotifyертежей
                 //Utils.Tabs.RestoreTabs.Init(); // Фаталит у Черновой
@@ -251,7 +251,7 @@ namespace AcadLib
             CommandStart.Start(doc =>
             {
                 UserSettingsService.Show();
-                UserInfo.ShowUserProfileRegister();
+                /*UserInfo.ShowUserProfileRegister();*/
             });
         }
 

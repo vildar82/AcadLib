@@ -40,7 +40,7 @@
                     Logger.Log.Error("UserInfo Constructor - нет в доступа к ADUtils или прошло более 3000.");
                 }
 
-                task = Task.Run(() =>
+                /*task = Task.Run(() =>
                 {
                     UserData = new MongoDblib.UsersData.DbUserData().GetCurrentUser();
                 });
@@ -52,7 +52,7 @@
                 {
                     noConnectMongoDb = true;
                     Logger.Log.Error("UserInfo Constructor - нет в доступа к MongoDb или прошло более 3000.");
-                }
+                }*/
             }
             catch (Exception ex)
             {
@@ -96,17 +96,17 @@
 
         public static void ShowUserProfileRegister()
         {
-            MongoDblib.UsersData.UserDataRegUI.ShowUserProfileRegister(FioAD, string.Empty, "AutoCAD");
+            //MongoDblib.UsersData.UserDataRegUI.ShowUserProfileRegister(FioAD, string.Empty, "AutoCAD");
         }
 
         public static List<Division> GetDivisions()
         {
-            return new MongoDblib.UsersData.DbUserData().GetDivisions();
+            return new List<Division>(); // MongoDblib.UsersData.DbUserData().GetDivisions();
         }
 
         public static List<SubDivision> GetSubDivisions()
         {
-            return new MongoDblib.UsersData.DbUserData().GetSubDivisions();
+            return new List<SubDivision>(); // MongoDblib.UsersData.DbUserData().GetSubDivisions();
         }
 
         private static void SaveBackup()
