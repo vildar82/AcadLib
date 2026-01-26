@@ -118,7 +118,7 @@ namespace AcadLib
                 LoadService.LoadFromFolder(Path.Combine(PikSettings.LocalSettingsFolder, @"Script\NET"), 1);
 
                 // Обработка чертежей
-                /*DocAuto.Start();*/
+                DocAuto.Start();
 
                 // Лента
                 RibbonBuilder.InitRibbon();
