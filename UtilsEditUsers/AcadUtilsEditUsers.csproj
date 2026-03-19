@@ -151,7 +151,7 @@
       <Version>1.0.1</Version>
     </PackageReference>
     <PackageReference Include="AutoMapper">
-      <Version>10.0.0</Version>
+      <Version>15.1.1</Version>
     </PackageReference>
     <PackageReference Include="EntityFramework">
       <Version>6.4.4</Version>
