@@ -41,10 +41,6 @@
             {
                 ribbonOptions.Data = new RibbonOptions();
             }
-            else
-            {
-                ribbonOptions.Data.Tabs = ribbonOptions.Data.Tabs.OrderBy(o => o.Index).ToList();
-            }
         }
 
         public static void ChangeToggleState(string commandName)
@@ -129,9 +125,7 @@
 
                 if (ribbon == null)
                     ribbon = ComponentManager.Ribbon;
-                ribbon.Tabs.CollectionChanged -= Tabs_CollectionChanged;
-
-                foreach (var tabData in tabsData.OrderBy(o=> GetTabIndex(o.Item1.Name)))
+                foreach (var tabData in tabsData)
                 {
                     if (ribbon.FindTab(tabData.Item1.Name) != null)
                     {
@@ -143,7 +137,7 @@
                     var tab = (RibbonTab) tabOpt.Item;
                     if (tab == null || tabOpt.Items?.Any() != true)
                         continue;
-                    AddItem(tabOpt.Index, tab, ribbon.Tabs);
+                    ribbon.Tabs.Add(tab);
                     tab.Panels.CollectionChanged += Panels_CollectionChanged;
                     tab.PropertyChanged += Tab_PropertyChanged;
                 }
@@ -153,8 +147,6 @@
                 {
                     ribbon.ActiveTab = activeTab;
                 }
-
-                ribbon.Tabs.CollectionChanged += Tabs_CollectionChanged;
             }
             catch (Exception ex)
             {
@@ -320,22 +312,6 @@
             item.Size = size;
         }
 
-        private static void AddItem<T>(int index, [NotNull] T item, [NotNull] IList<T> items)
-            where T : IRibbonContentUid
-        {
-            if (index > items.Count)
-            {
-                index = ribbon.Tabs.Count;
-            }
-            else if (index < 0)
-            {
-                items.Add(item);
-                return;
-            }
-
-            items.Insert(index, item);
-        }
-
         private static void Tab_PropertyChanged(object sender, [NotNull] PropertyChangedEventArgs e)
         {
             switch (e.PropertyName)
@@ -384,11 +360,6 @@
             }
 
             return tabOption;
-        }
-
-        private static int GetTabIndex(string name)
-        {
-            return ribbonOptions.Data.Tabs.FirstOrDefault(t => t.UID == name)?.Index ?? 0;
         }
 
         [NotNull]
@@ -452,12 +423,13 @@
 
         private static void SaveOptions()
         {
-            ribbonOptions.Data.Tabs = ribbonOptions.Data.Tabs.Where(w => w.Item != null).OrderBy(o => o.Index).ToList();
+            ribbonOptions.Data.Tabs = ribbonOptions.Data.Tabs.Where(w => w.Item != null).ToList();
             foreach (var tabOpt in ribbonOptions.Data.Tabs)
             {
                 var tab = (RibbonTab)tabOpt.Item;
                 if (tab == null)
                     continue;
+                tabOpt.Index = 0;
                 tabOpt.IsVisible = tab.IsVisible;
                 foreach (var panelOpt in tabOpt.Items)
                 {
@@ -470,22 +442,6 @@
 
             Debug.WriteLine("RibbonBuilder SaveOptions");
             ribbonOptions.TrySave();
-        }
-
-        private static void Tabs_CollectionChanged(object sender, [NotNull] NotifyCollectionChangedEventArgs e)
-        {
-            if (e.Action == NotifyCollectionChangedAction.Add)
-            {
-                foreach (var tab in ribbonOptions.Data.Tabs)
-                {
-                    var index = ribbon.Tabs.IndexOf((RibbonTab)tab.Item);
-                    if (index == -1)
-                        continue;
-                    tab.Index = index;
-                }
-
-                SaveOptions();
-            }
         }
 
         public static ImageSource GetImage(RibbonItemData item, string userGroup)
